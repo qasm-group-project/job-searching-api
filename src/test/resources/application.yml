@@ -1,0 +1,14 @@
+# ===================== Spring =====================
+server.port: 8181
+spring.profiles.active: test
+
+# =================== Datasource ===================
+# H2
+spring:
+  jpa:
+    hibernate.ddl-auto: create
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource.url: jdbc:h2:mem:testdb
+  datasource.username: user
+  datasource.password: password

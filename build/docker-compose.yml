@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+
+  postgres:
+    container_name: job_searching_db
+    image: postgres:14
+    environment:
+      POSTGRES_DB: job_searching
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
