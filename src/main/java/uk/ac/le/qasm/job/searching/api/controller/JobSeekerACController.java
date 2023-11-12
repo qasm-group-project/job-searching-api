@@ -1,6 +1,5 @@
 package uk.ac.le.qasm.job.searching.api.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,11 +7,9 @@ import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.usecase.CreateJobSeekerACUseCase;
 import uk.ac.le.qasm.job.searching.api.usecase.GetJobSeekerACUserCase;
-
 import java.util.Map;
 import java.util.UUID;
 
-@Slf4j
 @RestController
 @RequestMapping("/JobSeekerAC")
 public class JobSeekerACController {
