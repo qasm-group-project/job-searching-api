@@ -1,6 +1,7 @@
 package uk.ac.le.qasm.job.searching.api.controller.Provider;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +18,11 @@ import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
 public class AuthController {
     private final AuthenticationService authenticationService;
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request){
         return authenticationService.register(request);
     }
     @PostMapping("/login")
-    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<Object> authenticate(@Valid @RequestBody AuthenticationRequest request){
         return authenticationService.authenticate(request);
     }
 }
