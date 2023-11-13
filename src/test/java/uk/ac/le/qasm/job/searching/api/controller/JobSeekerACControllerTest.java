@@ -33,8 +33,8 @@ class JobSeekerACControllerTest {
         jobSeekerAccount.setFirstname("John");
         jobSeekerAccount.setLastname("QAQ");
         jobSeekerAccount.setPhone("444455555");
-        jobSeekerAccount.setAc_username("TTTTYYYY");
-        jobSeekerAccount.setAc_password("password");
+        jobSeekerAccount.setUsername("TTTTYYYY");
+        jobSeekerAccount.setPassword("password");
 
         String jsonString = gson.toJson(jobSeekerAccount);
 

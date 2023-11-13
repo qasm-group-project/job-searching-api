@@ -9,6 +9,9 @@ spring:
     hibernate.ddl-auto: create
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  datasource.url: jdbc:h2:mem:testdb
+  datasource.url: jdbc:h2:mem:testdb;init=create schema if not exists job_searching;\\set schema job_searching;
   datasource.username: user
   datasource.password: password
+  datasource:
+    hikari:
+      connection-init-sql:
