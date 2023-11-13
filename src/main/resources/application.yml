@@ -11,3 +11,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/job_searching
     username: user
     password: password
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

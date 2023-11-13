@@ -1,30 +1,37 @@
 package uk.ac.le.qasm.job.searching.api.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
+import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.usecase.CheckJobSeekerACUsernameUserCase;
 import uk.ac.le.qasm.job.searching.api.usecase.CreateJobSeekerACUseCase;
 import uk.ac.le.qasm.job.searching.api.usecase.GetJobSeekerACUserCase;
+
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/seekers")
 public class JobSeekerACController {
     private final CreateJobSeekerACUseCase createJobSeekerACUseCase;
     private final GetJobSeekerACUserCase getJobSeekerACUserCase;
     private final CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase;
+    private final JobSeekerService jobSeekerService;
 
-    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, GetJobSeekerACUserCase getJobSeekerACUserCase, CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase) {
+
+    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, GetJobSeekerACUserCase getJobSeekerACUserCase, CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase, JobSeekerService jobSeekerService) {
         this.createJobSeekerACUseCase = createJobSeekerACUseCase;
         this.getJobSeekerACUserCase = getJobSeekerACUserCase;
         this.checkJobSeekerACUsernameUserCase = checkJobSeekerACUsernameUserCase;
+        this.jobSeekerService = jobSeekerService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createSeeker(@RequestBody JobSeekerAccount jobSeekerAccount) {
         try {
             if (!checkJobSeekerACUsernameUserCase.Check(jobSeekerAccount.getUsername())){
@@ -37,6 +44,14 @@ public class JobSeekerACController {
         }
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<?> updateSeeker(@RequestBody JobSeekerAccount jobSeekerAccount){
+        try {
+            return ResponseEntity.ok(jobSeekerService.findByUsername(jobSeekerAccount));
+        }catch (BaseException ex) {
+            return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") UUID id) {
         try {
