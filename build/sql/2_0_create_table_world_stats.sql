@@ -10,8 +10,8 @@ CREATE TABLE "user"
 CREATE TABLE "seeker"
 (
     id uuid not null default uuid_generate_v4() primary key ,
-    ac_username varchar(50) not null unique,
-    ac_password varchar(50) not null,
+    username varchar(50) not null unique,
+    password varchar(50) not null,
     nickname varchar(50) not null,
     email varchar(50) not null,
     phone varchar(20) not null,

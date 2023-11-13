@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
+import uk.ac.le.qasm.job.searching.api.usecase.CheckJobSeekerACUsernameUserCase;
 import uk.ac.le.qasm.job.searching.api.usecase.CreateJobSeekerACUseCase;
 import uk.ac.le.qasm.job.searching.api.usecase.GetJobSeekerACUserCase;
 import java.util.Map;
@@ -15,17 +16,22 @@ import java.util.UUID;
 public class JobSeekerACController {
     private final CreateJobSeekerACUseCase createJobSeekerACUseCase;
     private final GetJobSeekerACUserCase getJobSeekerACUserCase;
+    private final CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase;
 
-    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, GetJobSeekerACUserCase getJobSeekerACUserCase) {
+    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, GetJobSeekerACUserCase getJobSeekerACUserCase, CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase) {
         this.createJobSeekerACUseCase = createJobSeekerACUseCase;
         this.getJobSeekerACUserCase = getJobSeekerACUserCase;
+        this.checkJobSeekerACUsernameUserCase = checkJobSeekerACUsernameUserCase;
     }
 
     @PostMapping
     public ResponseEntity<?> createSeeker(@RequestBody JobSeekerAccount jobSeekerAccount) {
         try {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(createJobSeekerACUseCase.create(jobSeekerAccount));
+            if (!checkJobSeekerACUsernameUserCase.Check(jobSeekerAccount.getUsername())){
+                return ResponseEntity.status(HttpStatus.CREATED).body(createJobSeekerACUseCase.create(jobSeekerAccount));
+            }else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","username already exist!"));
+            }
         } catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }

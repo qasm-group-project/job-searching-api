@@ -16,13 +16,13 @@ public class JobSeekerAccount {
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private UUID id;
 
-    @Column(name = "ac_username")
+    @Column(name = "username")
     @JsonProperty(value = "ac_username")
-    private String ac_username;
+    private String username;
 
-    @Column(name = "ac_password")
+    @Column(name = "password")
     @JsonProperty(value = "ac_password")
-    private String ac_password;
+    private String password;
 
     @Column(name = "nickname")
     @JsonProperty(value = "nickname")

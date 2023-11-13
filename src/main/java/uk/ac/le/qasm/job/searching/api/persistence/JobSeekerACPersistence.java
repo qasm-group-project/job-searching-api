@@ -23,4 +23,8 @@ public class JobSeekerACPersistence {
         return  jobSeekerACRepository.findById(id);
     }
 
+    public Boolean CheckUsernameIsPresent(String username){
+        return (jobSeekerACRepository.findByUsername(username)).isPresent();
+    }
+
 }
