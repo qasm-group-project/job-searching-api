@@ -17,11 +17,11 @@ public class JobSeekerAccount {
     private UUID id;
 
     @Column(name = "username")
-    @JsonProperty(value = "ac_username")
+    @JsonProperty(value = "username")
     private String username;
 
     @Column(name = "password")
-    @JsonProperty(value = "ac_password")
+    @JsonProperty(value = "password")
     private String password;
 
     @Column(name = "nickname")
