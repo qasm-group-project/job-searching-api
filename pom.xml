@@ -92,6 +92,21 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- lombok Dependency -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- gson Dependency -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

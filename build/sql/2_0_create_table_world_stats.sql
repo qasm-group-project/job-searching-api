@@ -7,7 +7,7 @@ CREATE TABLE "user"
     type varchar(20) NOT NULL,
     CONSTRAINT id PRIMARY KEY (id)
 );
-CREATE TABLE "job_seeker_account"
+CREATE TABLE "seeker"
 (
     id uuid not null default uuid_generate_v4() primary key ,
     ac_username varchar(50) not null unique,
@@ -18,5 +18,4 @@ CREATE TABLE "job_seeker_account"
     firstname varchar(50) not null,
     lastname varchar(50) not null,
     gender varchar(10) not null
-
 );

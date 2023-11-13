@@ -2,11 +2,13 @@ package uk.ac.le.qasm.job.searching.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "job_seeker_account", schema = "job_searching")
+@Data
+@Table(name = "seeker", schema = "job_searching")
 public class JobSeekerAccount {
     @Id
     @GeneratedValue
@@ -45,6 +47,4 @@ public class JobSeekerAccount {
     @Column(name = "gender")
     @JsonProperty(value = "gender")
     private String gender;
-
-
 }

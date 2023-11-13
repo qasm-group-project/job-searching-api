@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/JobSeekerAC")
+@RequestMapping("/seekers")
 public class JobSeekerACController {
     private final CreateJobSeekerACUseCase createJobSeekerACUseCase;
     private final GetJobSeekerACUserCase getJobSeekerACUserCase;
@@ -22,8 +22,9 @@ public class JobSeekerACController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody JobSeekerAccount jobSeekerAccount) {
+    public ResponseEntity<?> createSeeker(@RequestBody JobSeekerAccount jobSeekerAccount) {
         try {
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createJobSeekerACUseCase.create(jobSeekerAccount));
         } catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
@@ -38,5 +39,6 @@ public class JobSeekerACController {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }
     }
+
 
 }
