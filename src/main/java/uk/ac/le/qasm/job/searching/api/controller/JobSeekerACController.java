@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccountTest;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.usecase.CheckJobSeekerACUsernameUserCase;
@@ -47,19 +48,22 @@ public class JobSeekerACController {
     @PostMapping("/update")
     public ResponseEntity<?> updateSeeker(@RequestBody JobSeekerAccount jobSeekerAccount){
         try {
-            return ResponseEntity.ok(jobSeekerService.findByUsername(jobSeekerAccount));
+            return ResponseEntity.ok(jobSeekerService.updateByUsername(jobSeekerAccount));
         }catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }
     }
+    @PostMapping("/getbyuserame")
+    public JobSeekerAccount getByUsername(@RequestBody JobSeekerAccount jobSeekerAccount){
+        return jobSeekerService.findByUsername(jobSeekerAccount);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") UUID id) {
-        try {
-            return ResponseEntity.ok(getJobSeekerACUserCase.getById(id));
-        } catch (BaseException ex) {
+        try{
+            return ResponseEntity.ok(jobSeekerService.findByIdtest(id));
+        }catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }
     }
-
-
 }

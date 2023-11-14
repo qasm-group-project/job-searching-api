@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,9 +19,13 @@ public class JobSeekerAccount {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
-    @TableId(type = IdType.ASSIGN_UUID)
+    @JsonProperty(value = "id",access = JsonProperty.Access.READ_ONLY)
+    @TableId(value = "id")
     private UUID id;
+
+    @TableField(value = "id")
+    @Transient
+    private String uuidId;
 
     @Column(name = "username")
     @JsonProperty(value = "username")
