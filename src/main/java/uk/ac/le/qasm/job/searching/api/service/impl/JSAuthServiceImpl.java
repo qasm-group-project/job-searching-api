@@ -77,6 +77,6 @@ public class JSAuthServiceImpl implements JSAuthService {
             res.put("status",HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
         }
-
     }
+
 }
