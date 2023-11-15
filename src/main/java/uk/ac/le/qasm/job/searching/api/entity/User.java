@@ -2,11 +2,10 @@ package uk.ac.le.qasm.job.searching.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
 import java.util.UUID;
 
 @Entity
-@Table(name = "user", schema = "job_searching")
+@Table(name = "users", schema = "job_searching")
 public class User {
 
     @Id
@@ -22,5 +21,6 @@ public class User {
     @Column(name = "type")
     @JsonProperty(value = "type")
     private String type;
+
 
 }
