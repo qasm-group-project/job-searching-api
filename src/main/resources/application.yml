@@ -5,7 +5,7 @@ server.port: 8181
 # Postgres
 spring:
   jpa:
-    hibernate.ddl-auto: none
+    hibernate.ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     url: jdbc:postgresql://localhost:5432/job_searching
