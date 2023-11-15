@@ -10,14 +10,14 @@ CREATE TABLE users
 CREATE TABLE seeker
 (
     id uuid not null default uuid_generate_v4() primary key ,
-    username varchar(50) not null unique,
-    password varchar(50) not null,
-    nickname varchar(50) not null,
-    email varchar(50) not null,
-    phone varchar(20) not null,
-    firstname varchar(50) not null,
-    lastname varchar(50) not null,
-    gender varchar(10) not null
+    username varchar(255) not null unique,
+    password varchar(255) not null,
+    nickname varchar(255) not null,
+    email varchar(255) not null,
+    phone varchar(255) not null,
+    firstname varchar(255) not null,
+    lastname varchar(255) not null,
+    gender varchar(255) not null
 );
 create table provider
 (
