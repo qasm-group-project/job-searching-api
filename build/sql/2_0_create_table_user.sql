@@ -22,8 +22,8 @@ CREATE TABLE seeker
 create table provider
 (
     id uuid not null default uuid_generate_v4() primary key,
-    username varchar(50) not null unique,
-    password varchar(50) not null,
+    username varchar(100) not null unique,
+    password varchar(100) not null,
     email varchar(50) not null,
     company_name varchar(50) not null,
     company_contact_number varchar(50) not null,
