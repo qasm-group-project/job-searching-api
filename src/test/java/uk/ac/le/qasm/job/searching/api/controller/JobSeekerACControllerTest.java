@@ -9,9 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -26,7 +25,7 @@ class JobSeekerACControllerTest {
     void testCreate() throws Exception{
         Gson gson = new Gson();
 
-        JobSeekerAccount jobSeekerAccount = new JobSeekerAccount();
+        JobSeeker jobSeekerAccount = new JobSeeker();
 
         jobSeekerAccount.setGender("male");
         jobSeekerAccount.setEmail("test@gmail.com");

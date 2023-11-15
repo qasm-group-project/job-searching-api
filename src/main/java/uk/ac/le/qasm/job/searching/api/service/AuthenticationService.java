@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.Service;
+package uk.ac.le.qasm.job.searching.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

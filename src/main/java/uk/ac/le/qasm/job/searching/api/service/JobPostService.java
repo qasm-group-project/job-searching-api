@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.Service;
+package uk.ac.le.qasm.job.searching.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

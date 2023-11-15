@@ -1,26 +1,33 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uk.ac.le.qasm.job.searching.api.Enumeration.Role;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "seeker", schema = "job_searching")
 @TableName(value = "seeker",schema = "job_searching")
-public class JobSeekerAccount {
+public class JobSeeker implements UserDetails {
     @Getter
     @Id
     @GeneratedValue
     @Column(name = "id")
     @JsonProperty(value = "id",access = JsonProperty.Access.READ_ONLY)
-    @TableId(value = "id")
+    @TableId(value = "id",type = IdType.ASSIGN_UUID)
     private UUID id;
 
     @Column(name = "username")
@@ -62,11 +69,38 @@ public class JobSeekerAccount {
     @JsonProperty(value = "gender")
     @TableField("gender")
     private String gender;
+
+
     public void setId(String id_String) {
         if (id_String != null){
             this.id = UUID.fromString(id_String);
         }else {
             this.id=null;
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

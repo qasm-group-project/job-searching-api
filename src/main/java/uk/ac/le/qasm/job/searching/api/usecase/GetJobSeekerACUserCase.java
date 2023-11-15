@@ -1,7 +1,7 @@
 package uk.ac.le.qasm.job.searching.api.usecase;
 
 import org.springframework.stereotype.Component;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.exception.UserNotFoundException;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerACPersistence;
 
@@ -15,8 +15,8 @@ public class GetJobSeekerACUserCase {
     public GetJobSeekerACUserCase(JobSeekerACPersistence jobSeekerACPersistence) {
         this.jobSeekerACPersistence = jobSeekerACPersistence;
     }
-    public JobSeekerAccount getById(UUID uuid){
-        Optional<JobSeekerAccount> jobSeekerAccount = jobSeekerACPersistence.getById(uuid);
+    public JobSeeker getById(UUID uuid){
+        Optional<JobSeeker> jobSeekerAccount = jobSeekerACPersistence.getById(uuid);
         return jobSeekerAccount.orElseThrow(UserNotFoundException::new);
     }
 }

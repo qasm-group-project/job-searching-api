@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.mapper.JobSeekerMapper;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 
@@ -21,15 +21,16 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     }
 
     @Override
-    public JobSeekerAccount findByUsername(JobSeekerAccount jobSeekerAccount) {
-        QueryWrapper<JobSeekerAccount> queryWrapper =new QueryWrapper<>();
+    public JobSeeker findByUsername(JobSeeker jobSeekerAccount) {
+
+        QueryWrapper<JobSeeker> queryWrapper =new QueryWrapper<>();
         queryWrapper.eq("username",jobSeekerAccount.getUsername());
         return jobSeekerMapper.selectOne(queryWrapper);
     }
 
     @Override
-    public int updateByUsername(JobSeekerAccount jobSeekerAccount) {
-        QueryWrapper<JobSeekerAccount> queryWrapper =new QueryWrapper<>();
+    public int updateByUsername(JobSeeker jobSeekerAccount) {
+        QueryWrapper<JobSeeker> queryWrapper =new QueryWrapper<>();
         queryWrapper.eq("username",jobSeekerAccount.getUsername());
         return jobSeekerMapper.update(jobSeekerAccount,queryWrapper);
     }
@@ -37,9 +38,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
 
     @Override
-    public JobSeekerAccount findByIdtest(@Param("id") UUID id) {
-        LambdaQueryWrapper<JobSeekerAccount> lambdaQueryWrapper = Wrappers.lambdaQuery();
-        lambdaQueryWrapper.eq(JobSeekerAccount::getId,id);
+    public JobSeeker findByIdtest(@Param("id") UUID id) {
+        LambdaQueryWrapper<JobSeeker> lambdaQueryWrapper = Wrappers.lambdaQuery();
+        lambdaQueryWrapper.eq(JobSeeker::getId,id);
         return jobSeekerMapper.selectOne(lambdaQueryWrapper);
     }
 

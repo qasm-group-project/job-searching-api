@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
-import uk.ac.le.qasm.job.searching.api.Service.JobPostService;
-import uk.ac.le.qasm.job.searching.api.config.JwtService;
+import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
-
-import java.security.SignatureException;
 
 @RestController
 @RequestMapping("/api/v1/provider/job-post")

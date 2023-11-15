@@ -1,7 +1,7 @@
 package uk.ac.le.qasm.job.searching.api.persistence;
 
 import org.springframework.stereotype.Component;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.repository.JobSeekerACRepository;
 
 import java.util.Optional;
@@ -16,10 +16,10 @@ public class JobSeekerACPersistence {
         this.jobSeekerACRepository = jobSeekerACRepository;
     }
 
-    public JobSeekerAccount Create(JobSeekerAccount jobSeekerAccount){
+    public JobSeeker Create(JobSeeker jobSeekerAccount){
         return jobSeekerACRepository.save(jobSeekerAccount);
     }
-    public Optional<JobSeekerAccount> getById(UUID id){
+    public Optional<JobSeeker> getById(UUID id){
         return  jobSeekerACRepository.findById(id);
     }
 

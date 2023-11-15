@@ -2,15 +2,15 @@ package uk.ac.le.qasm.job.searching.api.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 
 import java.util.UUID;
 
 @Service
 public interface JobSeekerService {
-    JobSeekerAccount findByUsername(JobSeekerAccount jobSeekerAccount);
+    JobSeeker findByUsername(JobSeeker jobSeekerAccount);
 
-    int updateByUsername(JobSeekerAccount jobSeekerAccount);
+    int updateByUsername(JobSeeker jobSeekerAccount);
 
-    JobSeekerAccount findByIdtest(@Param("id")UUID id);
+    JobSeeker findByIdtest(@Param("id")UUID id);
 }
