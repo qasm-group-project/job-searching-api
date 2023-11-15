@@ -30,4 +30,3 @@ create table provider
     company_location varchar(50) not null,
     role varchar(50) not null
 );
-create table jobpost
