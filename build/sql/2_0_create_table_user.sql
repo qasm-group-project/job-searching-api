@@ -19,3 +19,15 @@ CREATE TABLE seeker
     lastname varchar(50) not null,
     gender varchar(10) not null
 );
+create table provider
+(
+    id uuid not null default uuid_generate_v4() primary key,
+    username varchar(50) not null unique,
+    password varchar(50) not null,
+    email varchar(50) not null,
+    company_name varchar(50) not null,
+    company_contact_number varchar(50) not null,
+    company_location varchar(50) not null,
+    role varchar(50) not null
+);
+create table jobpost
