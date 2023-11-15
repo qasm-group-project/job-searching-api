@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccountTest;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.usecase.CheckJobSeekerACUsernameUserCase;
@@ -20,14 +19,12 @@ import java.util.UUID;
 @RequestMapping("/seekers")
 public class JobSeekerACController {
     private final CreateJobSeekerACUseCase createJobSeekerACUseCase;
-    private final GetJobSeekerACUserCase getJobSeekerACUserCase;
     private final CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase;
     private final JobSeekerService jobSeekerService;
 
 
-    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, GetJobSeekerACUserCase getJobSeekerACUserCase, CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase, JobSeekerService jobSeekerService) {
+    public JobSeekerACController(CreateJobSeekerACUseCase createJobSeekerACUseCase, CheckJobSeekerACUsernameUserCase checkJobSeekerACUsernameUserCase, JobSeekerService jobSeekerService) {
         this.createJobSeekerACUseCase = createJobSeekerACUseCase;
-        this.getJobSeekerACUserCase = getJobSeekerACUserCase;
         this.checkJobSeekerACUsernameUserCase = checkJobSeekerACUsernameUserCase;
         this.jobSeekerService = jobSeekerService;
     }

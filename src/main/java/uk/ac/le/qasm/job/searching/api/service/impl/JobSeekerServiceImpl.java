@@ -4,11 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccountTest;
-import uk.ac.le.qasm.job.searching.api.mapper.JSMapper;
 import uk.ac.le.qasm.job.searching.api.mapper.JobSeekerMapper;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 

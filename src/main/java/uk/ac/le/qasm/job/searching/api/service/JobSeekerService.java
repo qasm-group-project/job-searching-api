@@ -3,7 +3,6 @@ package uk.ac.le.qasm.job.searching.api.service;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccount;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerAccountTest;
 
 import java.util.UUID;
 

@@ -1,13 +1,13 @@
 SET SCHEMA 'job_searching';
 
-CREATE TABLE "user"
+CREATE TABLE users
 (
     id   uuid        NOT NULL DEFAULT uuid_generate_v4(),
     name varchar(20) NOT NULL,
     type varchar(20) NOT NULL,
     CONSTRAINT id PRIMARY KEY (id)
 );
-CREATE TABLE "seeker"
+CREATE TABLE seeker
 (
     id uuid not null default uuid_generate_v4() primary key ,
     username varchar(50) not null unique,
