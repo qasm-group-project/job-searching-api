@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/seekers")
+@RequestMapping("api/v1/auth/seekers")
 public class JobSeekerACController {
 
 

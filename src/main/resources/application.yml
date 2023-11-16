@@ -5,6 +5,7 @@ server.port: 8181
 # Postgres
 spring:
   jpa:
+    #create-drop #none
     hibernate.ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
