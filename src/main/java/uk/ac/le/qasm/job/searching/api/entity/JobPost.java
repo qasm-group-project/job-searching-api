@@ -1,5 +1,4 @@
 package uk.ac.le.qasm.job.searching.api.entity;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
-
 import java.util.UUID;
 
 @Data
@@ -62,13 +60,10 @@ public class JobPost {
     @TableField("is_Visible")
     private Boolean isVisible;
 
-//    public void setId(String id_String) {
-//        if (id_String != null){
-//            this.id = UUID.fromString(id_String);
-//        }else {
-//            this.id=null;
-//        }
-//    }
+//    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+//    @TableField(exist = false)
+//    private List<JobApplication> jobApplications;
+
     public void setId(String id_String){
         if (id_String != null){
             this.id = UUID.fromString(id_String);
