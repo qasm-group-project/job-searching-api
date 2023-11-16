@@ -39,7 +39,7 @@ public class AuthenticationService {
                 .company_name(request.getCompany_name())
                 .company_location(request.getCompany_location())
                 .company_contact_number(request.getCompany_contact_number())
-                .role(Role.ADMIN)
+                .role(Role.PROVIDER)
                 .build();
         repository.save(provider);
         var jwtToken = jwtService.generateToken(provider);
