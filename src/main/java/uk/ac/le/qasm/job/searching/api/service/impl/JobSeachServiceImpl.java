@@ -30,7 +30,7 @@ public class JobSeachServiceImpl implements JobSeachService {
                 .selectAs(Provider::getCompany_contact_number,SearchAllJob::getCompany_contact_number)
                 .selectAs(Provider::getCompany_location,SearchAllJob::getCompany_location)
                 .leftJoin(Provider.class,Provider::getId,JobPost::getProvider_uuid)
-                        .eq(JobPost::getIsVisible,true)
+//                        .eq(JobPost::getIsVisible,true)
         )
         );
 

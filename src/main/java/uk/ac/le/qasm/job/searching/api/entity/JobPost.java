@@ -55,11 +55,6 @@ public class JobPost {
     @TableField(exist = false)
     private Provider provider;
 
-    @Column(name = "isVisible")
-    @JsonProperty(value = "isVisible")
-    @TableField("is_Visible")
-    private Boolean isVisible;
-
 //    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
 //    @TableField(exist = false)
 //    private List<JobApplication> jobApplications;
