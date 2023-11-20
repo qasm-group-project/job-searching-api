@@ -1,5 +1,6 @@
 package uk.ac.le.qasm.job.searching.api.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
