@@ -41,24 +41,13 @@ public class AuthenticationService {
         repository.save(provider);
         return jwtService.generateToken(provider);
     }
-    public ResponseEntity<Object> authenticate(AuthenticationRequest request) throws AuthenticationException{
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(), request.getPassword()
-                    ));
-            var provider =  repository.findByUsername(request.getUsername()).orElseThrow();
-            var jwtToken = jwtService.generateToken(provider);
-            Map<String, Object> responseObj = new HashMap<String, Object>();
-            responseObj.put("message", "login successfully!");
-            responseObj.put("status", HttpStatus.OK.value());
-            responseObj.put("token", jwtToken);
-            return new ResponseEntity<Object>(responseObj, HttpStatus.OK);
-        }catch (BadCredentialsException badCredentialsException){
-            Map<String, Object> responseObj = new HashMap<String, Object>();
-            responseObj.put("message", "user not found!");
-            responseObj.put("status", HttpStatus.NOT_FOUND.value());
-            return new ResponseEntity<Object>(responseObj, HttpStatus.NOT_FOUND);
-        }
+    public String authenticate(AuthenticationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(), request.getPassword()
+                )
+        );
+        var provider = repository.findByUsername(request.getUsername()).orElseThrow();
+        return jwtService.generateToken(provider);
     }
 }

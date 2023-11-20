@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -46,7 +47,19 @@ public class AuthController {
 
     }
     @PostMapping("/login")
-    public ResponseEntity<Object> authenticate(@Valid @RequestBody AuthenticationRequest request){
-        return authenticationService.authenticate(request);
+    public ResponseEntity<?> authenticate(@Valid @RequestBody AuthenticationRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+        try {
+            String token = authenticationService.authenticate(request);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (BadCredentialsException exception) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid username or password!"));
+        }
     }
 }
