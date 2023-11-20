@@ -12,3 +12,9 @@ spring:
   datasource.url: jdbc:h2:mem:testdb
   datasource.username: user
   datasource.password: password
+  sql.init:
+    platform: h2
+    data-locations:
+      - classpath:sql/h2/0_0_create_schema.sql
+      - classpath:sql/h2/1_0_create_extension_uuid.sql
+      - classpath:sql/h2/2_0_create_table_user.sql
