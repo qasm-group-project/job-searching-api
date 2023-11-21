@@ -1,12 +1,11 @@
 package uk.ac.le.qasm.job.searching.api.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 
 @Data
 @Builder
@@ -21,5 +20,7 @@ public class JobPostRequest {
     private String salary;
     @NotEmpty(message = "The full jobType is required.")
     private String jobType;
+    @NotNull(message = "The status of visibility is required.")
+    private Boolean isVisible;
 }
 
