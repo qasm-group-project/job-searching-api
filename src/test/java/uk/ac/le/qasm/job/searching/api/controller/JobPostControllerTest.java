@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.controller.provider;
+package uk.ac.le.qasm.job.searching.api.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,11 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
-import uk.ac.le.qasm.job.searching.api.controller.Provider.JobPostController;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
+import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 
@@ -40,8 +38,6 @@ public class JobPostControllerTest {
     private MockMvc mockMvc;
     @Mock
     private JobPostService jobPostService;
-    @Mock
-    private JobPostRepository jobPostRepository;
     @InjectMocks
     private JobPostController jobPostController;
 
@@ -58,7 +54,9 @@ public class JobPostControllerTest {
         when(authentication.getPrincipal()).thenReturn(provider);
 
         // Mock yourService.saveJobPost method
-        doNothing().when(jobPostService).saveJobPost(Mockito.any(JobPost.class));
+        JobPost jobPost = new JobPost();
+        jobPost.setId(UUID.randomUUID());
+        when(jobPostService.saveJobPost(Mockito.any(JobPost.class))).thenReturn(jobPost);
 
         // Set up MockMvc
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -72,13 +70,13 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isCreated())
-                        .andExpect(jsonPath("$.message")
-                        .value("Job Post Created successfully!"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isCreated())
+               .andExpect(jsonPath("$.message")
+                                  .value("Job Post Created successfully!"));
     }
 
     @Test
@@ -92,14 +90,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The full title is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full title is required."));
     }
+
     @Test
     void testCreateJobPost_TitleIsEmpty_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -112,13 +111,13 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The full title is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full title is required."));
     }
 
     @Test
@@ -133,14 +132,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The full jobType is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full jobType is required."));
     }
+
     @Test
     void testCreateJobPost_JobTypeIsEmpty_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -153,14 +153,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The full jobType is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full jobType is required."));
     }
+
     @Test
     void testCreateJobPost_DescriptionMissed_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -173,14 +174,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The full description is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full description is required."));
     }
+
     @Test
     void testCreateJobPost_DescriptionIsEmpty_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -193,14 +195,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                         .andExpect(jsonPath("$.errors[0]")
-                        .value("The full description is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full description is required."));
     }
+
     @Test
     void testCreateJobPost_SalaryMissed_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -213,14 +216,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("The full salary is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full salary is required."));
     }
+
     @Test
     void testCreateJobPost_SalaryIsEmpty_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -233,14 +237,15 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("The full salary is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The full salary is required."));
     }
+
     @Test
     void testCreateJobPost_IsVisibleMissed_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -253,14 +258,15 @@ public class JobPostControllerTest {
 //        jobPostRequest.setIsVisible(true);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                        .andExpect(jsonPath("$.errors[0]")
-                        .value("The status of visibility is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The status of visibility is required."));
     }
+
     @Test
     void testCreateJobPost_IsVisibleIsEmpty_ShouldReturnBadRequest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -273,16 +279,17 @@ public class JobPostControllerTest {
         jobPostRequest.setIsVisible(null);
 
         // Perform the request and assert the response
-        var res = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("The status of visibility is required."));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/provider/job-post/create")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest())
+               .andExpect(jsonPath("$.errors[0]")
+                                  .value("The status of visibility is required."));
     }
+
     @Test
-    public void getAllJobPosts() throws Exception{
+    public void getAllJobPosts() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
         // Mock authentication and principal
         Authentication authentication = mock(Authentication.class);
@@ -300,16 +307,17 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/provider/job-post")
-                        .param("page", "0")
-                        .param("size", "10")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray());
+                                              .param("page", "0")
+                                              .param("size", "10")
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).getAllJobPostsByProvider(eq(mockProvider), any());
     }
+
     @Test
     void getAllJobPostsFailure() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -329,10 +337,10 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/provider/job-post")
-                        .param("page", "0")
-                        .param("size", "10")
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isInternalServerError());
+                                              .param("page", "0")
+                                              .param("size", "10")
+                                              .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isInternalServerError());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).getAllJobPostsByProvider(eq(mockProvider), any());
@@ -374,19 +382,20 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Title")) // Add assertions for other fields
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Description"))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(50000))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.isVisible").value(true))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.jobType").value("FULL_TIME"));
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Title")) // Add assertions for other fields
+               .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Description"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(50000))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.isVisible").value(true))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.jobType").value("FULL_TIME"));
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);
     }
+
     @Test
     void updateJobPostUnauthorized() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -410,16 +419,15 @@ public class JobPostControllerTest {
         when(authentication.getPrincipal()).thenReturn(provider);
 
         // Mock service to return an existing job post
-        JobPost existingJobPost = new JobPost();
         when(jobPostService.updateJobPost(provider, jobPostId, jobPostRequest))
                 .thenThrow(new RuntimeException("You are not authorized to update this job post"));
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isForbidden());
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isForbidden());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);
@@ -450,10 +458,10 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(jobPostRequest))
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isForbidden());
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .content(asJsonString(jobPostRequest))
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isForbidden());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);
@@ -481,15 +489,16 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                                .value("Job Post Deleted successfully!"));
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.message")
+                                               .value("Job Post Deleted successfully!"));
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).deleteJobPost(provider, jobPostId);
     }
+
     @Test
     void deleteJobPostNotFound() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
@@ -510,20 +519,20 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isForbidden());
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isForbidden());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).deleteJobPost(provider, jobPostId);
     }
+
     @Test
     void deleteJobPostUnauthorized() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
-        Provider differentProvider = new Provider(); // Create a different provider instance
 
         // Mock authentication and principal
         Authentication authentication = mock(Authentication.class);
@@ -538,15 +547,13 @@ public class JobPostControllerTest {
 
         // Perform the request using MockMvc
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/provider/job-post/{jobPostId}", jobPostId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isForbidden());
+                                              .contentType(MediaType.APPLICATION_JSON)
+                                              .accept(MediaType.APPLICATION_JSON))
+               .andExpect(status().isForbidden());
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).deleteJobPost(provider, jobPostId);
     }
-
-
 
 
     private static String asJsonString(final Object obj) {

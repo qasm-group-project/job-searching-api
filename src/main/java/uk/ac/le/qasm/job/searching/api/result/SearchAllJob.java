@@ -1,7 +1,7 @@
 package uk.ac.le.qasm.job.searching.api.result;
+
 import lombok.Data;
-import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
-import java.util.UUID;
+import uk.ac.le.qasm.job.searching.api.enums.JobType;
 @Data
 public class SearchAllJob {
 
@@ -20,13 +20,5 @@ public class SearchAllJob {
     private String company_contact_number;
 
     private String company_location;
-
-//    public void setId(String id_String){
-//        if (id_String != null){
-//            this.id = UUID.fromString(id_String);
-//        }else {
-//            this.id=null;
-//        }
-//    }
 
 }

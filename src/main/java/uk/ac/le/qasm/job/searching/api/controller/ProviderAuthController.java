@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.controller.Provider;
+package uk.ac.le.qasm.job.searching.api.controller;
 
 
 import jakarta.validation.Valid;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.ac.le.qasm.job.searching.api.service.AuthenticationService;
 import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
 import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
-import uk.ac.le.qasm.job.searching.api.service.AuthenticationService;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth/provider")
 @RequiredArgsConstructor
-public class AuthController {
+public class ProviderAuthController {
 
     private final AuthenticationService authenticationService;
     @PostMapping("/register")
