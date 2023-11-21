@@ -1,0 +1,26 @@
+Parameters:
+	Username:
+		is blank.  			[property UsernameBlank] [error] 
+		not sent. 			[property UsernameNotSent] [error]
+		username already exists. 	[property Exists] [error]
+		username does not exist.	[if !UsernameBlank && !UsernameNotSent && !Exists] 
+
+	Password:
+		is blank. 			[property PasswordBlank] [error]
+		not sent. 			[property PasswordNotSent] [error]
+		has value. 			[if !PasswordBlank && !PasswordNotSent]
+
+	Company Name:
+		is blank. 			[property NameBlank] [error]
+		not sent. 			[property NameNotSent] [error]
+		has value. 			[if !NameBlank && !NameNotSent]
+		
+	Company Number:
+ 		is blank. 			[property NumberBlank] [error]
+ 		not sent. 			[property NumberNotSent] [error]
+ 		has value. 			[if !NumberBlank && !NumberNotSent]
+ 		
+	Company Location:
+ 		is blank. 			[property LocationBlank] [error]
+ 		not sent. 			[property LocationNotSent] [error]
+ 		has value. 			[if !LocationBlank && !LocationNotSent]
