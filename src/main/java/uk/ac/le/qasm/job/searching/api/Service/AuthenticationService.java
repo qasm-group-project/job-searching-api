@@ -26,12 +26,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public ResponseEntity<Object> register(RegisterRequest request){
+    public String register(RegisterRequest request){
         if (repository.findByUsername(request.getUsername()).isPresent()){
-            Map<String, Object> responseObj = new HashMap<String, Object>();
-            responseObj.put("message", "Username already exist!");
-            responseObj.put("status", HttpStatus.FORBIDDEN.value());
-            return new ResponseEntity<Object>(responseObj, HttpStatus.FORBIDDEN);
+            throw new RuntimeException("Username already exists");
         }
         var provider = Provider.builder()
                 .username(request.getUsername())
@@ -42,31 +39,15 @@ public class AuthenticationService {
                 .role(Role.PROVIDER)
                 .build();
         repository.save(provider);
-        var jwtToken = jwtService.generateToken(provider);
-        Map<String, Object> responseObj = new HashMap<String, Object>();
-        responseObj.put("message", "Provider Created successfully!");
-        responseObj.put("status", HttpStatus.OK.value());
-        responseObj.put("token", jwtToken);
-        return new ResponseEntity<Object>(responseObj, HttpStatus.OK);
+        return jwtService.generateToken(provider);
     }
-    public ResponseEntity<Object> authenticate(AuthenticationRequest request) throws AuthenticationException{
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(), request.getPassword()
-                    ));
-            var provider =  repository.findByUsername(request.getUsername()).orElseThrow();
-            var jwtToken = jwtService.generateToken(provider);
-            Map<String, Object> responseObj = new HashMap<String, Object>();
-            responseObj.put("message", "login successfully!");
-            responseObj.put("status", HttpStatus.OK.value());
-            responseObj.put("token", jwtToken);
-            return new ResponseEntity<Object>(responseObj, HttpStatus.OK);
-        }catch (BadCredentialsException badCredentialsException){
-            Map<String, Object> responseObj = new HashMap<String, Object>();
-            responseObj.put("message", "user not found!");
-            responseObj.put("status", HttpStatus.NOT_FOUND.value());
-            return new ResponseEntity<Object>(responseObj, HttpStatus.NOT_FOUND);
-        }
+    public String authenticate(AuthenticationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(), request.getPassword()
+                )
+        );
+        var provider = repository.findByUsername(request.getUsername()).orElseThrow();
+        return jwtService.generateToken(provider);
     }
 }
