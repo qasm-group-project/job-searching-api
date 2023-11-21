@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.controller.Seeker;
+package uk.ac.le.qasm.job.searching.api.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +13,12 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/seekers")
-public class JobSeekerACController {
+public class JobSeekerController {
 
 
     private final JobSeekerService jobSeekerService;
 
-    public JobSeekerACController(JobSeekerService jobSeekerService) {
+    public JobSeekerController(JobSeekerService jobSeekerService) {
         this.jobSeekerService = jobSeekerService;
     }
 

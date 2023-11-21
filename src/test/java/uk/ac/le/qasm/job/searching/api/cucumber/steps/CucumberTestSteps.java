@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
+import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
@@ -58,8 +59,8 @@ public class CucumberTestSteps {
         providerRepository.deleteAll();
     }
 
-    @Given("the job seeker is created with")
-    public void theJobSeekerIsCreatedWith(String docString) {
+    @Given("the job provider is created with")
+    public void theJobProviderIsCreatedWith(String docString) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
@@ -69,8 +70,8 @@ public class CucumberTestSteps {
                                               String.class);
     }
 
-    @Given("the job seeker is logged in with username {string} and password {string}")
-    public void theJobSeekerIsLoggedInWithUsernameAndPassword(String username, String password) {
+    @Given("the job provider is logged in with username {string} and password {string}")
+    public void theJobProviderIsLoggedInWithUsernameAndPassword(String username, String password) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
@@ -113,6 +114,22 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call the create job seeker path with the following body")
+    public void iCallTheCreateJobSeekerPathWithTheFollowingBody(String docString) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/register",
+                                                  HttpMethod.POST,
+                                                  new HttpEntity<>(docString, headers),
+                                                  String.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @Then("the status returned must be {int}")
     public void the_status_returned_must_be(Integer httpStatus) {
         if (response != null) {
@@ -132,9 +149,9 @@ public class CucumberTestSteps {
         }
 
         if (value.equals("not null")) {
-            assertNotNull(jsonResponse.get(field).textValue());
+            assertNotNull(MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
         } else {
-            assertEquals(value, jsonResponse.get(field).textValue());
+            assertEquals(value, MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
         }
     }
 

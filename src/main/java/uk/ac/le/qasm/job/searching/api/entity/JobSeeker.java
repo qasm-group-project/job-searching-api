@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +36,7 @@ public class JobSeeker implements UserDetails {
     @Column(name = "username", unique = true)
     @JsonProperty(value = "username")
     @TableField("username")
+    @NotEmpty(message = "The username is required.")
     private String username;
 
     @Column(name = "password")

@@ -64,11 +64,11 @@ public class JSAuthServiceImpl implements JSAuthService {
                                      .role(Role.PROVIDER)
                                      .build();
             var jwtToken = jwtService.generateToken(jobSeeker);
-            var res1 = repository.save(jobSeeker);
+            var user = repository.save(jobSeeker);
             res.put("message", "Login success!");
             res.put("status", HttpStatus.OK.value());
             res.put("token", jwtToken);
-            res.put("res", res1);
+            res.put("user", user);
 //            return ResponseEntity.status(HttpStatus.CREATED).body(createJobSeekerACUseCase.create(jobSeeker));
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
