@@ -1,41 +1,30 @@
 package uk.ac.le.qasm.job.searching.api.controller.provider;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.http.MediaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.ac.le.qasm.job.searching.api.Enumeration.Role;
 import uk.ac.le.qasm.job.searching.api.Service.AuthenticationService;
 import uk.ac.le.qasm.job.searching.api.config.JwtService;
 import uk.ac.le.qasm.job.searching.api.controller.Provider.AuthController;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
 import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
 import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
 
-import java.io.Console;
-import java.util.Optional;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(MockitoExtension.class)
