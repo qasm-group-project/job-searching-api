@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
+import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
+import uk.ac.le.qasm.job.searching.api.enums.JobType;
 
 import java.util.UUID;
 
@@ -47,8 +48,15 @@ public class JobPost {
     @JsonProperty(value = "isVisible")
     private Boolean isVisible;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "job_status")
+    @JsonProperty(value = "status")
+    private JobStatus status;
+
     @ManyToOne
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
+
 }

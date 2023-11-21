@@ -1,23 +1,16 @@
-package uk.ac.le.qasm.job.searching.api.Service;
+package uk.ac.le.qasm.job.searching.api.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.Enumeration.Role;
+import uk.ac.le.qasm.job.searching.api.enums.Role;
 import uk.ac.le.qasm.job.searching.api.config.JwtService;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
 import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
 import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

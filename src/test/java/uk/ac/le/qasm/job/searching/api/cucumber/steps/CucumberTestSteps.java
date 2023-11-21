@@ -16,7 +16,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
-import uk.ac.le.qasm.job.searching.api.repository.UserRepository;
+import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
+import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +36,10 @@ public class CucumberTestSteps {
     private Long port;
 
     @Autowired
-    private UserRepository userRepository;
+    private ProviderRepository providerRepository;
+
+    @Autowired
+    private JobPostRepository jobPostRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -40,20 +49,62 @@ public class CucumberTestSteps {
 
     private ResponseEntity<String> response;
     private RestClientResponseException ex;
+    private String token;
+    private String jobPostId;
 
     @Given("the tables are empty")
     public void the_tables_are_empty() {
-        userRepository.deleteAll();
+        jobPostRepository.deleteAll();
+        providerRepository.deleteAll();
     }
 
-    @When("I call the user creation path with the following body")
-    public void i_call_the_user_creation_path_with_the_following_body(String docString) {
+    @Given("the job seeker is created with")
+    public void theJobSeekerIsCreatedWith(String docString) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
+        restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/provider/register",
+                                              HttpMethod.POST,
+                                              new HttpEntity<>(docString, headers),
+                                              String.class);
+    }
+
+    @Given("the job seeker is logged in with username {string} and password {string}")
+    public void theJobSeekerIsLoggedInWithUsernameAndPassword(String username, String password) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/provider/login",
+                                                                  HttpMethod.POST,
+                                                                  new HttpEntity<>(Map.of("username", username, "password", password), headers),
+                                                                  JsonNode.class);
+
+        this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
+    }
+
+    @Given("a post is created with")
+    public void aPostIsCreatedWith(String docString) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/create",
+                                                                  HttpMethod.POST,
+                                                                  new HttpEntity<>(docString, headers),
+                                                                  JsonNode.class);
+
+        jobPostId = Objects.requireNonNull(response.getBody()).get("id").asText();
+    }
+
+    @When("I call the update job post path with the following body")
+    public void iCallTheUpdateJobPostPathWithTheFollowingBody(String docString) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
         try {
-            this.response = restTemplate.exchange("http://localhost:" + port + "/user",
-                                                  HttpMethod.POST,
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/" + jobPostId,
+                                                  HttpMethod.PUT,
                                                   new HttpEntity<>(docString, headers),
                                                   String.class);
 
@@ -83,8 +134,15 @@ public class CucumberTestSteps {
         if (value.equals("not null")) {
             assertNotNull(jsonResponse.get(field).textValue());
         } else {
-            assertEquals(jsonResponse.get(field).textValue(), value);
+            assertEquals(value, jsonResponse.get(field).textValue());
         }
+    }
+
+    @Then("the job post with the title {string} must have the status {string}")
+    public void theJobPostWithTheTitleMustHaveTheStatus(String title, String status) {
+        Optional<JobPost> jobPost = jobPostRepository.findByTitle(title);
+
+        assertEquals(status, jobPost.orElseThrow().getStatus().name());
     }
 
 }
