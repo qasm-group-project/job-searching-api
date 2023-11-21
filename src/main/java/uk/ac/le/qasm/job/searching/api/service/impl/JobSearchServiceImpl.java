@@ -27,7 +27,7 @@ public class JobSearchServiceImpl implements JobSearchService {
                 .selectAs(Provider::getCompany_name,SearchAllJob::getCompany_name)
                 .selectAs(Provider::getCompany_contact_number,SearchAllJob::getCompany_contact_number)
                 .selectAs(Provider::getCompany_location,SearchAllJob::getCompany_location)
-                .leftJoin(Provider.class,Provider::getId,JobPost::getProvider_uuid)
+                .leftJoin(Provider.class,Provider::getId,JobPost::getProvider)
 //                        .eq(JobPost::getIsVisible,true)
         )
         );
