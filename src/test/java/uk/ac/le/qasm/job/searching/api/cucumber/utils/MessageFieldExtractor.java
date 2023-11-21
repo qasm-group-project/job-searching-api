@@ -24,7 +24,11 @@ public class MessageFieldExtractor {
 
         JsonNode value = null;
         if (payload != null) {
-            value = payload.get(fields.get(fields.size() - 1));
+            if(isInteger(fields.get(fields.size() - 1))) {
+                value = payload.get(Integer.parseInt(fields.get(fields.size() - 1)));
+            } else {
+                value = payload.get(fields.get(fields.size() - 1));
+            }
         }
         if (value != null && value.isTextual()) {
             fieldValues = value.textValue();
@@ -36,6 +40,15 @@ public class MessageFieldExtractor {
         }
 
         return fieldValues;
+    }
+
+    private static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
 }
