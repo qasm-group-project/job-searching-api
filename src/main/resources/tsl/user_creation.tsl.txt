@@ -1,0 +1,51 @@
+
+Test Case 1  		<error>
+   Username :  is blank
+
+
+Test Case 2  		<error>
+   Username :  not sent
+
+
+Test Case 3  		<error>
+   Username :  username already exists
+
+
+Test Case 4  		<error>
+   Password :  is blank
+
+
+Test Case 5  		<error>
+   Password :  not sent
+
+
+Test Case 6  		<error>
+   Company Name :  is blank
+
+
+Test Case 7  		<error>
+   Company Name :  not sent
+
+
+Test Case 8  		<error>
+   Company Number :  is blank
+
+
+Test Case 9  		<error>
+   Company Number :  not sent
+
+
+Test Case 10 		<error>
+   Company Location :  is blank
+
+
+Test Case 11 		<error>
+   Company Location :  not sent
+
+
+Test Case 12 		(Key = 0.0.0.0.0.)
+   Username         :  <n/a>
+   Password         :  <n/a>
+   Company Name     :  <n/a>
+   Company Number   :  <n/a>
+   Company Location :  <n/a>

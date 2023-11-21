@@ -1,20 +1,20 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
 
 import java.util.UUID;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode(exclude = "provider")
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
     @Id
@@ -23,22 +23,32 @@ public class JobPost {
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private UUID id;
 
+    @Setter
     @Column(name = "title")
     @JsonProperty(value = "title")
     private String title;
 
+    @Setter
     @Column(name = "description", columnDefinition="TEXT")
     @JsonProperty(value = "description")
     private String description;
 
+    @Setter
     @Column(name = "salary")
     @JsonProperty(value = "salary")
     private String salary;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private JobType jobType;
 
+    @Setter
+    @Column(name = "isVisible")
+    @JsonProperty(value = "isVisible")
+    private Boolean isVisible;
+
     @ManyToOne
     @JoinColumn(name = "provider_uuid")
+    @JsonIgnore
     private Provider provider;
 }
