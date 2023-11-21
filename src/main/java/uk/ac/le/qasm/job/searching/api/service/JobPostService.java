@@ -1,19 +1,16 @@
-package uk.ac.le.qasm.job.searching.api.Service;
+package uk.ac.le.qasm.job.searching.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
+import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,11 +23,8 @@ public class JobPostService {
         this.jobPostRepository = jobPostRepository;
     }
 
-    public void saveJobPost(JobPost jobPost) {
-        jobPostRepository.save(jobPost);
-    }
-    public Page<JobPost> getAllJobPosts(Pageable pageable) {
-        return jobPostRepository.findAll(pageable);
+    public JobPost saveJobPost(JobPost jobPost) {
+        return jobPostRepository.save(jobPost);
     }
 
     public Page<JobPost> getAllJobPostsByProvider(Provider provider, PageRequest pageRequest) {
@@ -50,6 +44,7 @@ public class JobPostService {
         existingJobPost.setSalary(updatedJobPost.getSalary());
         existingJobPost.setIsVisible(updatedJobPost.getIsVisible());
         existingJobPost.setJobType(JobType.valueOf(updatedJobPost.getJobType()));
+        existingJobPost.setStatus(updatedJobPost.getJobStatus());
         // Save and return the updated job post
         return jobPostRepository.save(existingJobPost);
     }
