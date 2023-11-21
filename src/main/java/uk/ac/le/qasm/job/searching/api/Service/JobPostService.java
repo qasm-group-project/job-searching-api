@@ -19,11 +19,7 @@ public class JobPostService {
         this.jobPostRepository = jobPostRepository;
     }
 
-    public ResponseEntity<Object> saveJobPost(JobPost jobPost) {
+    public void saveJobPost(JobPost jobPost) {
         jobPostRepository.save(jobPost);
-        Map<String, Object> responseObj = new HashMap<String, Object>();
-        responseObj.put("message", "Job Post Created successfully!");
-        responseObj.put("status", HttpStatus.OK.value());
-        return new ResponseEntity<Object>(responseObj, HttpStatus.OK);
     }
 }
