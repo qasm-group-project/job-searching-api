@@ -19,6 +19,7 @@ import uk.ac.le.qasm.job.searching.api.Application;
 import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
+import uk.ac.le.qasm.job.searching.api.repository.JobSeekerRepository;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
 
 import java.util.Map;
@@ -43,6 +44,9 @@ public class CucumberTestSteps {
     private JobPostRepository jobPostRepository;
 
     @Autowired
+    private JobSeekerRepository jobSeekerRepository;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -57,6 +61,7 @@ public class CucumberTestSteps {
     public void the_tables_are_empty() {
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
+        jobSeekerRepository.deleteAll();
     }
 
     @Given("the job provider is created with")
@@ -115,7 +120,11 @@ public class CucumberTestSteps {
     }
 
     @When("I call the create job seeker path with the following body")
+    @Given("the job seeker is created with")
     public void iCallTheCreateJobSeekerPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
@@ -123,6 +132,25 @@ public class CucumberTestSteps {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/register",
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(docString, headers),
+                                                  String.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the login path with username {string} and password {string}")
+    public void iCallTheLoginPathWithUsernameAndPassword(String username, String password) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/login",
+                                                  HttpMethod.POST,
+                                                  new HttpEntity<>(Map.of("username", username, "password", password), headers),
                                                   String.class);
 
         } catch (RestClientResponseException ex) {

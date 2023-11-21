@@ -69,7 +69,6 @@ public class JSAuthServiceImpl implements JSAuthService {
             res.put("status", HttpStatus.OK.value());
             res.put("token", jwtToken);
             res.put("user", user);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(createJobSeekerACUseCase.create(jobSeeker));
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
     }
@@ -85,42 +84,16 @@ public class JSAuthServiceImpl implements JSAuthService {
             QueryWrapper<JobSeeker> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("username", authenticationRequest.getUsername());
             var jobseeker = jobSeekerMapper.selectOne(queryWrapper);
-//            var jobseeker =  repository.findByUsername(authenticationRequest.getUsername()).orElseThrow();
             var jwtToken = jwtService.generateToken(jobseeker);
             res.put("message", "Login success");
-            res.put("status", HttpStatus.OK.value());
             res.put("token", jwtToken);
 
-//                res.put("token",jwtService.generateToken(jobseeker));
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (AuthenticationException e) {
-            res.put("message", "username does not exist");
-            res.put("status", HttpStatus.NOT_FOUND.value());
-            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+            res.put("message", "Wrong credentials");
+            return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
         }
 
-
-//        HashMap<String,Object> res = new HashMap<>();
-//        QueryWrapper<JobSeeker> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("username",authenticationRequest.getUsername());
-//
-//        var jobseeker = jobSeekerMapper.selectOne(queryWrapper);
-//        if (jobseeker!=null){
-//            if (passwordEncoder.matches(authenticationRequest.getPassword(),jobseeker.getPassword())){
-//                res.put("message","Login success");
-//                res.put("status",HttpStatus.OK.value());
-//                res.put("token",jwtService.generateToken(jobseeker));
-//                return new ResponseEntity<>(res,HttpStatus.OK);
-//            }else {
-//                res.put("message","wrong password");
-//                res.put("status",HttpStatus.UNAUTHORIZED.value());
-//                return new ResponseEntity<>(res,HttpStatus.UNAUTHORIZED);
-//            }
-//        }else {
-//            res.put("message","username does not exist");
-//            res.put("status",HttpStatus.NOT_FOUND.value());
-//            return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
-//        }
     }
 
 }

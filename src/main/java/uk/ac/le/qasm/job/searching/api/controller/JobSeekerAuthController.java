@@ -43,7 +43,7 @@ public class JobSeekerAuthController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
         return jsAuthService.login(authenticationRequest);
     }

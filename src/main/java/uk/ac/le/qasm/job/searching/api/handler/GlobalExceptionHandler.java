@@ -38,7 +38,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(JwtExtractionException.class)
     public ResponseEntity<Object> handleJwtExtractionException(JwtExtractionException ex) {
-
         Map<String, Object> responseObj = new HashMap<>();
         responseObj.put("error", "Failed to extract claim from JWT token");
         responseObj.put("details", ex.getMessage());
@@ -47,7 +46,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnknownException(Exception ex) {
-
         Map<String, Object> responseObj = new HashMap<>();
         responseObj.put("error", "Failed to extract claim from JWT token");
         responseObj.put("details", ex.getMessage());
