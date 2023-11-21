@@ -2,12 +2,14 @@ package uk.ac.le.qasm.job.searching.api.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
 
@@ -31,10 +33,17 @@ public class JobPostService {
         return jobPostRepository.findAll(pageable);
     }
 
-    public JobPost updateJobPost(UUID jobPostId, JobPostRequest updatedJobPost) {
+    public Page<JobPost> getAllJobPostsByProvider(Provider provider, PageRequest pageRequest) {
+        return jobPostRepository.findByProvider(provider, pageRequest);
+    }
+
+    public JobPost updateJobPost(Provider provider, UUID jobPostId, JobPostRequest updatedJobPost) {
         JobPost existingJobPost = jobPostRepository.findById(jobPostId)
                 .orElseThrow(() -> new RuntimeException("Job post not found"));
-
+        // Check if the provided provider ID matches the job post's provider ID
+        if (!existingJobPost.getProvider().getId().equals(provider.getId())) {
+            throw new RuntimeException("You are not authorized to update this job post");
+        }
         // Update fields
         existingJobPost.setTitle(updatedJobPost.getTitle());
         existingJobPost.setDescription(updatedJobPost.getDescription());
@@ -45,15 +54,16 @@ public class JobPostService {
         return jobPostRepository.save(existingJobPost);
     }
 
-    public ResponseEntity<Object> deleteJobPost(UUID jobPostId) {
-        JobPost existingJobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new RuntimeException("Job post not found with id: " + jobPostId));
-        jobPostRepository.delete(existingJobPost);
-        Map<String, Object> responseObj = new HashMap<String, Object>();
-        responseObj.put("message", "Job Post Deleted successfully!");
-        responseObj.put("status", HttpStatus.OK.value());
-        return new ResponseEntity<Object>(responseObj, HttpStatus.OK);
-
+    public ResponseEntity<Object> deleteJobPost(Provider provider, UUID jobPostId) {
+            JobPost existingJobPost = jobPostRepository.findById(jobPostId)
+                    .orElseThrow(() -> new RuntimeException("Job post not found"));
+            // Check if the provided provider ID matches the job post's provider ID
+            if (!existingJobPost.getProvider().getId().equals(provider.getId())) {
+                throw new RuntimeException("You are not authorized to delete this job post");
+            }
+            jobPostRepository.delete(existingJobPost);
+            Object responseBody = Map.of("message", "Job post deleted successfully");
+            return ResponseEntity.ok(responseBody);
     }
 
 }

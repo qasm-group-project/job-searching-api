@@ -4,6 +4,8 @@ package uk.ac.le.qasm.job.searching.api.controller.Provider;
 import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,10 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
 import uk.ac.le.qasm.job.searching.api.Service.JobPostService;
 import uk.ac.le.qasm.job.searching.api.config.JwtService;
@@ -25,6 +24,7 @@ import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
 import java.security.SignatureException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/provider/job-post")
@@ -50,15 +50,18 @@ public class JobPostController {
                 .isVisible(request.getIsVisible())
                 .provider(provider)
                 .build();
-        return jobPostService.saveJobPost(newJobPost);
+        jobPostService.saveJobPost(newJobPost);
+        Object responseBody = Map.of("message", "Job Post Created successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
     @GetMapping("")
-    public ResponseEntity<Page<JobPost>> getAllJobPosts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+    public ResponseEntity<Page<JobPost>> getAllJobPosts(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size)
+    {
         try {
-            Page<JobPost> jobPosts = jobPostService.getAllJobPosts(PageRequest.of(page, size));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Provider provider = (Provider) authentication.getPrincipal();
+            Page<JobPost> jobPosts = jobPostService.getAllJobPostsByProvider(provider, PageRequest.of(page, size));
             return new ResponseEntity<>(jobPosts, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,20 +69,40 @@ public class JobPostController {
     }
 
     @PutMapping("/{jobPostId}")
-    public ResponseEntity<JobPost> updateJobPost(
+    public ResponseEntity<Object> updateJobPost(
             @PathVariable UUID jobPostId,
+            @Valid
             @RequestBody JobPostRequest jobPostRequest
-    ) {
-        try {
-            JobPost updatedPost = jobPostService.updateJobPost(jobPostId, jobPostRequest);
-            return new ResponseEntity<>(updatedPost, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            ,BindingResult bindingResult) {
+            if (bindingResult.hasErrors()) {
+                List<String> errors = bindingResult.getFieldErrors()
+                        .stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+            }
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Provider provider = (Provider) authentication.getPrincipal();
+                JobPost updatedPost = jobPostService.updateJobPost(provider, jobPostId, jobPostRequest);
+                return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+            }catch (Exception e){
+                Object responseBody = Map.of("message", e.getMessage());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            }
     }
 
     @DeleteMapping("/{jobPostId}")
     public ResponseEntity<Object> deleteJobPost(@PathVariable UUID jobPostId) {
-        return jobPostService.deleteJobPost(jobPostId);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Provider provider = (Provider) authentication.getPrincipal();
+            jobPostService.deleteJobPost(provider, jobPostId);
+            Object responseBody = Map.of("message", "Job Post Deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Object responseBody = Map.of("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
     }
 }

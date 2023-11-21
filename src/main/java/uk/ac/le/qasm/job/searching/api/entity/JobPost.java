@@ -1,5 +1,6 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,10 +9,12 @@ import uk.ac.le.qasm.job.searching.api.Enumeration.JobType;
 import java.util.UUID;
 
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode(exclude = "provider")
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
     @Id
@@ -46,5 +49,6 @@ public class JobPost {
 
     @ManyToOne
     @JoinColumn(name = "provider_uuid")
+    @JsonIgnore
     private Provider provider;
 }
