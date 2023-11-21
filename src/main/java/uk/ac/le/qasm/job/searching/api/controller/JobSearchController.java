@@ -24,8 +24,6 @@ public class JobSearchController {
 
     @GetMapping
     public ResponseEntity<?> searchJob(){
-        SecurityContextHolder.getContext().getAuthentication();
-//        Authentication authentication =
         return jobSearchService.searchAll();
     }
 
