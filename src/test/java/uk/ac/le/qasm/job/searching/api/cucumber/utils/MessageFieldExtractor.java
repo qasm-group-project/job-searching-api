@@ -1,6 +1,8 @@
 package uk.ac.le.qasm.job.searching.api.cucumber.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -10,6 +12,10 @@ public class MessageFieldExtractor {
     }
 
     public static String getResponseFieldValue(JsonNode response, String dotSeparatedFields) {
+        if(dotSeparatedFields.isBlank()){
+            return response.toString();
+        }
+
         List<String> fields = List.of(dotSeparatedFields.trim().split("\\."));
         String fieldValues = null;
 
@@ -40,6 +46,13 @@ public class MessageFieldExtractor {
         }
 
         return fieldValues;
+    }
+
+
+    public static List<Object> getResponseFieldArray(JsonNode jsonResponse, String field) throws JsonProcessingException {
+        String json = getResponseFieldValue(jsonResponse, field);
+
+        return List.of(new ObjectMapper().readValue(json, Object[].class));
     }
 
     private static boolean isInteger(String s) {

@@ -33,7 +33,7 @@ public class JobSeeker implements UserDetails {
     private String username;
 
     @Column(name = "password")
-    @JsonProperty(value = "password")
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty(message = "The password is required.")
     private String password;
 

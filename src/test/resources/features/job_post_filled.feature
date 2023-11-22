@@ -26,8 +26,8 @@ Feature: Update a job post to filled functionality
         "title": "job post title",
         "description": "description",
         "salary": "1000.0",
-        "jobType": "FULL_TIME",
-        "isVisible": "true"
+        "job_type": "FULL_TIME",
+        "is_visible": "true"
       }
     """
     When I call the update job post path with the following body
@@ -36,8 +36,8 @@ Feature: Update a job post to filled functionality
         "title": "job post title",
         "description": "description",
         "salary": "1000.0",
-        "jobType": "FULL_TIME",
-        "isVisible": "true",
+        "job_type": "FULL_TIME",
+        "is_visible": "true",
         "status": "FILLED"
       }
     """
@@ -46,6 +46,31 @@ Feature: Update a job post to filled functionality
     And the field "title" returned must be "job post title"
     And the field "description" returned must be "description"
     And the field "salary" returned must be "1000.0"
-    And the field "jobType" returned must be "FULL_TIME"
+    And the field "job_type" returned must be "FULL_TIME"
     And the field "status" returned must be "FILLED"
     And the job post with the title "job post title" must have the status "FILLED"
+
+  Scenario: Job post is created with status PENDING
+    Given the job provider is created with
+    """
+      {
+        "username": "username",
+        "password": "password",
+        "company_name": "company_name",
+        "company_contact_number": "company_contact_number",
+        "company_location": "company_location"
+      }
+    """
+    And the job provider is logged in with username "username" and password "password"
+    When a post is created with
+    """
+      {
+        "title": "job post title",
+        "description": "description",
+        "salary": "1000.0",
+        "job_type": "FULL_TIME",
+        "is_visible": "true"
+      }
+    """
+    Then the status returned must be 201
+    And the job post with the title "job post title" must have the status "PENDING"

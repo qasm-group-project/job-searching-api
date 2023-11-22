@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
-import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
-import uk.ac.le.qasm.job.searching.api.service.JSAuthService;
+import uk.ac.le.qasm.job.searching.api.entity.AuthenticationRequest;
+import uk.ac.le.qasm.job.searching.api.adapter.JSAuthService;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +21,11 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth/seeker")
-public class JobSeekerAuthController {
+public class SeekerAuthController {
 
     private final JSAuthService jsAuthService;
 
-    public JobSeekerAuthController(JSAuthService jsAuthService) {
+    public SeekerAuthController(JSAuthService jsAuthService) {
         this.jsAuthService = jsAuthService;
     }
 

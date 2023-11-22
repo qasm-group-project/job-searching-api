@@ -51,7 +51,8 @@ public class Provider implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "provider_uuid")
     private List<JobPost> jobPosts;
 
     @Override
@@ -77,5 +78,18 @@ public class Provider implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Provider{" +
+               "id=" + id +
+               ", username='" + username + '\'' +
+               ", password='" + password + '\'' +
+               ", company_name='" + company_name + '\'' +
+               ", company_contact_number='" + company_contact_number + '\'' +
+               ", company_location='" + company_location + '\'' +
+               ", role=" + role +
+               '}';
     }
 }

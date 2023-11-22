@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
-import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
+import uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService;
 
 import java.util.Map;
 import java.util.UUID;
@@ -13,12 +13,12 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/seekers")
-public class JobSeekerController {
+public class SeekerController {
 
 
     private final JobSeekerService jobSeekerService;
 
-    public JobSeekerController(JobSeekerService jobSeekerService) {
+    public SeekerController(JobSeekerService jobSeekerService) {
         this.jobSeekerService = jobSeekerService;
     }
 

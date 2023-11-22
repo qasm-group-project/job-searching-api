@@ -17,7 +17,7 @@ import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
+import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/provider/job-post")
 @RequiredArgsConstructor
-public class JobPostController {
+public class ProviderJobPostController {
     private final JobPostService jobPostService;
 
     @PostMapping("/create")
@@ -45,6 +45,7 @@ public class JobPostController {
                        .description(request.getDescription())
                        .salary(request.getSalary())
                        .isVisible(request.getIsVisible())
+                       .status(request.getJobStatus())
                        .provider(provider)
                        .build();
         JobPost jobPost = jobPostService.saveJobPost(newJobPost);

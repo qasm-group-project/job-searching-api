@@ -17,4 +17,6 @@ public interface JobPostRepository extends JpaRepository<JobPost, UUID> {
     Optional<JobPost> findByTitle(String title);
 
     Set<JobPost> findAllByIsVisibleAndStatus(boolean b, JobStatus jobStatus);
+
+    Optional<JobPost> findByIdAndIsVisibleAndStatus(UUID jobId, boolean b, JobStatus jobStatus);
 }

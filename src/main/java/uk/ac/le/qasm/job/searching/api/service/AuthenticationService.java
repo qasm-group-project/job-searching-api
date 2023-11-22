@@ -9,8 +9,8 @@ import uk.ac.le.qasm.job.searching.api.enums.Role;
 import uk.ac.le.qasm.job.searching.api.config.JwtService;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
-import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
-import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
+import uk.ac.le.qasm.job.searching.api.entity.AuthenticationRequest;
+import uk.ac.le.qasm.job.searching.api.entity.RegisterRequest;
 
 @Service
 @RequiredArgsConstructor

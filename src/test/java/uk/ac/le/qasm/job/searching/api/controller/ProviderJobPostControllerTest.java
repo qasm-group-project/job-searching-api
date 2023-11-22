@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
-import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
+import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 
 import java.util.Collections;
@@ -33,13 +33,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class JobPostControllerTest {
+public class ProviderJobPostControllerTest {
     @Mock
     private MockMvc mockMvc;
     @Mock
     private JobPostService jobPostService;
     @InjectMocks
-    private JobPostController jobPostController;
+    private ProviderJobPostController providerJobPostController;
 
     @Test
     void testCreateJobPost() throws Exception {
@@ -59,7 +59,7 @@ public class JobPostControllerTest {
         when(jobPostService.saveJobPost(Mockito.any(JobPost.class))).thenReturn(jobPost);
 
         // Set up MockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
 
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
@@ -81,7 +81,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_MissedTitle_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setJobType("FULL_TIME");
@@ -101,7 +101,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_TitleIsEmpty_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("");
@@ -122,7 +122,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_JobTypeMissed_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -143,7 +143,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_JobTypeIsEmpty_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -164,7 +164,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_DescriptionMissed_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -185,7 +185,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_DescriptionIsEmpty_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -206,7 +206,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_SalaryMissed_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -227,7 +227,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_SalaryIsEmpty_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -248,7 +248,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_IsVisibleMissed_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -269,7 +269,7 @@ public class JobPostControllerTest {
 
     @Test
     void testCreateJobPost_IsVisibleIsEmpty_ShouldReturnBadRequest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Create a JobPostRequest object
         JobPostRequest jobPostRequest = new JobPostRequest();
         jobPostRequest.setTitle("Test title");
@@ -290,7 +290,7 @@ public class JobPostControllerTest {
 
     @Test
     public void getAllJobPosts() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Mock authentication and principal
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -320,7 +320,7 @@ public class JobPostControllerTest {
 
     @Test
     void getAllJobPostsFailure() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Mock authentication and principal
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -348,7 +348,7 @@ public class JobPostControllerTest {
 
     @Test
     void updateJobPostSuccess() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
@@ -389,8 +389,8 @@ public class JobPostControllerTest {
                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Title")) // Add assertions for other fields
                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Description"))
                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(50000))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.isVisible").value(true))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.jobType").value("FULL_TIME"));
+               .andExpect(MockMvcResultMatchers.jsonPath("$.is_visible").value(true))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.job_type").value("FULL_TIME"));
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);
@@ -398,7 +398,7 @@ public class JobPostControllerTest {
 
     @Test
     void updateJobPostUnauthorized() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
@@ -435,7 +435,7 @@ public class JobPostControllerTest {
 
     @Test
     void updateJobPostNotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
@@ -469,7 +469,7 @@ public class JobPostControllerTest {
 
     @Test
     void deleteJobPostSuccess() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
@@ -501,7 +501,7 @@ public class JobPostControllerTest {
 
     @Test
     void deleteJobPostNotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance
@@ -529,7 +529,7 @@ public class JobPostControllerTest {
 
     @Test
     void deleteJobPostUnauthorized() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
         UUID jobPostId = UUID.randomUUID();
         Provider provider = new Provider(); // Create a provider instance

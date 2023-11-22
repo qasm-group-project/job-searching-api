@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
-import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
+import uk.ac.le.qasm.job.searching.api.entity.AuthenticationRequest;
+import uk.ac.le.qasm.job.searching.api.entity.RegisterRequest;
 import uk.ac.le.qasm.job.searching.api.service.AuthenticationService;
 
 import java.util.List;

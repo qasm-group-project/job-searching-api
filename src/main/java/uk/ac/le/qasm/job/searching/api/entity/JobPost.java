@@ -15,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode(exclude = "provider")
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
     @Id
@@ -41,22 +40,36 @@ public class JobPost {
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(name = "job_type")
+    @JsonProperty("job_type")
     private JobType jobType;
 
     @Setter
-    @Column(name = "isVisible")
-    @JsonProperty(value = "isVisible")
+    @Column(name = "is_visible")
+    @JsonProperty(value = "is_visible")
     private Boolean isVisible;
 
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "job_status")
+    @Column(name = "status")
     @JsonProperty(value = "status")
     private JobStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
 
+    @Override
+    public String toString() {
+        return "JobPost{" +
+               "id=" + id +
+               ", title='" + title + '\'' +
+               ", description='" + description + '\'' +
+               ", salary='" + salary + '\'' +
+               ", jobType=" + jobType +
+               ", isVisible=" + isVisible +
+               ", status=" + status +
+               '}';
+    }
 }

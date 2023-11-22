@@ -12,8 +12,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
-import uk.ac.le.qasm.job.searching.api.request.RegisterRequest;
+import uk.ac.le.qasm.job.searching.api.entity.AuthenticationRequest;
+import uk.ac.le.qasm.job.searching.api.entity.RegisterRequest;
 import uk.ac.le.qasm.job.searching.api.service.AuthenticationService;
 
 import static org.mockito.ArgumentMatchers.any;

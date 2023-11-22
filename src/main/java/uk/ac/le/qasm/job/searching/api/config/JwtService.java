@@ -9,7 +9,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.exception.JwtExtractionException;
+import uk.ac.le.qasm.job.searching.api.exception.UnauthorizedException;
 
 import java.security.Key;
 import java.util.Date;
@@ -31,7 +31,7 @@ public class JwtService {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
         } catch (JwtException e) {
-            throw new JwtExtractionException("Failed to extract claim from JWT token");
+            throw new UnauthorizedException();
         }
     }
 
