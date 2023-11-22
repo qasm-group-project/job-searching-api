@@ -1,14 +1,14 @@
-package uk.ac.le.qasm.job.searching.api.usecase;
+package uk.ac.le.qasm.job.searching.api.service;
 
 import org.springframework.stereotype.Component;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerPersistence;
 
 @Component
-public class CreateJobSeekerACUseCase {
+public class CreateJobSeekerService {
     private final JobSeekerPersistence jobSeekerPersistence;
 
-    public CreateJobSeekerACUseCase(JobSeekerPersistence jobSeekerPersistence) {
+    public CreateJobSeekerService(JobSeekerPersistence jobSeekerPersistence) {
         this.jobSeekerPersistence = jobSeekerPersistence;
     }
 

@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.request;
+package uk.ac.le.qasm.job.searching.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;

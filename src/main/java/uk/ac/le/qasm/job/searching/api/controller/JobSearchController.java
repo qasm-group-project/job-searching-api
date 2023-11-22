@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.ac.le.qasm.job.searching.api.service.JobSearchService;
+import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
 
 @Slf4j
 @RestController

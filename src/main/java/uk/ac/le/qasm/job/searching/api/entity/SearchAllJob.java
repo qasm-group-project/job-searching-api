@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.result;
+package uk.ac.le.qasm.job.searching.api.entity;
 
 import lombok.Data;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;

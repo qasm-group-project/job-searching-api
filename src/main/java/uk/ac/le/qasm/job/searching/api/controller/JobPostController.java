@@ -17,7 +17,7 @@ import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.request.JobPostRequest;
+import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
 import java.util.List;
 import java.util.Map;
