@@ -26,7 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/provider/job-post")
 @RequiredArgsConstructor
-public class JobPostController {
+public class ProviderJobPostController {
     private final JobPostService jobPostService;
 
     @PostMapping("/create")

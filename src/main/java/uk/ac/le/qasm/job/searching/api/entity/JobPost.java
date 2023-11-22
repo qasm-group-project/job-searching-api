@@ -15,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode(exclude = "provider")
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
     @Id
@@ -56,9 +55,21 @@ public class JobPost {
     @JsonProperty(value = "status")
     private JobStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
 
+    @Override
+    public String toString() {
+        return "JobPost{" +
+               "id=" + id +
+               ", title='" + title + '\'' +
+               ", description='" + description + '\'' +
+               ", salary='" + salary + '\'' +
+               ", jobType=" + jobType +
+               ", isVisible=" + isVisible +
+               ", status=" + status +
+               '}';
+    }
 }

@@ -7,6 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
 import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.repository.JobSeekerRepository;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
@@ -27,8 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @CucumberContextConfiguration
 @ContextConfiguration(classes = Application.class, loader = SpringBootContextLoader.class)
@@ -42,10 +43,13 @@ public class CucumberTestSteps {
     private ProviderRepository providerRepository;
 
     @Autowired
+    private JobSeekerRepository jobSeekerRepository;
+
+    @Autowired
     private JobPostRepository jobPostRepository;
 
     @Autowired
-    private JobSeekerRepository jobSeekerRepository;
+    private JobApplicationRepository jobApplicationRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -58,8 +62,17 @@ public class CucumberTestSteps {
     private String token;
     private String jobPostId;
 
+    @Before
+    public void init() {
+        this.response = null;
+        this.ex = null;
+        this.token = null;
+        this.jobPostId = null;
+    }
+
     @Given("the tables are empty")
     public void the_tables_are_empty() {
+        jobApplicationRepository.deleteAll();
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
@@ -108,6 +121,11 @@ public class CucumberTestSteps {
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
+    }
+
+    @Given("the header is empty")
+    public void theHeaderIsEmpty() {
+        this.token = null;
     }
 
     @When("I call the update job post path with the following body")
@@ -191,6 +209,28 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call the apply for jobs path for the job {string}")
+    public void iCallTheApplyForJobsPathForTheJob(String title) {
+        JobPost jobPost = jobPostRepository.findByTitle(title)
+                                           .orElseThrow(() -> new RuntimeException("Job does not exist"));
+
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/" + jobPost.getId() + "/apply",
+                                                  HttpMethod.POST,
+                                                  new HttpEntity<>(headers),
+                                                  JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @Then("the status returned must be {int}")
     public void the_status_returned_must_be(Integer httpStatus) {
         if (response != null) {
@@ -211,6 +251,8 @@ public class CucumberTestSteps {
 
         if (value.equals("not null")) {
             assertNotNull(MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
+        } else if (value.equals("null")) {
+            assertNull(MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
         } else {
             assertEquals(value, MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
         }

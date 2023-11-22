@@ -13,12 +13,12 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/seekers")
-public class JobSeekerController {
+public class SeekerController {
 
 
     private final JobSeekerService jobSeekerService;
 
-    public JobSeekerController(JobSeekerService jobSeekerService) {
+    public SeekerController(JobSeekerService jobSeekerService) {
         this.jobSeekerService = jobSeekerService;
     }
 

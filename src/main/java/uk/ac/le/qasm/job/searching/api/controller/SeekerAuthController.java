@@ -21,11 +21,11 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth/seeker")
-public class JobSeekerAuthController {
+public class SeekerAuthController {
 
     private final JSAuthService jsAuthService;
 
-    public JobSeekerAuthController(JSAuthService jsAuthService) {
+    public SeekerAuthController(JSAuthService jsAuthService) {
         this.jsAuthService = jsAuthService;
     }
 

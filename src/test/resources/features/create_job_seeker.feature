@@ -26,7 +26,7 @@ Feature: Create a job seeker functionality
     And the field "message" returned must be "Login success!"
     And the field "token" returned must be "not null"
     And the field "user.username" returned must be "dfsd1f111566666"
-    And the field "user.password" returned must be "not null"
+    And the field "user.password" returned must be "null"
     And the field "user.nickname" returned must be "test_nickname"
     And the field "user.email" returned must be "test"
     And the field "user.phone" returned must be "444412345"

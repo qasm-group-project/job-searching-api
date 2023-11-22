@@ -53,6 +53,23 @@ Feature: Find available jobs functionality
     And the field "0.job_type" returned must be "FULL_TIME"
     And the field "0.status" returned must be "PENDING"
 
+  Scenario: Seeker is unauthorized
+    Given the job provider is logged in with username "username" and password "password"
+    And a post is created with
+    """
+      {
+        "title": "job post title",
+        "description": "description",
+        "salary": "1000.0",
+        "job_type": "FULL_TIME",
+        "is_visible": "true"
+      }
+    """
+    And the header is empty
+    When I call the search jobs path
+    Then the status returned must be 401
+    And the field "error" returned must be "User not authorized"
+
   Scenario: Invisible jobs are not returned
     Given the job provider is logged in with username "username" and password "password"
     And a post is created with
