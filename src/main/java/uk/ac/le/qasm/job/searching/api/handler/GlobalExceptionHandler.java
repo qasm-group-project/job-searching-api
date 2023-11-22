@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.exception.JwtExtractionException;
 
 import java.util.HashMap;
@@ -34,6 +35,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         body.put("errors", errors);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<Object> handleBaseException(BaseException ex) {
+        Map<String, Object> responseObj = new HashMap<>();
+        responseObj.put("error", ex.getDescription());
+        return ResponseEntity.status(ex.getHttpStatus()).body(responseObj);
     }
 
     @ExceptionHandler(JwtExtractionException.class)

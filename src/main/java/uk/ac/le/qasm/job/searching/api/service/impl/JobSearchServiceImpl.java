@@ -1,43 +1,24 @@
 package uk.ac.le.qasm.job.searching.api.service.impl;
 
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.mapper.JobSearchMapper;
-import uk.ac.le.qasm.job.searching.api.result.SearchAllJob;
+import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
+import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.service.JobSearchService;
+
+import java.util.Set;
 
 @Service
 public class JobSearchServiceImpl implements JobSearchService {
 
-    private final JobSearchMapper jobSearchMapper;
+    private final JobPostRepository jobPostRepository;
 
-    public JobSearchServiceImpl(JobSearchMapper jobSearchMapper) {
-        this.jobSearchMapper = jobSearchMapper;
+    public JobSearchServiceImpl(JobPostRepository jobPostRepository) {
+        this.jobPostRepository = jobPostRepository;
     }
 
     @Override
-    public ResponseEntity<?> searchAll() {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(jobSearchMapper.selectList(null));
-
-        return ResponseEntity.ok().body(jobSearchMapper.selectJoinList(SearchAllJob.class,new MPJLambdaWrapper<JobPost>()
-                .selectAll(JobPost.class)
-                .selectAs(Provider::getCompany_name,SearchAllJob::getCompany_name)
-                .selectAs(Provider::getCompany_contact_number,SearchAllJob::getCompany_contact_number)
-                .selectAs(Provider::getCompany_location,SearchAllJob::getCompany_location)
-                .leftJoin(Provider.class,Provider::getId,JobPost::getProvider)
-//                        .eq(JobPost::getIsVisible,true)
-        )
-        );
-
-
-//        List<SearchAllJob> allJobs = jobSearchMapper.selectJoinList(SearchAllJob.class,
-//                new MPJLambdaWrapper<JobPost>()
-//                        .select
-//                        .selectAs(JobPost::getId,)
-//
-//        );
+    public Set<JobPost> searchAll() {
+        return jobPostRepository.findAllByIsVisibleAndStatus(true, JobStatus.PENDING);
     }
 }

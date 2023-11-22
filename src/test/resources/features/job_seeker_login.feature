@@ -43,7 +43,7 @@ Feature: Job seeker login functionality
     """
     When I call the login path with username "dfsd1f111566666" and password "testacpasswoa"
     Then the status returned must be 403
-    And the field "message" returned must be "Wrong credentials"
+    And the field "error" returned must be "Wrong credentials"
 
   Scenario: Job seeker does not log in - username incorrect
     Given the job seeker is created with
@@ -61,5 +61,5 @@ Feature: Job seeker login functionality
     """
     When I call the login path with username "dfsd1f111566663" and password "testacpasswor"
     Then the status returned must be 403
-    And the field "message" returned must be "Wrong credentials"
+    And the field "error" returned must be "Wrong credentials"
 

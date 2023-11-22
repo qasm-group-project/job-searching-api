@@ -22,7 +22,7 @@ Feature: Create a job seeker functionality
         "gender":"male"
       }
     """
-    Then the status returned must be 200
+    Then the status returned must be 201
     And the field "message" returned must be "Login success!"
     And the field "token" returned must be "not null"
     And the field "user.username" returned must be "dfsd1f111566666"

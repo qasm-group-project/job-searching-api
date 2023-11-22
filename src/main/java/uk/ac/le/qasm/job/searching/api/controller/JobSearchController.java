@@ -9,8 +9,7 @@ import uk.ac.le.qasm.job.searching.api.service.JobSearchService;
 
 @Slf4j
 @RestController
-//change the RequestMapping later!
-@RequestMapping("/api/v1/seeker/search")
+@RequestMapping("/api/v1/seeker/job-post")
 public class JobSearchController {
 
     private final JobSearchService jobSearchService;
@@ -21,7 +20,7 @@ public class JobSearchController {
 
     @GetMapping
     public ResponseEntity<?> searchJob(){
-        return jobSearchService.searchAll();
+        return ResponseEntity.ok(jobSearchService.searchAll());
     }
 
 }

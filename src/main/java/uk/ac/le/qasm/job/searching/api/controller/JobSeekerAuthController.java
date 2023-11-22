@@ -3,7 +3,6 @@ package uk.ac.le.qasm.job.searching.api.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -30,21 +29,21 @@ public class JobSeekerAuthController {
         this.jsAuthService = jsAuthService;
     }
 
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/register")
     public ResponseEntity<?> createSeeker(@Valid @RequestBody JobSeeker jobSeekerAccount, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
         }
         try {
-            return jsAuthService.register(jobSeekerAccount);
+            return ResponseEntity.status(HttpStatus.CREATED).body(jsAuthService.register(jobSeekerAccount));
         } catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping( "/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        return jsAuthService.login(authenticationRequest);
+        return ResponseEntity.ok(jsAuthService.login(authenticationRequest));
     }
 }

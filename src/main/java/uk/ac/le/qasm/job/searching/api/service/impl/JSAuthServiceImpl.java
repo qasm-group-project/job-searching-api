@@ -2,7 +2,6 @@ package uk.ac.le.qasm.job.searching.api.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -11,6 +10,8 @@ import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.config.JwtService;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.enums.Role;
+import uk.ac.le.qasm.job.searching.api.exception.UnauthorizedException;
+import uk.ac.le.qasm.job.searching.api.exception.UserAlreadyExistsException;
 import uk.ac.le.qasm.job.searching.api.mapper.JobSeekerMapper;
 import uk.ac.le.qasm.job.searching.api.repository.SeekerRepository;
 import uk.ac.le.qasm.job.searching.api.request.AuthenticationRequest;
@@ -44,13 +45,11 @@ public class JSAuthServiceImpl implements JSAuthService {
     }
 
     @Override
-    public ResponseEntity<Object> register(JobSeeker jobSeekerAccount) {
+    public Map<String, Object> register(JobSeeker jobSeekerAccount) {
         Map<String, Object> res = new HashMap<>();
 
         if (checkJobSeekerACUsernameUserCase.Check(jobSeekerAccount.getUsername())) {
-            res.put("message", "username already exist!");
-            res.put("status", HttpStatus.FORBIDDEN.value());
-            return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
+            throw new UserAlreadyExistsException();
         } else {
             var jobSeeker = JobSeeker.builder()
                                      .username(jobSeekerAccount.getUsername())
@@ -69,12 +68,12 @@ public class JSAuthServiceImpl implements JSAuthService {
             res.put("status", HttpStatus.OK.value());
             res.put("token", jwtToken);
             res.put("user", user);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return res;
         }
     }
 
     @Override
-    public ResponseEntity<?> login(AuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public Map<String, Object> login(AuthenticationRequest authenticationRequest) throws AuthenticationException {
         Map<String, Object> res = new HashMap<>();
         try {
             authenticationManager.authenticate(
@@ -88,10 +87,9 @@ public class JSAuthServiceImpl implements JSAuthService {
             res.put("message", "Login success");
             res.put("token", jwtToken);
 
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return res;
         } catch (AuthenticationException e) {
-            res.put("message", "Wrong credentials");
-            return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
+            throw new UnauthorizedException();
         }
 
     }
