@@ -43,4 +43,5 @@ public class AuthenticationService {
         var provider = repository.findByUsername(request.getUsername()).orElseThrow();
         return jwtService.generateToken(provider);
     }
+
 }

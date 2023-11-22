@@ -8,8 +8,8 @@ Feature: Update a job post to filled functionality
   Background:
     Given the tables are empty
 
-  Scenario: User is created successfully - response validation
-    Given the job seeker is created with
+  Scenario: Job post is update successfully to FILLED
+    Given the job provider is created with
     """
       {
         "username": "username",
@@ -19,7 +19,7 @@ Feature: Update a job post to filled functionality
         "company_location": "company_location"
       }
     """
-    And the job seeker is logged in with username "username" and password "password"
+    And the job provider is logged in with username "username" and password "password"
     And a post is created with
     """
       {

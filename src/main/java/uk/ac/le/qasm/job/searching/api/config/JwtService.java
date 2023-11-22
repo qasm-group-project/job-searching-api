@@ -31,7 +31,6 @@ public class JwtService {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
         } catch (JwtException e) {
-            // TODO - Luis
             throw new JwtExtractionException("Failed to extract claim from JWT token");
         }
     }
