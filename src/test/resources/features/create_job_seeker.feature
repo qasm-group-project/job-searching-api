@@ -34,6 +34,24 @@ Feature: Create a job seeker functionality
     And the field "user.lastname" returned must be "testlastname"
     And the field "user.gender" returned must be "male"
 
+
+
+  Scenario: Job seeker creation failed - gender required
+    When I call the create job seeker path with the following body
+    """
+      {
+        "username":"dfsd1f111566666",
+        "password":"testacpasswor",
+        "nickname":"test_nickname",
+        "email":"test",
+        "phone":"444412345",
+        "firstname":"testirstname",
+        "lastname":"testlastname"
+      }
+    """
+    Then the status returned must be 400
+    And the field "errors.0" returned must be "The gender is required."
+
   Scenario: Job seeker creation failed - username required
     When I call the create job seeker path with the following body
     """
@@ -69,9 +87,9 @@ Feature: Create a job seeker functionality
   Scenario: Job seeker creation failed - nickname required
     When I call the create job seeker path with the following body
     """
-      {
+{
         "username":"dfsd1f111566666",
-         "password":"testacpasswor",
+        "password":"testacpasswor",
         "email":"test",
         "phone":"444412345",
         "firstname":"testirstname",
@@ -81,6 +99,8 @@ Feature: Create a job seeker functionality
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The nickname is required."
+
+
 
   Scenario: Job seeker creation failed - email required
     When I call the create job seeker path with the following body
@@ -97,3 +117,51 @@ Feature: Create a job seeker functionality
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The email is required."
+
+  Scenario: Job seeker creation failed - phone required
+    When I call the create job seeker path with the following body
+    """
+      {
+        "username":"dfsd1f111566666",
+        "password":"testacpasswor",
+        "nickname":"test_nickname",
+        "email":"test",
+        "firstname":"testirstname",
+        "lastname":"testlastname",
+        "gender":"male"
+      }
+    """
+    Then the status returned must be 400
+    And the field "errors.0" returned must be "The phone is required."
+
+  Scenario: Job seeker creation failed - firstname required
+    When I call the create job seeker path with the following body
+    """
+      {
+        "username":"dfsd1f111566666",
+        "password":"testacpasswor",
+        "nickname":"test_nickname",
+        "email":"test",
+        "phone":"444412345",
+        "lastname":"testlastname",
+        "gender":"male"
+      }
+    """
+    Then the status returned must be 400
+    And the field "errors.0" returned must be "The firstname is required."
+
+  Scenario: Job seeker creation failed - lastname required
+    When I call the create job seeker path with the following body
+    """
+      {
+        "username":"dfsd1f111566666",
+        "password":"testacpasswor",
+        "nickname":"test_nickname",
+        "email":"test",
+        "phone":"444412345",
+        "firstname":"testirstname",
+        "gender":"male"
+      }
+    """
+    Then the status returned must be 400
+    And the field "errors.0" returned must be "The lastname is required."

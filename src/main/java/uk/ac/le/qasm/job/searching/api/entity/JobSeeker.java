@@ -42,36 +42,43 @@ public class JobSeeker implements UserDetails {
     @Column(name = "password")
     @JsonProperty(value = "password")
     @TableField("password")
+    @NotEmpty(message = "The password is required.")
     private String password;
 
     @Column(name = "nickname")
     @JsonProperty(value = "nickname")
     @TableField("nickname")
+    @NotEmpty(message = "The nickname is required.")
     private String nickname;
 
     @Column(name = "email")
     @JsonProperty(value = "email")
     @TableField("email")
+    @NotEmpty(message = "The email is required.")
     private String email;
 
     @Column(name = "phone")
     @JsonProperty(value = "phone")
     @TableField("phone")
+    @NotEmpty(message = "The phone is required.")
     private String phone;
 
     @Column(name = "firstname")
     @JsonProperty(value = "firstname")
     @TableField("firstname")
+    @NotEmpty(message = "The firstname is required.")
     private String firstname;
 
     @Column(name = "lastname")
     @JsonProperty(value = "lastname")
     @TableField("lastname")
+    @NotEmpty(message = "The lastname is required.")
     private String lastname;
 
     @Column(name = "gender")
     @JsonProperty(value = "gender")
     @TableField("gender")
+    @NotEmpty(message = "The gender is required.")
     private String gender;
 
     @Enumerated(EnumType.STRING)
