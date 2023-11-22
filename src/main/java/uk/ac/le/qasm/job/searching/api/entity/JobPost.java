@@ -41,16 +41,18 @@ public class JobPost {
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(name = "job_type")
+    @JsonProperty("job_type")
     private JobType jobType;
 
     @Setter
-    @Column(name = "isVisible")
-    @JsonProperty(value = "isVisible")
+    @Column(name = "is_visible")
+    @JsonProperty(value = "is_visible")
     private Boolean isVisible;
 
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "job_status")
+    @Column(name = "status")
     @JsonProperty(value = "status")
     private JobStatus status;
 

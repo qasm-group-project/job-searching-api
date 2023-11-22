@@ -16,14 +16,19 @@ import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 public class JobPostRequest {
 
     @NotEmpty(message = "The full title is required.")
+    @JsonProperty("title")
     private String title;
     @NotEmpty(message = "The full description is required.")
+    @JsonProperty("description")
     private String description;
     @NotEmpty(message = "The full salary is required.")
+    @JsonProperty("salary")
     private String salary;
     @NotEmpty(message = "The full jobType is required.")
+    @JsonProperty("job_type")
     private String jobType;
     @NotNull(message = "The status of visibility is required.")
+    @JsonProperty("is_visible")
     private Boolean isVisible;
     @JsonProperty("status")
     private JobStatus jobStatus = JobStatus.PENDING;

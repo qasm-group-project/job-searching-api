@@ -389,8 +389,8 @@ public class JobPostControllerTest {
                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Title")) // Add assertions for other fields
                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Description"))
                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(50000))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.isVisible").value(true))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.jobType").value("FULL_TIME"));
+               .andExpect(MockMvcResultMatchers.jsonPath("$.is_visible").value(true))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.job_type").value("FULL_TIME"));
 
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);

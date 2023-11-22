@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
+import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+
+import java.util.Set;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/seeker/job-post")
+@RequestMapping("/api/v1/seeker/job-posts")
 public class JobSearchController {
 
     private final JobSearchService jobSearchService;
@@ -19,7 +22,7 @@ public class JobSearchController {
     }
 
     @GetMapping
-    public ResponseEntity<?> searchJob(){
+    public ResponseEntity<Set<JobPost>> searchJob() {
         return ResponseEntity.ok(jobSearchService.searchAll());
     }
 

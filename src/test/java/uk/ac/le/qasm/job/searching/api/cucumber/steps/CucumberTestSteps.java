@@ -22,6 +22,7 @@ import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.repository.JobSeekerRepository;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class CucumberTestSteps {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ResponseEntity<String> response;
+    private ResponseEntity<JsonNode> response;
     private RestClientResponseException ex;
     private String token;
     private String jobPostId;
@@ -70,9 +71,9 @@ public class CucumberTestSteps {
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
         restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/provider/register",
-                                              HttpMethod.POST,
-                                              new HttpEntity<>(docString, headers),
-                                              String.class);
+                              HttpMethod.POST,
+                              new HttpEntity<>(docString, headers),
+                              String.class);
     }
 
     @Given("the job provider is logged in with username {string} and password {string}")
@@ -90,20 +91,30 @@ public class CucumberTestSteps {
 
     @Given("a post is created with")
     public void aPostIsCreatedWith(String docString) {
+        this.response = null;
+        this.ex = null;
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Authorization", "Bearer " + token);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/create",
-                                                                  HttpMethod.POST,
-                                                                  new HttpEntity<>(docString, headers),
-                                                                  JsonNode.class);
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/create",
+                                             HttpMethod.POST,
+                                             new HttpEntity<>(docString, headers),
+                                             JsonNode.class);
 
-        jobPostId = Objects.requireNonNull(response.getBody()).get("id").asText();
+            jobPostId = Objects.requireNonNull(response.getBody()).get("id").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
     }
 
     @When("I call the update job post path with the following body")
     public void iCallTheUpdateJobPostPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Authorization", "Bearer " + token);
@@ -112,7 +123,7 @@ public class CucumberTestSteps {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/" + jobPostId,
                                                   HttpMethod.PUT,
                                                   new HttpEntity<>(docString, headers),
-                                                  String.class);
+                                                  JsonNode.class);
 
         } catch (RestClientResponseException ex) {
             this.ex = ex;
@@ -132,13 +143,14 @@ public class CucumberTestSteps {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/register",
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(docString, headers),
-                                                  String.class);
+                                                  JsonNode.class);
 
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
     }
 
+    @Given("the job seeker is logged in with username {string} and password {string}")
     @When("I call the login path with username {string} and password {string}")
     public void iCallTheLoginPathWithUsernameAndPassword(String username, String password) {
         this.response = null;
@@ -151,7 +163,28 @@ public class CucumberTestSteps {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/login",
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(Map.of("username", username, "password", password), headers),
-                                                  String.class);
+                                                  JsonNode.class);
+            this.token = null;
+            this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the search jobs path")
+    public void iCallTheSearchJobsPath() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts",
+                                                  HttpMethod.GET,
+                                                  new HttpEntity<>(headers),
+                                                  JsonNode.class);
 
         } catch (RestClientResponseException ex) {
             this.ex = ex;
@@ -171,7 +204,7 @@ public class CucumberTestSteps {
     public void the_field_returned_must_be(String field, String value) throws JsonProcessingException {
         JsonNode jsonResponse;
         if (response != null) {
-            jsonResponse = objectMapper.readTree(response.getBody());
+            jsonResponse = response.getBody();
         } else {
             jsonResponse = objectMapper.readTree(ex.getResponseBodyAsString());
         }
@@ -181,6 +214,21 @@ public class CucumberTestSteps {
         } else {
             assertEquals(value, MessageFieldExtractor.getResponseFieldValue(jsonResponse, field));
         }
+    }
+
+    @Then("the array {string} returned must have size {string}")
+    public void theArrayReturnedMustHaveSize(String field, String size) throws JsonProcessingException {
+        JsonNode jsonResponse;
+        if (response != null) {
+            jsonResponse = response.getBody();
+        } else {
+            jsonResponse = objectMapper.readTree(ex.getResponseBodyAsString());
+        }
+
+        List<Object> array = MessageFieldExtractor.getResponseFieldArray(jsonResponse, field);
+
+        assertNotNull(array);
+        assertEquals(Integer.parseInt(size), array.size());
     }
 
     @Then("the job post with the title {string} must have the status {string}")
