@@ -8,23 +8,30 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class JobSeekerACPersistence {
+public class JobSeekerPersistence {
     private final JobSeekerRepository jobSeekerRepository;
 
-
-    public JobSeekerACPersistence(JobSeekerRepository jobSeekerRepository) {
+    public JobSeekerPersistence(JobSeekerRepository jobSeekerRepository) {
         this.jobSeekerRepository = jobSeekerRepository;
     }
 
     public JobSeeker Create(JobSeeker jobSeekerAccount){
         return jobSeekerRepository.save(jobSeekerAccount);
     }
-    public Optional<JobSeeker> getById(UUID id){
-        return  jobSeekerRepository.findById(id);
-    }
 
     public Boolean CheckUsernameIsPresent(String username){
         return (jobSeekerRepository.findByUsername(username)).isPresent();
     }
 
+    public Optional<JobSeeker> findByUsername(String username) {
+        return this.jobSeekerRepository.findByUsername(username);
+    }
+
+    public JobSeeker update(JobSeeker jobSeeker) {
+        return this.jobSeekerRepository.save(jobSeeker);
+    }
+
+    public Optional<JobSeeker> findById(UUID id) {
+        return jobSeekerRepository.findById(id);
+    }
 }

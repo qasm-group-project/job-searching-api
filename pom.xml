@@ -150,19 +150,6 @@
             <version>2.9.0</version>
         </dependency>
 
-        <!-- mybatis-plus Dependency -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.yulichang</groupId>
-            <artifactId>mybatis-plus-join-boot-starter</artifactId>
-            <version>1.4.6</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>

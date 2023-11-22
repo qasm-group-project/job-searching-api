@@ -1,4 +1,9 @@
 package uk.ac.le.qasm.job.searching.api.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class UserNotFoundException extends BaseException {
+    public UserNotFoundException() {
+        super(HttpStatus.NOT_FOUND, "User not found");
+    }
 }

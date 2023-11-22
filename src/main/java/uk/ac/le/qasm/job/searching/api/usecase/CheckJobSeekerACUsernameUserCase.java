@@ -1,16 +1,16 @@
 package uk.ac.le.qasm.job.searching.api.usecase;
 
 import org.springframework.stereotype.Component;
-import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerACPersistence;
+import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerPersistence;
 @Component
 public class CheckJobSeekerACUsernameUserCase {
-    private final JobSeekerACPersistence jobSeekerACPersistence;
+    private final JobSeekerPersistence jobSeekerPersistence;
 
-    public CheckJobSeekerACUsernameUserCase(JobSeekerACPersistence jobSeekerACPersistence) {
-        this.jobSeekerACPersistence = jobSeekerACPersistence;
+    public CheckJobSeekerACUsernameUserCase(JobSeekerPersistence jobSeekerPersistence) {
+        this.jobSeekerPersistence = jobSeekerPersistence;
     }
 
     public Boolean Check(String username){
-        return jobSeekerACPersistence.CheckUsernameIsPresent(username);
+        return jobSeekerPersistence.CheckUsernameIsPresent(username);
     }
 }

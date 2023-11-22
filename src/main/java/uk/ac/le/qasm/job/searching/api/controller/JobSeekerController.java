@@ -23,23 +23,20 @@ public class JobSeekerController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateSeeker(@RequestBody JobSeeker jobSeekerAccount){
-        try {
-            return ResponseEntity.ok(jobSeekerService.updateByUsername(jobSeekerAccount));
-        }catch (BaseException ex) {
-            return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
-        }
+    public ResponseEntity<?> updateSeeker(@RequestBody JobSeeker jobSeeker) {
+        return ResponseEntity.ok(jobSeekerService.update(jobSeeker));
     }
+
     @PostMapping("/getbyuserame")
-    public JobSeeker getByUsername(@RequestBody JobSeeker jobSeekerAccount){
-        return jobSeekerService.findByUsername(jobSeekerAccount);
+    public JobSeeker getByUsername(@RequestBody JobSeeker jobSeekerAccount) {
+        return jobSeekerService.findByUsername(jobSeekerAccount.getUsername());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") UUID id) {
-        try{
-            return ResponseEntity.ok(jobSeekerService.findByIdtest(id));
-        }catch (BaseException ex) {
+        try {
+            return ResponseEntity.ok(jobSeekerService.findById(id));
+        } catch (BaseException ex) {
             return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
         }
     }
