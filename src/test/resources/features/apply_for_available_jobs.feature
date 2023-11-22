@@ -60,6 +60,7 @@ Feature: Apply for available jobs functionality
     And the field "applicant.firstname" returned must be "testirstname"
     And the field "applicant.lastname" returned must be "testlastname"
     And the field "applicant.gender" returned must be "male"
+    And the field "application_status" returned must be "PROCESSING"
 
   Scenario: Seeker is unauthorized
     Given the job provider is logged in with username "username" and password "password"

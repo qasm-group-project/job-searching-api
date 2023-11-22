@@ -9,6 +9,7 @@ import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
+import uk.ac.le.qasm.job.searching.api.enums.ApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
 
 import java.util.Set;
@@ -42,6 +43,7 @@ public class SeekerJobPostController {
         JobApplication jobApplication = JobApplication.builder()
                                                       .applicant(jobSeeker)
                                                       .jobPost(jobPost)
+                                                        .applicationStatus(ApplicationStatus.PROCESSING)
                                                       .build();
 
         return ResponseEntity.ok(jobApplicationPersistence.save(jobApplication));

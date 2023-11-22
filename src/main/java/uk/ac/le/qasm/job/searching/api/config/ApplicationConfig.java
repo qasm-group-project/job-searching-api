@@ -41,7 +41,7 @@ public class ApplicationConfig {
             if (jobSeeker.isPresent()) {
 
                 return jobSeeker.orElseThrow();
-            } else if (provider != null) {
+            } else if (provider.isPresent()) {
                 return provider.orElseThrow();
             } else {
                 throw new UsernameNotFoundException("Username error!" + username);
