@@ -139,6 +139,26 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call the search path with the following body")
+    @Given("the job seeker is created with")
+    public void iCallTheSearchJobPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/auth/seeker/register",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @When("I call the login path with username {string} and password {string}")
     public void iCallTheLoginPathWithUsernameAndPassword(String username, String password) {
         this.response = null;
