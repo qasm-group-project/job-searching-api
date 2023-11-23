@@ -55,6 +55,9 @@ public class Provider implements UserDetails{
     @JoinColumn(name = "provider_uuid")
     private List<JobPost> jobPosts;
 
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
+    private List<ProviderSocialMedia> socialMediaPlatforms;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

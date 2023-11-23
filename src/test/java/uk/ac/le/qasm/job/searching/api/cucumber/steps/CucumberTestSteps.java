@@ -19,15 +19,9 @@ import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
 import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
-import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
-import uk.ac.le.qasm.job.searching.api.repository.JobSeekerRepository;
-import uk.ac.le.qasm.job.searching.api.repository.ProviderRepository;
+import uk.ac.le.qasm.job.searching.api.repository.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,6 +43,9 @@ public class CucumberTestSteps {
     private JobPostRepository jobPostRepository;
 
     @Autowired
+    private ProviderSocialMediaRepository providerSocialMediaRepository;
+
+    @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
     @Autowired
@@ -61,6 +58,7 @@ public class CucumberTestSteps {
     private RestClientResponseException ex;
     private String token;
     private String jobPostId;
+    private String socialMediaId;
 
     @Before
     public void init() {
@@ -68,6 +66,7 @@ public class CucumberTestSteps {
         this.ex = null;
         this.token = null;
         this.jobPostId = null;
+        this.socialMediaId = null;
     }
 
     @Given("the tables are empty")
@@ -76,6 +75,7 @@ public class CucumberTestSteps {
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
+        providerSocialMediaRepository.deleteAll();
     }
 
     @Given("the job provider is created with")
@@ -226,6 +226,105 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(headers),
                                                   JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @Given("a social media is created with")
+    public void aSocialMediaCreatedWith(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+            socialMediaId = Objects.requireNonNull(response.getBody()).get("id").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+    @When("I call the update provider social media path with the following body")
+    public void iCallTheUpdateProviderSocialMediaPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + socialMediaId,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+    @When("I call the update provider social media path with the following body with fake socialMediaId")
+    public void iCallTheUpdateProviderSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + UUID.randomUUID(),
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete provider social media path with the following body")
+    public void iCallTheDeleteProviderSocialMediaPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + socialMediaId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete provider social media path with the following body and fake socialMediaId")
+    public void iCallTheDeleteProviderSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + UUID.randomUUID(),
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
