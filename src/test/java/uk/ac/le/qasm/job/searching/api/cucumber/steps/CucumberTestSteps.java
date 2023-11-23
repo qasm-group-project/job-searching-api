@@ -162,7 +162,6 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(docString, headers),
                                                   JsonNode.class);
-
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
@@ -280,4 +279,23 @@ public class CucumberTestSteps {
         assertEquals(status, jobPost.orElseThrow().getStatus().name());
     }
 
+    @When("I call the update job post path with the following body job")
+    public void iCallTheUpdateJobPostPathWithTheFollowingBodyJob(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/update",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }

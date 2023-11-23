@@ -15,11 +15,11 @@ public class JobSeekerPersistence {
         this.jobSeekerRepository = jobSeekerRepository;
     }
 
-    public JobSeeker Create(JobSeeker jobSeekerAccount){
+    public JobSeeker save(JobSeeker jobSeekerAccount){
         return jobSeekerRepository.save(jobSeekerAccount);
     }
 
-    public Boolean CheckUsernameIsPresent(String username){
+    public Boolean checkUsernameIsPresent(String username){
         return (jobSeekerRepository.findByUsername(username)).isPresent();
     }
 
@@ -27,9 +27,6 @@ public class JobSeekerPersistence {
         return this.jobSeekerRepository.findByUsername(username);
     }
 
-    public JobSeeker update(JobSeeker jobSeeker) {
-        return this.jobSeekerRepository.save(jobSeeker);
-    }
 
     public Optional<JobSeeker> findById(UUID id) {
         return jobSeekerRepository.findById(id);

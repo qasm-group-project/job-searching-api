@@ -13,6 +13,6 @@ public class CreateJobSeekerService {
     }
 
     public JobSeeker create(JobSeeker jobSeekerAccount){
-        return jobSeekerPersistence.Create(jobSeekerAccount);
+        return jobSeekerPersistence.save(jobSeekerAccount);
     }
 }

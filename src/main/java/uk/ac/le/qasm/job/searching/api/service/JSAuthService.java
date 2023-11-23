@@ -23,14 +23,14 @@ public class JSAuthService implements uk.ac.le.qasm.job.searching.api.adapter.JS
     private final JobSeekerService jobSeekerService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final CheckJobSeekerUsernameService checkJobSeekerUsernameService;
+    private final uk.ac.le.qasm.job.searching.api.service.CheckJobSeekerUsernameService checkJobSeekerUsernameService;
     private final AuthenticationManager authenticationManager;
     private final SeekerRepository repository;
 
     public JSAuthService(JobSeekerService jobSeekerService,
                          JwtService jwtService,
                          PasswordEncoder passwordEncoder,
-                         CheckJobSeekerUsernameService checkJobSeekerUsernameService,
+                         uk.ac.le.qasm.job.searching.api.service.CheckJobSeekerUsernameService checkJobSeekerUsernameService,
                          AuthenticationManager authenticationManager,
                          SeekerRepository repository) {
         this.jobSeekerService = jobSeekerService;
@@ -45,7 +45,7 @@ public class JSAuthService implements uk.ac.le.qasm.job.searching.api.adapter.JS
     public Map<String, Object> register(JobSeeker jobSeekerAccount) {
         Map<String, Object> res = new HashMap<>();
 
-        if (checkJobSeekerUsernameService.Check(jobSeekerAccount.getUsername())) {
+        if (checkJobSeekerUsernameService.check(jobSeekerAccount.getUsername())) {
             throw new UserAlreadyExistsException();
         } else {
             var
@@ -59,7 +59,7 @@ public class JSAuthService implements uk.ac.le.qasm.job.searching.api.adapter.JS
                              .firstname(jobSeekerAccount.getFirstname())
                              .lastname(jobSeekerAccount.getLastname())
                              .nickname(jobSeekerAccount.getNickname())
-                             .role(Role.PROVIDER)
+                             .role(Role.SEEKER)
                              .build();
             var jwtToken = jwtService.generateToken(jobSeeker);
             var user = repository.save(jobSeeker);
