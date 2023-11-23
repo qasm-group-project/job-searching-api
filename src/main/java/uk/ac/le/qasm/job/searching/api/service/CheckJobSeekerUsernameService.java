@@ -10,7 +10,7 @@ public class CheckJobSeekerUsernameService {
         this.jobSeekerPersistence = jobSeekerPersistence;
     }
 
-    public Boolean Check(String username){
-        return jobSeekerPersistence.CheckUsernameIsPresent(username);
+    public Boolean check(String username){
+        return jobSeekerPersistence.checkUsernameIsPresent(username);
     }
 }

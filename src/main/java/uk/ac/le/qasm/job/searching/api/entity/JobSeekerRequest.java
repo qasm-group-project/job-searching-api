@@ -1,10 +1,6 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import lombok.NonNull;
-import uk.ac.le.qasm.job.searching.api.enums.Role;
-
-import java.util.UUID;
 @Data
 public class JobSeekerRequest {
 
