@@ -46,6 +46,9 @@ public class CucumberTestSteps {
     private ProviderSocialMediaRepository providerSocialMediaRepository;
 
     @Autowired
+    private SeekerSocialMediaRepository seekerSocialMediaRepository;
+
+    @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
     @Autowired
@@ -76,6 +79,8 @@ public class CucumberTestSteps {
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
+        seekerSocialMediaRepository.deleteAll();
+
     }
 
     @Given("the job provider is created with")
@@ -166,6 +171,7 @@ public class CucumberTestSteps {
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
+        this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
     }
 
     @Given("the job seeker is logged in with username {string} and password {string}")
@@ -187,6 +193,7 @@ public class CucumberTestSteps {
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
+        this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
     }
 
     @When("I call the search jobs path")
@@ -251,6 +258,27 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
+    @Given("a seeker social media is created with")
+    public void aSeekerSocialMediaCreatedWith(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/social-media",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+            socialMediaId = Objects.requireNonNull(response.getBody()).get("id").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
     @When("I call the update provider social media path with the following body")
     public void iCallTheUpdateProviderSocialMediaPathWithTheFollowingBody(String docString) {
         this.response = null;
@@ -270,6 +298,26 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
+    @When("I call the update seeker social media path with the following body")
+    public void iCallTheUpdateSeekerSocialMediaPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/social-media/" + socialMediaId,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
     @When("I call the update provider social media path with the following body with fake socialMediaId")
     public void iCallTheUpdateProviderSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
         this.response = null;
@@ -281,6 +329,26 @@ public class CucumberTestSteps {
 
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + UUID.randomUUID(),
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the update seeker social media path with the following body with fake socialMediaId")
+    public void iCallTheUpdateSeekerSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/social-media/" + UUID.randomUUID(),
                     HttpMethod.PUT,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
@@ -310,6 +378,26 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call the delete seeker social media path with the following body")
+    public void iCallTheDeleteSeekerSocialMediaPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/social-media/" + socialMediaId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @When("I call the delete provider social media path with the following body and fake socialMediaId")
     public void iCallTheDeleteProviderSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
         this.response = null;
@@ -321,6 +409,26 @@ public class CucumberTestSteps {
 
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + UUID.randomUUID(),
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete seeker social media path with the following body and fake socialMediaId")
+    public void iCallTheDeleteSeekerSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/social-media/" + UUID.randomUUID(),
                     HttpMethod.DELETE,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
