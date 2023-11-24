@@ -22,7 +22,7 @@ Feature: Update or Create a job post with setting deadline for it
         "salary": "1000.0",
         "job_type": "FULL_TIME",
         "is_visible": "true",
-        "deadline": "2023-12-31"
+        "deadline": "2023-12-31T23:00:00"
       }
     """
     Then the status returned must be 201
@@ -76,7 +76,7 @@ Feature: Update or Create a job post with setting deadline for it
         "salary": "1000.0",
         "job_type": "FULL_TIME",
         "is_visible": "true",
-        "deadline": "2024-12-31"
+        "deadline": "2023-12-31T23:00:00"
       }
     """
     Then the status returned must be 200
@@ -92,7 +92,7 @@ Feature: Update or Create a job post with setting deadline for it
         "salary": "1000.0",
         "job_type": "FULL_TIME",
         "is_visible": "true",
-        "deadline": "2023-12-31"
+        "deadline": "2023-12-25T23:00:00"
       }
     """
     Then the status returned must be 201
@@ -104,7 +104,7 @@ Feature: Update or Create a job post with setting deadline for it
         "salary": "1000.0",
         "job_type": "FULL_TIME",
         "is_visible": "true",
-        "deadline": "2024-12-31"
+        "deadline": "2023-12-31T23:00:00"
       }
     """
     Then the status returned must be 200

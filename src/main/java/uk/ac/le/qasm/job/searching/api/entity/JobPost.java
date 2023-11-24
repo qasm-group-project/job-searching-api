@@ -8,6 +8,7 @@ import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -63,7 +64,7 @@ public class JobPost {
 
     @Column(name = "deadline")
     @JsonProperty(value = "deadline")
-    private LocalDate deadline;
+    private LocalDateTime deadline;
 
 
     @Override
