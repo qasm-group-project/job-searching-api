@@ -71,7 +71,8 @@ public class JobSeeker implements UserDetails {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(mappedBy = "seeker", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "seeker_id")
     private List<SeekerSocialMedia> socialMediaPlatforms;
 
     public void setId(String id_String) {

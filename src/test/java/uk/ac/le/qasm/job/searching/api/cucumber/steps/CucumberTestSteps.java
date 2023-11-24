@@ -74,12 +74,12 @@ public class CucumberTestSteps {
 
     @Given("the tables are empty")
     public void the_tables_are_empty() {
+        providerSocialMediaRepository.deleteAll();
+        seekerSocialMediaRepository.deleteAll();
         jobApplicationRepository.deleteAll();
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
-        providerSocialMediaRepository.deleteAll();
-        seekerSocialMediaRepository.deleteAll();
 
     }
 
@@ -168,10 +168,10 @@ public class CucumberTestSteps {
                                                   new HttpEntity<>(docString, headers),
                                                   JsonNode.class);
 
+            this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
-        this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
     }
 
     @Given("the job seeker is logged in with username {string} and password {string}")
@@ -188,12 +188,12 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(Map.of("username", username, "password", password), headers),
                                                   JsonNode.class);
+
             this.token = null;
             this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
-        this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
     }
 
     @When("I call the search jobs path")

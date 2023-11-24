@@ -29,7 +29,7 @@ public class SeekerSocialMedia {
     @JsonProperty(value = "link")
     private String link;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seeker_id", nullable = false)
     @JsonIgnore
     private JobSeeker seeker;
