@@ -46,6 +46,7 @@ public class ProviderJobPostController {
                        .salary(request.getSalary())
                        .isVisible(request.getIsVisible())
                        .status(request.getJobStatus())
+                       .deadline(request.getDeadline())
                        .provider(provider)
                        .build();
         JobPost jobPost = jobPostService.saveJobPost(newJobPost);
