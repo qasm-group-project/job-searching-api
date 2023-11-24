@@ -19,6 +19,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -94,6 +95,21 @@ public class ProviderJobPostController {
         } catch (Exception e) {
             Object responseBody = Map.of("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
+    }
+
+    @GetMapping("/expired")
+    public ResponseEntity<Page<JobPost>> getExpiredJobPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Provider provider = (Provider) authentication.getPrincipal();
+
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            Page<JobPost> expiredJobPosts = jobPostService.getExpiredJobPosts(provider, currentDateTime, PageRequest.of(page, size));
+
+            return new ResponseEntity<>(expiredJobPosts, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

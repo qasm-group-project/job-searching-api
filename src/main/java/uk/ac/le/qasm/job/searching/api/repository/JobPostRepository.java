@@ -7,6 +7,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -19,4 +20,6 @@ public interface JobPostRepository extends JpaRepository<JobPost, UUID> {
     Set<JobPost> findAllByIsVisibleAndStatus(boolean b, JobStatus jobStatus);
 
     Optional<JobPost> findByIdAndIsVisibleAndStatus(UUID jobId, boolean b, JobStatus jobStatus);
+
+    Page<JobPost> findByProviderAndDeadlineBefore(Provider provider, LocalDateTime currentDateTime, Pageable pageable);
 }

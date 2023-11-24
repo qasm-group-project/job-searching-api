@@ -487,4 +487,22 @@ public class CucumberTestSteps {
         assertEquals(status, jobPost.orElseThrow().getStatus().name());
     }
 
+    @When("I request to get expired job posts with this body")
+    public void iRequestToGetExpiredJobPostsWithThisBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/expired",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }
