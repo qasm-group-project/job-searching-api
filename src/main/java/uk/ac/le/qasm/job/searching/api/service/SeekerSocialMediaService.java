@@ -6,6 +6,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.SeekerSocialMedia;
 import uk.ac.le.qasm.job.searching.api.repository.SeekerSocialMediaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,5 +60,9 @@ public class SeekerSocialMediaService {
             // Handle the case where the social media platform with the given ID and seeker is not found
             throw new RuntimeException("Social media platform not found for the given ID and seeker");
         }
+    }
+
+    public List<SeekerSocialMedia> getAllSocialMediaPlatforms(JobSeeker seeker) {
+        return repo.findAllBySeeker(seeker);
     }
 }

@@ -53,6 +53,15 @@ public class SeekerController {
         }
     }
 
+    @GetMapping("/social-media")
+    public ResponseEntity<Object> getAllSocialMediaPlatforms() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker seeker = (JobSeeker) authentication.getPrincipal();
+        List<SeekerSocialMedia> socialMediaPlatforms = seekerSocialMediaService.getAllSocialMediaPlatforms(seeker);
+        Object responseBody = Map.of("data", socialMediaPlatforms);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
     @PostMapping("/social-media")
     public ResponseEntity<Object> addSocialMediaPlatform(
             @Valid @RequestBody SeekerSocialMediaRequest request, BindingResult bindingResult) {
