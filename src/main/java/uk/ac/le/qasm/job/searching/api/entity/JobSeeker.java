@@ -71,6 +71,10 @@ public class JobSeeker implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "seeker_id")
+    private List<SeekerSocialMedia> socialMediaPlatforms;
+
     public void setId(String id_String) {
         if (id_String != null){
             this.id = UUID.fromString(id_String);

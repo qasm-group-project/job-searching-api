@@ -43,7 +43,6 @@ public class SeekerJobPostController {
                                                       .applicant(jobSeeker)
                                                       .jobPost(jobPost)
                                                       .build();
-
         return ResponseEntity.ok(jobApplicationPersistence.save(jobApplication));
     }
 
