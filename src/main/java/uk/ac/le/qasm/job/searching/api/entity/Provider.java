@@ -55,6 +55,10 @@ public class Provider implements UserDetails{
     @JoinColumn(name = "provider_uuid")
     private List<JobPost> jobPosts;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "provider_id")
+    private List<ProviderNews> providerNews;
+
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
     private List<ProviderSocialMedia> socialMediaPlatforms;
 
