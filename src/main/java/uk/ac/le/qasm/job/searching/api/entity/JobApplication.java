@@ -24,7 +24,7 @@ public class JobApplication {
     @JsonProperty("applicant")
     private JobSeeker applicant;
 
-    @OneToOne
+    @ManyToOne
     @JsonProperty("job_post")
     private JobPost jobPost;
 
