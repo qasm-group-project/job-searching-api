@@ -13,6 +13,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.SeekerSocialMedia;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService;
+import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.SeekerSocialMediaService;
@@ -28,10 +29,12 @@ public class SeekerController {
     private final SeekerSocialMediaService seekerSocialMediaService;
 
     private final JobSeekerService jobSeekerService;
+    private final JobApplicationPersistence jobApplicationPersistence;
 
-    public SeekerController(SeekerSocialMediaService seekerSocialMediaService, JobSeekerService jobSeekerService) {
+    public SeekerController(SeekerSocialMediaService seekerSocialMediaService, JobSeekerService jobSeekerService, JobApplicationPersistence jobApplicationPersistence) {
         this.seekerSocialMediaService = seekerSocialMediaService;
         this.jobSeekerService = jobSeekerService;
+        this.jobApplicationPersistence = jobApplicationPersistence;
     }
 
     @PostMapping("/update")
@@ -128,4 +131,15 @@ public class SeekerController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
         }
     }
+    @GetMapping("/job-applications")
+    public ResponseEntity<Object> searchMyApplications(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findAllByApplicantId(jobSeeker.getId()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
 }
