@@ -42,11 +42,7 @@ Feature: As a provider
         "deadline": "2023-10-31T23:00:00"
       }
     """
-    When I request to get expired job posts with this body
-    """
-      {
-      }
-    """
+    When I request to get expired job posts
     Then the status returned must be 200
     And the field "content.0.title" returned must be "job post title"
     And the field "content.1.title" returned must be "job post title 2"
