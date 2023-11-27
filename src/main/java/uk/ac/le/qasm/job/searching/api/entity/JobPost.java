@@ -7,6 +7,8 @@ import lombok.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -59,6 +61,11 @@ public class JobPost {
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
+
+    @Column(name = "deadline")
+    @JsonProperty(value = "deadline")
+    private LocalDateTime deadline;
+
 
     @Override
     public String toString() {

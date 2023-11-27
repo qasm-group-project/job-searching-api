@@ -45,6 +45,7 @@ public class JobPostService {
         existingJobPost.setIsVisible(updatedJobPost.getIsVisible());
         existingJobPost.setJobType(JobType.valueOf(updatedJobPost.getJobType()));
         existingJobPost.setStatus(updatedJobPost.getJobStatus());
+        existingJobPost.setDeadline(updatedJobPost.getDeadline());
         // Save and return the updated job post
         return jobPostRepository.save(existingJobPost);
     }

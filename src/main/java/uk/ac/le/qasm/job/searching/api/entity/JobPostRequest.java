@@ -1,6 +1,7 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -32,7 +36,6 @@ public class JobPostRequest {
     private Boolean isVisible;
     @JsonProperty("status")
     private JobStatus jobStatus = JobStatus.PENDING;
-
-
+    private LocalDateTime deadline;
 }
 
