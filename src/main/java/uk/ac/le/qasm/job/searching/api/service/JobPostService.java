@@ -3,6 +3,7 @@ package uk.ac.le.qasm.job.searching.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
@@ -11,6 +12,7 @@ import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,6 +47,7 @@ public class JobPostService {
         existingJobPost.setIsVisible(updatedJobPost.getIsVisible());
         existingJobPost.setJobType(JobType.valueOf(updatedJobPost.getJobType()));
         existingJobPost.setStatus(updatedJobPost.getJobStatus());
+        existingJobPost.setDeadline(updatedJobPost.getDeadline());
         // Save and return the updated job post
         return jobPostRepository.save(existingJobPost);
     }
@@ -61,4 +64,7 @@ public class JobPostService {
             return ResponseEntity.ok(responseBody);
     }
 
+    public Page<JobPost> getExpiredJobPosts(Provider provider, LocalDateTime currentDateTime, Pageable pageable) {
+        return jobPostRepository.findByProviderAndDeadlineBefore(provider, currentDateTime, pageable);
+    }
 }

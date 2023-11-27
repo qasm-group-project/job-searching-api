@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,7 +34,6 @@ public class JobPostRequest {
     private Boolean isVisible;
     @JsonProperty("status")
     private JobStatus jobStatus = JobStatus.PENDING;
-
-
+    private LocalDateTime deadline;
 }
 

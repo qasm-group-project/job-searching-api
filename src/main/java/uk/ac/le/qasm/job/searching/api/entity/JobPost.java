@@ -7,6 +7,8 @@ import lombok.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -59,6 +61,23 @@ public class JobPost {
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
+
+    @Column(name = "deadline")
+    @JsonProperty(value = "deadline")
+    private LocalDateTime deadline;
+
+
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<JobApplication> jobApplications;
+
+    @Transient
+    private int numberOfApplicants;
+
+    @PostLoad
+    private void calculateNumberOfApplicants() {
+        this.numberOfApplicants = (jobApplications != null) ? jobApplications.size() : 0;
+    }
 
     @Override
     public String toString() {
