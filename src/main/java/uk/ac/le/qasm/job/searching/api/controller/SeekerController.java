@@ -142,4 +142,16 @@ public class SeekerController {
         }
     }
 
+    @DeleteMapping("/job-applications/{job_application_id}")
+    public ResponseEntity<Object> deleteMyApplication(@PathVariable("job_application_id") UUID jobApplicationId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
+        try {
+            jobSeekerService.deleteJobApplication(jobApplicationId, jobSeeker);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
 }

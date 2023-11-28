@@ -1,19 +1,24 @@
 package uk.ac.le.qasm.job.searching.api.service;
 
 import org.springframework.stereotype.Service;
+import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.exception.UserNotFoundException;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerPersistence;
+import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService {
 
     private final JobSeekerPersistence jobSeekerPersistence;
+    private final JobApplicationRepository jobApplicationRepository;
 
-    public JobSeekerService(JobSeekerPersistence jobSeekerPersistence) {
+    public JobSeekerService(JobSeekerPersistence jobSeekerPersistence, JobApplicationRepository jobApplicationRepository) {
         this.jobSeekerPersistence = jobSeekerPersistence;
+        this.jobApplicationRepository = jobApplicationRepository;
     }
 
     @Override
@@ -31,4 +36,15 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
         return jobSeekerPersistence.update(jobSeeker);
     }
 
+    public void deleteJobApplication(UUID jobApplicationId, JobSeeker jobSeeker) {
+        Optional<JobApplication> existingJopApplicationOptional = jobApplicationRepository.findByIdAndSeeker(
+                jobApplicationId, jobSeeker);
+
+        if (existingJopApplicationOptional.isPresent()) {
+            JobApplication existingJobApplication = existingJopApplicationOptional.get();
+            jobApplicationRepository.delete(existingJobApplication);
+        } else {
+            throw new RuntimeException("Job Application not found for the given ID and seeker");
+        }
+    }
 }
