@@ -52,6 +52,9 @@ public class CucumberTestSteps {
     private JobApplicationRepository jobApplicationRepository;
 
     @Autowired
+    private SavedJobPostRepository savedJobPostRepository;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -61,6 +64,7 @@ public class CucumberTestSteps {
     private RestClientResponseException ex;
     private String token;
     private String jobPostId;
+    private String savedJobPostId;
     private String socialMediaId;
 
     @Before
@@ -70,10 +74,12 @@ public class CucumberTestSteps {
         this.token = null;
         this.jobPostId = null;
         this.socialMediaId = null;
+        this.savedJobPostId = null;
     }
 
     @Given("the tables are empty")
     public void the_tables_are_empty() {
+        savedJobPostRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
         seekerSocialMediaRepository.deleteAll();
         jobApplicationRepository.deleteAll();
@@ -233,6 +239,100 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(headers),
                                                   JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call save post jobs path for the job")
+    public void iCallTheSaveForJobsPathForTheJob() {
+        this.response = null;
+        this.ex = null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/" + jobPostId + "/save",
+                    HttpMethod.POST,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
+            savedJobPostId = Objects.requireNonNull(response.getBody()).get("id").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete saved jobs path")
+    public void iCallTheDeleteSavedJobPostPath() {
+        this.response = null;
+        this.ex = null;
+        System.out.println(jobPostId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/" + savedJobPostId + "/deleteSavedJobPost",
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call save post jobs path for the job with invalid jobPosId")
+    public void iCallTheSaveForJobsPathForTheJobWithInvalidJobPostId() {
+        this.response = null;
+        this.ex = null;
+        System.out.println(jobPostId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/" + UUID.randomUUID() + "/save",
+                    HttpMethod.POST,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call get all saved post jobs path")
+    public void iCallTheGetAllSavedJobsPath() {
+        this.response = null;
+        this.ex = null;
+        System.out.println(jobPostId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/saved",
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete saved jobs path with invalid saved job id")
+    public void iCallTheDeleteSavedJobPostPathWithInvalidSaveJobId() {
+        this.response = null;
+        this.ex = null;
+        System.out.println(jobPostId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/" + UUID.randomUUID() + "/deleteSavedJobPost",
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
