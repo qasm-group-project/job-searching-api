@@ -35,16 +35,4 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
     public JobSeeker update(JobSeeker jobSeeker) {
         return jobSeekerPersistence.update(jobSeeker);
     }
-
-    public void deleteJobApplication(UUID jobApplicationId, JobSeeker jobSeeker) {
-        Optional<JobApplication> existingJopApplicationOptional = jobApplicationRepository.findByIdAndSeeker(
-                jobApplicationId, jobSeeker);
-
-        if (existingJopApplicationOptional.isPresent()) {
-            JobApplication existingJobApplication = existingJopApplicationOptional.get();
-            jobApplicationRepository.delete(existingJobApplication);
-        } else {
-            throw new RuntimeException("Job Application not found for the given ID and seeker");
-        }
-    }
 }

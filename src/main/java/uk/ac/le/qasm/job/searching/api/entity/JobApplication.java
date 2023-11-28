@@ -28,4 +28,7 @@ public class JobApplication {
     @JsonProperty("job_post")
     private JobPost jobPost;
 
+    @ManyToOne
+    @JsonProperty("seeker")
+    private JobSeeker seeker;
 }

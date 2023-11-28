@@ -30,4 +30,15 @@ public class JobApplicationPersistence {
         return this.jobApplicationRepository.findByIdAndSeeker(jobApplicationId, seeker);
     }
 
+    public void deleteJobApplication(UUID jobApplicationId, JobSeeker jobSeeker) {
+        Optional<JobApplication> existingJopApplicationOptional = jobApplicationRepository.findByIdAndSeeker(
+                jobApplicationId, jobSeeker);
+
+        if (existingJopApplicationOptional.isPresent()) {
+            JobApplication existingJobApplication = existingJopApplicationOptional.get();
+            jobApplicationRepository.delete(existingJobApplication);
+        } else {
+            throw new RuntimeException("Job Application not found for the given ID and seeker");
+        }
+    }
 }
