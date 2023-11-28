@@ -13,5 +13,5 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
 
     Set<JobApplication> findAllByApplicantId(UUID jobSeekerId);
 
-    Optional<JobApplication> findByIdAndSeeker(UUID jobApplicationId, JobSeeker seeker);
+    Optional<JobApplication> findByIdAndApplicant(UUID jobApplicationId, JobSeeker seeker);
 }
