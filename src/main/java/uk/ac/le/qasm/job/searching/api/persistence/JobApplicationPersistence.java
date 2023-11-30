@@ -37,7 +37,7 @@ public class JobApplicationPersistence {
         if (existingJobApplicationOptional.isPresent()) {
             JobApplication existingJobApplication = existingJobApplicationOptional.get();
 
-            jobApplicationRepository.deleteById(existingJobApplication.getId());
+            jobApplicationRepository.deleteJobApplicationByIdAndApplicant(existingJobApplication.getId(), existingJobApplication.getApplicant());
         } else {
             throw new RuntimeException("Job Application not found for the given ID and seeker");
         }
