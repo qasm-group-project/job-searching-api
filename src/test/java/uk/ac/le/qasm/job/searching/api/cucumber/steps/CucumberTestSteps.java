@@ -55,6 +55,9 @@ public class CucumberTestSteps {
     private SavedJobPostRepository savedJobPostRepository;
 
     @Autowired
+    private ProviderNewsRepository providerNewsRepository;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -66,6 +69,7 @@ public class CucumberTestSteps {
     private String jobPostId;
     private String savedJobPostId;
     private String socialMediaId;
+    private String newsId;
 
     @Before
     public void init() {
@@ -75,11 +79,13 @@ public class CucumberTestSteps {
         this.jobPostId = null;
         this.socialMediaId = null;
         this.savedJobPostId = null;
+        this.newsId = null;
     }
 
     @Given("the tables are empty")
     public void the_tables_are_empty() {
         savedJobPostRepository.deleteAll();
+        providerNewsRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
         seekerSocialMediaRepository.deleteAll();
         jobApplicationRepository.deleteAll();
@@ -359,6 +365,27 @@ public class CucumberTestSteps {
         }
     }
 
+    @Given("news is created with")
+    public void aNewsCreatedWith(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/news",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+            newsId = Objects.requireNonNull(response.getBody()).get("id").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @Given("a seeker social media is created with")
     public void aSeekerSocialMediaCreatedWith(String docString) {
         this.response = null;
@@ -390,6 +417,45 @@ public class CucumberTestSteps {
 
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + socialMediaId,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the update provider news path with the following body")
+    public void iCallTheUpdateProviderNewsPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/news/" + newsId,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+    @When("I call the update provider news path with fake id and the following body")
+    public void iCallTheUpdateProviderNewsPathWithFakeIdAndTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/news/" + UUID.randomUUID(),
                     HttpMethod.PUT,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
@@ -469,6 +535,45 @@ public class CucumberTestSteps {
 
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media/" + socialMediaId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+    @When("I call the delete provider news path with the following body")
+    public void iCallTheDeleteProviderNewsPathWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/news/" + newsId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the delete provider news path with fake id and the following body")
+    public void iCallTheDeleteProviderNewsPathWithFakeIdAndTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/news/" + UUID.randomUUID(),
                     HttpMethod.DELETE,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
