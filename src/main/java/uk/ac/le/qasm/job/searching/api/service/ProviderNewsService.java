@@ -4,7 +4,6 @@ package uk.ac.le.qasm.job.searching.api.service;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.entity.ProviderNews;
-import uk.ac.le.qasm.job.searching.api.entity.ProviderSocialMedia;
 import uk.ac.le.qasm.job.searching.api.repository.ProviderNewsRepository;
 
 import java.util.Optional;

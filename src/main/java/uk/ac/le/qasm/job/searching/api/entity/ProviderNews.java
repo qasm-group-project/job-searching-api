@@ -2,12 +2,9 @@ package uk.ac.le.qasm.job.searching.api.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import jakarta.persistence.*;
-import lombok.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
