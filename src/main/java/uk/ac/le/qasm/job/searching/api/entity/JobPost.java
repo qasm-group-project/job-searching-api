@@ -57,6 +57,11 @@ public class JobPost {
     @JsonProperty(value = "status")
     private JobStatus status;
 
+    @Setter
+    @Column(name = "category")
+    @JsonProperty(value = "category")
+    private String category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_uuid")
     @JsonIgnore
