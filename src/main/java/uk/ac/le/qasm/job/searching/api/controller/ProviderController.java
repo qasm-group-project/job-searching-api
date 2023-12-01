@@ -17,7 +17,6 @@ import uk.ac.le.qasm.job.searching.api.request.ProviderNewsRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.ProviderNewsService;
-import uk.ac.le.qasm.job.searching.api.service.ProviderService;
 import uk.ac.le.qasm.job.searching.api.service.ProviderSocialMediaService;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.UUID;
 @RequestMapping("/api/v1/provider")
 @RequiredArgsConstructor
 public class ProviderController {
-    private final ProviderService providerService;
     private final ProviderSocialMediaService providerSocialMediaService;
     private final ProviderNewsService providerNewsService;
 
