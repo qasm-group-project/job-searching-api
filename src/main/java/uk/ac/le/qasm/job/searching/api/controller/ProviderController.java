@@ -35,7 +35,8 @@ public class ProviderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Provider provider = (Provider) authentication.getPrincipal();
         List<ProviderSocialMedia> socialMediaPlatforms = providerSocialMediaService.getAllSocialMediaPlatforms(provider);
-        Object responseBody = Map.of("data", socialMediaPlatforms);
+        Object responseBody = Map.of("data", socialMediaPlatforms,
+                "number_of_social_media_platforms", socialMediaPlatforms.size());
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
@@ -114,22 +115,17 @@ public class ProviderController {
             List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
         }
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Provider provider = (Provider) authentication.getPrincipal();
-            var newProviderNews = ProviderNews.builder()
-                    .title(request.getTitle())
-                    .description(request.getDescription())
-                    .provider(provider)
-                    .build();
-            ProviderNews providerNews = providerNewsService.saveProviderNews(newProviderNews);
-            Object responseBody = Map.of("message", "Provider News Created successfully!", "id",
-                    providerNews.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
-        }catch (Exception e){
-            Object responseBody = Map.of("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        var newProviderNews = ProviderNews.builder()
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .provider(provider)
+                .build();
+        ProviderNews providerNews = providerNewsService.saveProviderNews(newProviderNews);
+        Object responseBody = Map.of("message", "Provider News Created successfully!", "id",
+                providerNews.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
     @PutMapping("/news/{newsId}")

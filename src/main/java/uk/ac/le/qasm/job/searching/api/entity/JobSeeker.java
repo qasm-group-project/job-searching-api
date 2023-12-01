@@ -75,13 +75,6 @@ public class JobSeeker implements UserDetails {
     @JoinColumn(name = "seeker_id")
     private List<SeekerSocialMedia> socialMediaPlatforms;
 
-    public void setId(String id_String) {
-        if (id_String != null){
-            this.id = UUID.fromString(id_String);
-        }else {
-            this.id=null;
-        }
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
