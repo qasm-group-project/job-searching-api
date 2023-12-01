@@ -48,6 +48,7 @@ public class ProviderJobPostController {
                        .isVisible(request.getIsVisible())
                        .status(request.getJobStatus())
                        .deadline(request.getDeadline())
+                        .category(request.getCategory())
                        .provider(provider)
                        .build();
         JobPost jobPost = jobPostService.saveJobPost(newJobPost);

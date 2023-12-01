@@ -35,5 +35,6 @@ public class JobPostRequest {
     @JsonProperty("status")
     private JobStatus jobStatus = JobStatus.PENDING;
     private LocalDateTime deadline;
+    private String category;
 }
 
