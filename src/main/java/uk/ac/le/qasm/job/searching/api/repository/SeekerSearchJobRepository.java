@@ -7,7 +7,6 @@ import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 
-import java.util.Set;
 import java.util.UUID;
 
 public interface SeekerSearchJobRepository extends JpaRepository<JobPost, UUID> {
