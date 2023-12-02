@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: Adding news for a Provider
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -13,6 +15,7 @@ Feature: Adding news for a Provider
         "company_location": "company_location"
       }
     """
+
   Scenario: Job Provider create news successfully!
     When the job provider is logged in with username "username" and password "password"
     And news is created with
@@ -59,6 +62,7 @@ Feature: Adding news for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full title is required."
+
   Scenario: Job Provider can not create news because of lacking data!
     When the job provider is logged in with username "username" and password "password"
     And news is created with

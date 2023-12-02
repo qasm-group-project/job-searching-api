@@ -2,6 +2,7 @@
 #utf-8
 
 Feature: Verify retrieval of job posts with number of applicants
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -27,6 +28,7 @@ Feature: Verify retrieval of job posts with number of applicants
         "gender":"male"
       }
     """
+
   Scenario: Retrieving job posts with number of applicants
     Given the job provider is logged in with username "username" and password "password"
     And a post is created with
@@ -44,5 +46,5 @@ Feature: Verify retrieval of job posts with number of applicants
     And the job provider is logged in with username "username" and password "password"
     When I call get all provider job posts
     Then the status returned must be 200
-    And the field "content.0.numberOfApplicants" returned must be "1"
+    And the field "content.0.number_of_applicants" returned must be "1"
 

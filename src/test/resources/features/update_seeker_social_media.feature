@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: Updating Social Media for a Seeker
+
   Background:
     Given the tables are empty
     And the job seeker is created with
@@ -16,7 +18,7 @@ Feature: Updating Social Media for a Seeker
         "gender":"male"
       }
     """
-    When the job seeker is logged in with username "username" and password "password"
+    And the job seeker is logged in with username "username" and password "password"
     And a seeker social media is created with
     """
       {
@@ -24,6 +26,7 @@ Feature: Updating Social Media for a Seeker
         "link": "https://link.com"
       }
     """
+
   Scenario: the job seeker can update the seeker social media successfully!
     And the job seeker is logged in with username "username" and password "password"
     When I call the update seeker social media path with the following body

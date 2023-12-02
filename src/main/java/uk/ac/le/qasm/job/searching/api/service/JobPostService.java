@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
-import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -20,10 +20,12 @@ import java.util.UUID;
 @Service
 public class JobPostService {
     private final JobPostRepository jobPostRepository;
+    private final CsvFileWriterService csvFileWriterService;
 
     @Autowired
-    public JobPostService(JobPostRepository jobPostRepository) {
+    public JobPostService(JobPostRepository jobPostRepository, CsvFileWriterService csvFileWriterService) {
         this.jobPostRepository = jobPostRepository;
+        this.csvFileWriterService = csvFileWriterService;
     }
 
     public JobPost saveJobPost(JobPost jobPost) {
@@ -34,20 +36,19 @@ public class JobPostService {
         return jobPostRepository.findByProvider(provider, pageRequest);
     }
 
-    public Page<JobPost> getAllJobPostsByProviderInFile(Provider provider) {
+    public byte[] getAllJobPostsByProviderInFile(Provider provider) {
         Set<JobPost> jobPosts = jobPostRepository.findAllByProvider(provider);
 
-        return null;
+        return csvFileWriterService.generate(jobPosts);
     }
 
     public JobPost updateJobPost(Provider provider, UUID jobPostId, JobPostRequest updatedJobPost) {
         JobPost existingJobPost = jobPostRepository.findById(jobPostId)
-                .orElseThrow(() -> new RuntimeException("Job post not found"));
-        // Check if the provided provider ID matches the job post's provider ID
+                                                   .orElseThrow(() -> new RuntimeException("Job post not found"));
         if (!existingJobPost.getProvider().getId().equals(provider.getId())) {
             throw new RuntimeException("You are not authorized to update this job post");
         }
-        // Update fields
+
         existingJobPost.setTitle(updatedJobPost.getTitle());
         existingJobPost.setDescription(updatedJobPost.getDescription());
         existingJobPost.setSalary(updatedJobPost.getSalary());
@@ -55,20 +56,20 @@ public class JobPostService {
         existingJobPost.setJobType(JobType.valueOf(updatedJobPost.getJobType()));
         existingJobPost.setStatus(updatedJobPost.getJobStatus());
         existingJobPost.setDeadline(updatedJobPost.getDeadline());
-        // Save and return the updated job post
+
         return jobPostRepository.save(existingJobPost);
     }
 
     public ResponseEntity<Object> deleteJobPost(Provider provider, UUID jobPostId) {
-            JobPost existingJobPost = jobPostRepository.findById(jobPostId)
-                    .orElseThrow(() -> new RuntimeException("Job post not found"));
-            // Check if the provided provider ID matches the job post's provider ID
-            if (!existingJobPost.getProvider().getId().equals(provider.getId())) {
-                throw new RuntimeException("You are not authorized to delete this job post");
-            }
-            jobPostRepository.delete(existingJobPost);
-            Object responseBody = Map.of("message", "Job post deleted successfully");
-            return ResponseEntity.ok(responseBody);
+        JobPost existingJobPost = jobPostRepository.findById(jobPostId)
+                                                   .orElseThrow(() -> new RuntimeException("Job post not found"));
+        if (!existingJobPost.getProvider().getId().equals(provider.getId())) {
+            throw new RuntimeException("You are not authorized to delete this job post");
+        }
+
+        jobPostRepository.delete(existingJobPost);
+        Object responseBody = Map.of("message", "Job post deleted successfully");
+        return ResponseEntity.ok(responseBody);
     }
 
     public Page<JobPost> getExpiredJobPosts(Provider provider, LocalDateTime currentDateTime, Pageable pageable) {
