@@ -14,6 +14,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -31,6 +32,12 @@ public class JobPostService {
 
     public Page<JobPost> getAllJobPostsByProvider(Provider provider, PageRequest pageRequest) {
         return jobPostRepository.findByProvider(provider, pageRequest);
+    }
+
+    public Page<JobPost> getAllJobPostsByProviderInFile(Provider provider) {
+        Set<JobPost> jobPosts = jobPostRepository.findAllByProvider(provider);
+
+        return null;
     }
 
     public JobPost updateJobPost(Provider provider, UUID jobPostId, JobPostRequest updatedJobPost) {

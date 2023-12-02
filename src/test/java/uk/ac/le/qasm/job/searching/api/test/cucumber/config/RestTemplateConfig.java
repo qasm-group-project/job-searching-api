@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.cucumber.config;
+package uk.ac.le.qasm.job.searching.api.test.cucumber.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.controller;
+package uk.ac.le.qasm.job.searching.api.test.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.ac.le.qasm.job.searching.api.controller.ProviderJobPostController;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;

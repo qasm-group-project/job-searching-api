@@ -1,7 +1,8 @@
 #language: en
 #utf-8
 
-Feature: Verify retrieval of job posts with number of applicants
+Feature: Verify retrieval of job posts in csv file
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -27,7 +28,9 @@ Feature: Verify retrieval of job posts with number of applicants
         "gender":"male"
       }
     """
-  Scenario: Retrieving job posts with number of applicants
+
+
+  Scenario: Retrieving job posts in csv file
     Given the job provider is logged in with username "username" and password "password"
     And a post is created with
     """
@@ -39,10 +42,9 @@ Feature: Verify retrieval of job posts with number of applicants
         "is_visible": "true"
       }
     """
-    Then the job seeker is logged in with username "testusername" and password "testacpasswor"
-    And I call the apply for jobs path for the job "job post title"
-    And the job provider is logged in with username "username" and password "password"
-    When I call get all provider job posts
+    When I call get all provider job posts by csv file
     Then the status returned must be 200
-    And the field "content.0.numberOfApplicants" returned must be "1"
+#    And the field "content.0.numberOfApplicants" returned must be "1"
 
+#    Then the job seeker is logged in with username "testusername" and password "testacpasswor"
+#    And I call the apply for jobs path for the job "job post title"

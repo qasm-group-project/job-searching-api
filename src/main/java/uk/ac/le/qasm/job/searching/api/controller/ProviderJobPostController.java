@@ -55,7 +55,7 @@ public class ProviderJobPostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<Page<JobPost>> getAllJobPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +65,14 @@ public class ProviderJobPostController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/csv")
+    public ResponseEntity<Page<JobPost>> getAllJobPostsCsv() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        Page<JobPost> jobPosts = jobPostService.getAllJobPostsByProviderInFile(provider);
+        return new ResponseEntity<>(jobPosts, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{jobPostId}", produces = MediaType.APPLICATION_JSON_VALUE)

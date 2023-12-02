@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.cucumber.utils;
+package uk.ac.le.qasm.job.searching.api.test.cucumber.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

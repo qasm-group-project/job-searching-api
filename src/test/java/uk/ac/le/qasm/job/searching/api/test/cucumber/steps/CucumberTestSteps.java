@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.cucumber.steps;
+package uk.ac.le.qasm.job.searching.api.test.cucumber.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
-import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
+import uk.ac.le.qasm.job.searching.api.test.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.repository.*;
 
@@ -624,7 +624,7 @@ public class CucumberTestSteps {
     }
 
     @When("I call get all provider job posts")
-    public void iCallGetAllProviderJobPosts(String docString) {
+    public void iCallGetAllProviderJobPosts() {
         this.response = null;
         this.ex = null;
 
@@ -635,7 +635,7 @@ public class CucumberTestSteps {
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post",
                     HttpMethod.GET,
-                    new HttpEntity<>(docString, headers),
+                    new HttpEntity<>(headers),
                     JsonNode.class);
 
         } catch (RestClientResponseException ex) {
@@ -657,6 +657,26 @@ public class CucumberTestSteps {
                     HttpMethod.DELETE,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call get all provider job posts by csv file")
+    public void iCallGetAllProviderJobPostsByCsvFile() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/csv",
+                                                  HttpMethod.GET,
+                                                  new HttpEntity<>(headers),
+                                                  JsonNode.class);
 
         } catch (RestClientResponseException ex) {
             this.ex = ex;
@@ -730,4 +750,5 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
 }
