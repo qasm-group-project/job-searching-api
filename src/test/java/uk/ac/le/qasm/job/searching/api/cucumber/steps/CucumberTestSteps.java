@@ -643,6 +643,26 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call get all provider social medias")
+    public void iCallGetAllProviderSocialMedias() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/social-media",
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    JsonNode.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @When("I call the delete seeker social media path with the following body and fake socialMediaId")
     public void iCallTheDeleteSeekerSocialMediaPathWithTheFollowingBodyAndFakeSocialMediaId(String docString) {
         this.response = null;

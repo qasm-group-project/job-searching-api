@@ -100,16 +100,12 @@ public class ProviderJobPostController {
 
     @GetMapping("/expired")
     public ResponseEntity<Page<JobPost>> getExpiredJobPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Provider provider = (Provider) authentication.getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
 
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            Page<JobPost> expiredJobPosts = jobPostService.getExpiredJobPosts(provider, currentDateTime, PageRequest.of(page, size));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Page<JobPost> expiredJobPosts = jobPostService.getExpiredJobPosts(provider, currentDateTime, PageRequest.of(page, size));
 
-            return new ResponseEntity<>(expiredJobPosts, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(expiredJobPosts, HttpStatus.OK);
     }
 }

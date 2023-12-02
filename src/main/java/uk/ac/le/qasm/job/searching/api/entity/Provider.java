@@ -86,17 +86,4 @@ public class Provider implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "Provider{" +
-               "id=" + id +
-               ", username='" + username + '\'' +
-               ", password='" + password + '\'' +
-               ", company_name='" + company_name + '\'' +
-               ", company_contact_number='" + company_contact_number + '\'' +
-               ", company_location='" + company_location + '\'' +
-               ", role=" + role +
-               '}';
-    }
 }

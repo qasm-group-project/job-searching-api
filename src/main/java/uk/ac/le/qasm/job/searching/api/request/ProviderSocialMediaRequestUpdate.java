@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProviderSocialMediaRequestUpdate {
     @NotEmpty(message = "The full link is required.")

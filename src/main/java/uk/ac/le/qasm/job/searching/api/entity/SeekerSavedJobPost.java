@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "seeker_saved_job_post", schema = "job_searching")
 public class SeekerSavedJobPost {
