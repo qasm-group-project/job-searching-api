@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: Updating news for a Provider
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -21,6 +23,7 @@ Feature: Updating news for a Provider
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
       }
     """
+
   Scenario: Job Provider update news successfully!
     When I call the update provider news path with the following body
     """
@@ -42,6 +45,7 @@ Feature: Updating news for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full title is required."
+
   Scenario: Job Provider can not update news because of lacking data!
     When I call the update provider news path with the following body
     """
@@ -52,6 +56,7 @@ Feature: Updating news for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full title is required."
+
   Scenario: Job Provider can not update news because of lacking data!
     When I call the update provider news path with the following body
     """
@@ -62,6 +67,7 @@ Feature: Updating news for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full description is required."
+
   Scenario: Job Provider can not update news because of lacking data!
     When I call the update provider news path with the following body
     """
@@ -71,6 +77,7 @@ Feature: Updating news for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full description is required."
+
   Scenario: Job Provider can not update news because of invalid news id!
     When I call the update provider news path with fake id and the following body
     """

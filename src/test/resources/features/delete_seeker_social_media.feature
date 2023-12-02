@@ -1,8 +1,8 @@
 #language: en
 #utf-8
 
-
 Feature: Deleting Social Media for a Seeker
+
   Background:
     Given the tables are empty
     And the job seeker is created with
@@ -18,7 +18,7 @@ Feature: Deleting Social Media for a Seeker
         "gender":"male"
       }
     """
-    When the job seeker is logged in with username "username" and password "password"
+    And the job seeker is logged in with username "username" and password "password"
     And a seeker social media is created with
     """
       {
@@ -26,6 +26,7 @@ Feature: Deleting Social Media for a Seeker
         "link": "https://link.com"
       }
     """
+
   Scenario: Job Seeker delete social media successfully!
     When the job seeker is logged in with username "username" and password "password"
     And I call the delete seeker social media path with the following body
@@ -34,6 +35,7 @@ Feature: Deleting Social Media for a Seeker
       }
     """
     Then the status returned must be 200
+
   Scenario: Job Seeker can not delete social media because of invalid id!
     When the job seeker is logged in with username "username" and password "password"
     And I call the delete seeker social media path with the following body and fake socialMediaId

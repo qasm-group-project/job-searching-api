@@ -12,8 +12,6 @@ import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class JobPostRequest {
 

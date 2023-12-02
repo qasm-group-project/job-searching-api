@@ -1,7 +1,6 @@
 package uk.ac.le.qasm.job.searching.api.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,22 +38,18 @@ public class ApplicationConfig {
             Optional<JobSeeker> jobSeeker = seekerRepository.findByUsername(username);
 
             if (jobSeeker.isPresent()) {
-
                 return jobSeeker.orElseThrow();
-            } else if (provider != null) {
+            } else if (provider.isPresent()) {
                 return provider.orElseThrow();
             } else {
                 throw new UsernameNotFoundException("Username error!" + username);
-
             }
         }
     }
 
     @Component
-    public class CustomAuthenticationProvider implements AuthenticationProvider{
+    public static class CustomAuthenticationProvider implements AuthenticationProvider{
 
-        @Autowired
-        private CustomDetailsService customDetailsService;
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             String username = authentication.getName();
@@ -69,16 +64,11 @@ public class ApplicationConfig {
         }
 
     }
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//        return username -> repository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//    }
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(new CustomDetailsService());
-//        authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
