@@ -78,17 +78,4 @@ public class JobPost {
     private void calculateNumberOfApplicants() {
         this.numberOfApplicants = (jobApplications != null) ? jobApplications.size() : 0;
     }
-
-    @Override
-    public String toString() {
-        return "JobPost{" +
-               "id=" + id +
-               ", title='" + title + '\'' +
-               ", description='" + description + '\'' +
-               ", salary='" + salary + '\'' +
-               ", jobType=" + jobType +
-               ", isVisible=" + isVisible +
-               ", status=" + status +
-               '}';
-    }
 }

@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProviderNewsRequest {
     @NotEmpty(message = "The full title is required.")
