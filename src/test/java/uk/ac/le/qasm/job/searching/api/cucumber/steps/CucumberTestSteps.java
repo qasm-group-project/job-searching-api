@@ -3,6 +3,7 @@ package uk.ac.le.qasm.job.searching.api.cucumber.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -62,6 +63,7 @@ public class CucumberTestSteps {
     private String token;
     private String jobPostId;
     private String socialMediaId;
+    private String job_application_id;
 
     @Before
     public void init() {
@@ -70,6 +72,7 @@ public class CucumberTestSteps {
         this.token = null;
         this.jobPostId = null;
         this.socialMediaId = null;
+        this.job_application_id = null;
     }
 
     @Given("the tables are empty")
@@ -233,6 +236,7 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(headers),
                                                   JsonNode.class);
+            job_application_id =  Objects.requireNonNull(response.getBody()).get("id").asText();
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
@@ -521,6 +525,45 @@ public class CucumberTestSteps {
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
                     JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @And("I call the delete job application with the following body")
+    public void iCallTheDeleteJobApplicationWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications/" + job_application_id,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call get all job applications")
+    public void iCallGetAllJobApplications(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
