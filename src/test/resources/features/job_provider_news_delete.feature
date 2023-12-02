@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: Deleting news for a Provider
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -21,6 +23,7 @@ Feature: Deleting news for a Provider
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
       }
     """
+
   Scenario: Job Provider delete news successfully!
     When I call the delete provider news path with the following body
     """

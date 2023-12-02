@@ -13,7 +13,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-htmlReport
+
 ### STS ###
 .apt_generated
 .classpath
@@ -26,3 +26,5 @@ htmlReport
 ### Intelij ###
 .idea
 *.iml
+
+htmlReport

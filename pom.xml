@@ -126,6 +126,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Dependency necessary for Csv conversion -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
         <!-- Dependency necessary for H2 on BDD -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -133,8 +140,6 @@
             <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
-
-
 
         <!-- lombok Dependency -->
         <dependency>
@@ -167,34 +172,6 @@
                     <finalName>job-searching-api-${project.version}</finalName>
                 </configuration>
             </plugin>
-
-            <!-- Runs Cucumber tests -->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                <version>2.22.0</version>-->
-<!--            </plugin>-->
-
-            <!-- Generate Jacoco report -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.jacoco</groupId>-->
-            <!--                <artifactId>jacoco-maven-plugin</artifactId>-->
-            <!--                <version>0.8.8</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>prepare-agent</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>report</id>-->
-            <!--                        <phase>verify</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>report</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
 
         </plugins>
     </build>

@@ -3,8 +3,10 @@ package uk.ac.le.qasm.job.searching.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import uk.ac.le.qasm.job.searching.api.entity.JobPost;
+import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
+import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +58,7 @@ public class ProviderJobPostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<Page<JobPost>> getAllJobPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +68,19 @@ public class ProviderJobPostController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "/csv", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<ByteArrayResource> getAllJobPostsCsv() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+
+        byte[] resourceCsv = jobPostService.getAllJobPostsByProviderInFile(provider);
+        ByteArrayResource resource = new ByteArrayResource(resourceCsv);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=job_post_" + LocalDate.now() + ".csv")
+                             .body(resource);
     }
 
     @PutMapping(value = "/{jobPostId}", produces = MediaType.APPLICATION_JSON_VALUE)

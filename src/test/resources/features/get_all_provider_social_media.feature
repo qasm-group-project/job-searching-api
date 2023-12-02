@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: get all Social Media for a Provider
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -13,6 +15,7 @@ Feature: get all Social Media for a Provider
         "company_location": "company_location"
       }
     """
+
   Scenario: get all job Provider social media successfully!
     When the job provider is logged in with username "username" and password "password"
     And a social media is created with

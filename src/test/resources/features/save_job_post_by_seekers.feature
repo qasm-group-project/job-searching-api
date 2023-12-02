@@ -1,3 +1,6 @@
+#language: en
+#utf-8
+
 Feature: save jobs for seekers
 
   Background:

@@ -15,6 +15,8 @@ import java.util.UUID;
 public interface JobPostRepository extends JpaRepository<JobPost, UUID> {
     Page<JobPost> findByProvider(Provider provider, Pageable pageable);
 
+    Set<JobPost> findAllByProvider(Provider provider);
+
     Optional<JobPost> findByTitle(String title);
 
     Set<JobPost> findAllByIsVisibleAndStatus(boolean b, JobStatus jobStatus);
@@ -22,4 +24,5 @@ public interface JobPostRepository extends JpaRepository<JobPost, UUID> {
     Optional<JobPost> findByIdAndIsVisibleAndStatus(UUID jobId, boolean b, JobStatus jobStatus);
 
     Page<JobPost> findByProviderAndDeadlineBefore(Provider provider, LocalDateTime currentDateTime, Pageable pageable);
+
 }

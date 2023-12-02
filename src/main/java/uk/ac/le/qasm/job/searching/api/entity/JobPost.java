@@ -72,6 +72,7 @@ public class JobPost {
     private List<JobApplication> jobApplications;
 
     @Transient
+    @JsonProperty(value = "number_of_applicants")
     private int numberOfApplicants;
 
     @PostLoad
