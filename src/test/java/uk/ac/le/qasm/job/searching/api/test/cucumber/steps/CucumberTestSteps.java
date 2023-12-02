@@ -77,6 +77,7 @@ public class CucumberTestSteps {
     private String savedJobPostId;
     private String socialMediaId;
     private String newsId;
+    private String applicationId;
 
     @Before
     public void init() {
@@ -236,7 +237,7 @@ public class CucumberTestSteps {
     }
 
     @When("I call the apply for jobs path for the job {string}")
-    public void iCallTheApplyForJobsPathForTheJob(String title) {
+    public void iCallTheApplyForJobsPathForTheJob(String title) throws JsonProcessingException {
         JobPost jobPost = jobPostRepository.findByTitle(title)
                                            .orElseThrow(() -> new RuntimeException("Job does not exist"));
 
@@ -252,6 +253,8 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(headers),
                                                   String.class);
+
+            this.applicationId = objectMapper.readTree(response.getBody()).get("id").asText();
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }
@@ -270,6 +273,7 @@ public class CucumberTestSteps {
                                                   HttpMethod.POST,
                                                   new HttpEntity<>(headers),
                                                   String.class);
+
             savedJobPostId = objectMapper.readTree(response.getBody()).get("id").asText();
         } catch (RestClientResponseException ex) {
             this.ex = ex;
@@ -744,6 +748,25 @@ public class CucumberTestSteps {
             response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/csv",
                                              HttpMethod.GET,
                                              new HttpEntity<>(headers),
+                                             String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("the job provider posts the following feedback to the application")
+    public void theJobProviderPostsTheFollowingFeedbackToTheApplication(String json) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/applications/" + this.applicationId + "/feedback",
+                                             HttpMethod.POST,
+                                             new HttpEntity<>(json, headers),
                                              String.class);
         } catch (RestClientResponseException ex) {
             this.ex = ex;

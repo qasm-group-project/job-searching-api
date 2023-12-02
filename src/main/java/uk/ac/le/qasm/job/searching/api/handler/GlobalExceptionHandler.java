@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnknownException(Exception ex) {
         Map<String, Object> responseObj = new HashMap<>();
-        responseObj.put("error", "Failed to extract claim from JWT token");
+        responseObj.put("error", "Unknown error occurred, please try again later.");
         responseObj.put("details", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseObj);
     }

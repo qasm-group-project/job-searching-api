@@ -19,6 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
+
     @Id
     @GeneratedValue
     @Column(name = "id")

@@ -15,10 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.entity.JobPostRequest;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
+import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
+import uk.ac.le.qasm.job.searching.api.service.ApplicationService;
 import uk.ac.le.qasm.job.searching.api.service.JobPostService;
 
 import java.time.LocalDate;
@@ -31,7 +30,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/provider/job-post")
 @RequiredArgsConstructor
 public class ProviderJobPostController {
+
     private final JobPostService jobPostService;
+    private final ApplicationService applicationService;
 
     @PostMapping("/create")
     public ResponseEntity<Object> createJobPost(@Valid @RequestBody JobPostRequest request, BindingResult bindingResult) {
@@ -123,5 +124,10 @@ public class ProviderJobPostController {
         Page<JobPost> expiredJobPosts = jobPostService.getExpiredJobPosts(provider, currentDateTime, PageRequest.of(page, size));
 
         return new ResponseEntity<>(expiredJobPosts, HttpStatus.OK);
+    }
+
+    @PostMapping("/applications/{application_id}/feedback")
+    public ResponseEntity<Object> sendFeedback(@PathVariable("application_id") UUID applicationId, @RequestBody ProviderFeedback providerFeedback) {
+        return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateProviderFeedback(applicationId, providerFeedback));
     }
 }
