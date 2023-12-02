@@ -732,6 +732,24 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("I call get all seeker job applications by csv file")
+    public void iCallGetAllSeekerJobApplicationsByCsvFile() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/csv",
+                                             HttpMethod.GET,
+                                             new HttpEntity<>(headers),
+                                             String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @Then("the status returned must be {int}")
     public void the_status_returned_must_be(Integer httpStatus) {
         if (response != null) {

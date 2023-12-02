@@ -20,7 +20,7 @@ public class JobApplication {
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
     private UUID id;
 
-    @OneToOne
+    @ManyToOne
     @JsonProperty("applicant")
     private JobSeeker applicant;
 
