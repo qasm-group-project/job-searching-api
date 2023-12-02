@@ -58,7 +58,6 @@ public class JobPost {
     private JobStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
 
@@ -68,8 +67,8 @@ public class JobPost {
 
 
     @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<JobApplication> jobApplications;
+    @JsonProperty("applications")
+    private List<JobPostApplication> jobPostApplications;
 
     @Transient
     @JsonProperty(value = "number_of_applicants")
@@ -77,6 +76,6 @@ public class JobPost {
 
     @PostLoad
     private void calculateNumberOfApplicants() {
-        this.numberOfApplicants = (jobApplications != null) ? jobApplications.size() : 0;
+        this.numberOfApplicants = (jobPostApplications != null) ? jobPostApplications.size() : 0;
     }
 }

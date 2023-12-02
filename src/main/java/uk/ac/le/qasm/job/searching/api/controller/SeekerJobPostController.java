@@ -11,11 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
-import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeekerApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.SeekerSavedJobPost;
-import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.service.SavedJobPostService;
 
@@ -32,16 +32,16 @@ public class SeekerJobPostController {
     private final JobSearchService jobSearchService;
     private final JobSeekerService jobSeekerService;
     private final SavedJobPostService savedJobPostService;
-    private final JobApplicationPersistence jobApplicationPersistence;
+    private final JobSeekerApplicationPersistence jobSeekerApplicationPersistence;
 
     public SeekerJobPostController(JobSearchService jobSearchService,
                                    JobSeekerService jobSeekerService,
                                    SavedJobPostService savedJobPostService,
-                                   JobApplicationPersistence jobApplicationPersistence) {
+                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence) {
         this.jobSearchService = jobSearchService;
         this.jobSeekerService = jobSeekerService;
         this.savedJobPostService = savedJobPostService;
-        this.jobApplicationPersistence = jobApplicationPersistence;
+        this.jobSeekerApplicationPersistence = jobSeekerApplicationPersistence;
     }
 
     @GetMapping
@@ -50,17 +50,17 @@ public class SeekerJobPostController {
     }
 
     @PostMapping("/{job_id}/apply")
-    public ResponseEntity<JobApplication> applyForJob(@PathVariable("job_id") UUID jobId) {
+    public ResponseEntity<JobSeekerApplication> applyForJob(@PathVariable("job_id") UUID jobId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
 
         JobPost jobPost = jobSearchService.findById(jobId);
 
-        JobApplication jobApplication = JobApplication.builder()
-                                                      .applicant(jobSeeker)
-                                                      .jobPost(jobPost)
-                                                      .build();
-        return ResponseEntity.ok(jobApplicationPersistence.save(jobApplication));
+        JobSeekerApplication jobSeekerApplication = JobSeekerApplication.builder()
+                                                                        .applicant(jobSeeker)
+                                                                        .jobPost(jobPost)
+                                                                        .build();
+        return ResponseEntity.ok(jobSeekerApplicationPersistence.save(jobSeekerApplication));
     }
 
     @GetMapping("/applications/csv")

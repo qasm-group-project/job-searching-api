@@ -1,11 +1,11 @@
 package uk.ac.le.qasm.job.searching.api.service;
 
 import org.springframework.stereotype.Service;
-import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
+import uk.ac.le.qasm.job.searching.api.entity.JobSeekerApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.exception.UserNotFoundException;
-import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerPersistence;
 
 import java.util.Comparator;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService {
 
     private final JobSeekerPersistence jobSeekerPersistence;
-    private final JobApplicationPersistence jobApplicationPersistence;
+    private final JobSeekerApplicationPersistence jobSeekerApplicationPersistence;
     private final CsvFileWriterService csvFileWriterService;
 
     public JobSeekerService(JobSeekerPersistence jobSeekerPersistence,
-                            JobApplicationPersistence jobApplicationPersistence,
+                            JobSeekerApplicationPersistence jobSeekerApplicationPersistence,
                             CsvFileWriterService csvFileWriterService) {
         this.jobSeekerPersistence = jobSeekerPersistence;
-        this.jobApplicationPersistence = jobApplicationPersistence;
+        this.jobSeekerApplicationPersistence = jobSeekerApplicationPersistence;
         this.csvFileWriterService = csvFileWriterService;
     }
 
@@ -45,10 +45,11 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
     }
 
     public byte[] getAllJobApplicationsBySeekerInFile(JobSeeker jobSeeker) {
-        Set<JobApplication> applications = jobApplicationPersistence.findAllByApplicant(jobSeeker);
+        Set<JobSeekerApplication> applications = jobSeekerApplicationPersistence.findAllByApplicant(jobSeeker);
 
         return csvFileWriterService.generate(applications.stream()
-                                                         .map(JobApplication::getJobPost)
+                                                         .map(JobSeekerApplication::getJobPost)
+                                                         .peek(jobPost -> jobPost.setJobPostApplications(null))
                                                          .sorted(Comparator.comparing(JobPost::getTitle))
                                                          .collect(Collectors.toCollection(LinkedHashSet::new)));
     }

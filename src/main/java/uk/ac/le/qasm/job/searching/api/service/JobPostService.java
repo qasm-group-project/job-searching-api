@@ -13,9 +13,8 @@ import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.repository.JobPostRepository;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JobPostService {
@@ -39,7 +38,10 @@ public class JobPostService {
     public byte[] getAllJobPostsByProviderInFile(Provider provider) {
         Set<JobPost> jobPosts = jobPostRepository.findAllByProvider(provider);
 
-        return csvFileWriterService.generate(jobPosts);
+        return csvFileWriterService.generate(jobPosts.stream()
+                                                     .peek(jobPost -> jobPost.setJobPostApplications(null))
+                                                     .sorted(Comparator.comparing(JobPost::getTitle))
+                                                     .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     public JobPost updateJobPost(Provider provider, UUID jobPostId, JobPostRequest updatedJobPost) {

@@ -56,7 +56,7 @@ public class CucumberTestSteps {
     private SeekerSocialMediaRepository seekerSocialMediaRepository;
 
     @Autowired
-    private JobApplicationRepository jobApplicationRepository;
+    private JobSeekerApplicationRepository jobSeekerApplicationRepository;
 
     @Autowired
     private SavedJobPostRepository savedJobPostRepository;
@@ -95,7 +95,7 @@ public class CucumberTestSteps {
         providerNewsRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
         seekerSocialMediaRepository.deleteAll();
-        jobApplicationRepository.deleteAll();
+        jobSeekerApplicationRepository.deleteAll();
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();

@@ -1,8 +1,12 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -12,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "job_application", schema = "job_searching")
-public class JobApplication {
+public class JobPostApplication {
 
     @Id
     @GeneratedValue
@@ -24,8 +28,8 @@ public class JobApplication {
     @JsonProperty("applicant")
     private JobSeeker applicant;
 
-    @ManyToOne
-    @JsonProperty("job_post")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private JobPost jobPost;
 
 }
