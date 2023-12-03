@@ -30,4 +30,9 @@ public class ApplicationService {
 
         return jobPostApplicationPersistence.save(jobPostApplication);
     }
+
+    public JobPostApplication receiveFeedbackFromSeeker(UUID applicationId){
+        return jobPostApplicationPersistence.findById(applicationId).orElseThrow();
+    }
+
 }

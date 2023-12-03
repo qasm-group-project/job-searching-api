@@ -123,4 +123,9 @@ public class SeekerJobPostController {
         return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateSeekerFeedback(applicationId, seekerFeedback));
     }
 
+    @GetMapping("/applications/{application_id}/receiveFeedback")
+    public ResponseEntity<Object> receiveFeedback(@PathVariable("application_id") UUID applicationId) {
+        return ResponseEntity.status(HttpStatus.OK).body(applicationService.receiveFeedbackFromSeeker(applicationId));
+    }
+
 }

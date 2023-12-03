@@ -879,4 +879,24 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
+    @When("I call the receive feedback from seeker path")
+    public void iCallTheReceiveFeedbackFromSeekerPath() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/" + this.applicationId + "/receiveFeedback",
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    String.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }
