@@ -26,7 +26,7 @@ public class ApplicationService {
 
     public JobPostApplication updateSeekerFeedback(UUID applicationId, SeekerFeedback seekerFeedback) {
         JobPostApplication jobPostApplication = jobPostApplicationPersistence.findById(applicationId).orElseThrow();
-        jobPostApplication.addFeedback(seekerFeedback);
+        jobPostApplication.addSeekerFeedback(seekerFeedback);
 
         return jobPostApplicationPersistence.save(jobPostApplication);
     }

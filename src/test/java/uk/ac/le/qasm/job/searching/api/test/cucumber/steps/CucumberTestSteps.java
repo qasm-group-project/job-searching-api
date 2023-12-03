@@ -861,4 +861,22 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("the job seeker posts the feedback with following body")
+    public void theJobSeekerPostsTheFeedbackWithFollowingBody(String feedback) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/" + this.applicationId + "/feedback",
+                    HttpMethod.POST,
+                    new HttpEntity<>(feedback, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }

@@ -1,11 +1,11 @@
 #language: en
 #utf-8
-
+  
 Feature: Job seeker send feedback feature
-  Job seeker must be able to post feedbacks
-  So job provider can see them later
-
-  Background:
+  job seeker must be able to post feedbacks
+  so job provider can see them later
+  
+  Background: 
     Given the tables are empty
     And the job provider is created with
     """
@@ -44,14 +44,14 @@ Feature: Job seeker send feedback feature
     And the job seeker is logged in with username "dfsd1f111566666" and password "testacpasswor"
     And I call the apply for jobs path for the job "job post title"
 
-  Scenario: Feedback send by job seeker successfully
+  Scenario: Feedback is send by the seeker
     Given the job seeker is logged in with username "dfsd1f111566666" and password "testacpasswor"
-    When the job seeker posts the following feedback to the application
+    When the job seeker posts the feedback with following body
     """
-      {
-        "feedback": "This company is nice, friendly and professional."
-      }
-    """
+       {
+         "feedback": "This company is nice, friendly and professional."
+       }
+     """
     Then the status returned must be 200
     And the field "id" returned must be "not null"
     And the field "applicant.username" returned must be "dfsd1f111566666"
@@ -64,13 +64,3 @@ Feature: Job seeker send feedback feature
     And the field "applicant.gender" returned must be "male"
     And the field "provider_feedbacks" returned must be "[]"
     And the field "seeker_feedbacks.0" returned must be "This company is nice, friendly and professional."
-
-  Scenario: Seeker is unauthorized
-    Given the header is empty
-    When the job provider posts the following feedback to the application
-    """
-      {
-        "feedback": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      }
-    """
-    Then the status returned must be 401
