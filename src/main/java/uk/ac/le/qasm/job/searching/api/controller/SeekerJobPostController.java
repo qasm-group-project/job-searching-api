@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerApplication;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
-import uk.ac.le.qasm.job.searching.api.entity.SeekerSavedJobPost;
+import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.service.SavedJobPostService;
@@ -115,6 +112,20 @@ public class SeekerJobPostController {
         } catch (RuntimeException e) {
             Object responseBody = Map.of("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
+    }
+
+    @PostMapping("/searchBy")
+    public ResponseEntity<?> searchBy(@RequestBody SearchJobRequest searchJobRequest){
+        try {
+            if (searchJobRequest.getTitle().isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchByNoTitle(searchJobRequest));
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchBy(searchJobRequest));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+
         }
     }
 
