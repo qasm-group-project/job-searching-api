@@ -3,6 +3,7 @@ package uk.ac.le.qasm.job.searching.api.persistence;
 import org.springframework.stereotype.Component;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
+import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 
 import java.util.Optional;
@@ -26,8 +27,8 @@ public class JobApplicationPersistence {
         return this.jobApplicationRepository.findAllByApplicantId(seekerId);
     }
 
-    public Set<JobApplication> findAllByProviderId(UUID providerId) {
-        return this.jobApplicationRepository.findAllByProviderId(providerId);
+    public Set<JobApplication> findAllByProvider(Provider provider) {
+        return this.jobApplicationRepository.findAllByProvider(provider);
     }
 
     public Optional<JobApplication> findByIdAndSeeker(UUID jobApplicationId, JobSeeker seeker) {

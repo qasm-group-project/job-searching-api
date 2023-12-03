@@ -111,7 +111,7 @@ public class ProviderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Provider provider = (Provider) authentication.getPrincipal();
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findAllByProviderId(provider.getId()));
+            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findAllByProvider(provider));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }

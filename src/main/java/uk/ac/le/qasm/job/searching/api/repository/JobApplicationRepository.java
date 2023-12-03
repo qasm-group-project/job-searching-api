@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
+import uk.ac.le.qasm.job.searching.api.entity.Provider;
 
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +26,6 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
 
     @Modifying
     @Transactional
-    @Query("SELECT ja FROM JobApplication ja INNER JOIN JobPost jp ON ja.jobPost = jp.id WHERE jp.provider = :providerId")
-    Set<JobApplication> findAllByProviderId(UUID providerId);
+    @Query("SELECT ja FROM JobApplication ja WHERE ja.jobPost in (SELECT jp.id FROM JobPost jp where jp.provider = :provider)")
+    Set<JobApplication> findAllByProvider(Provider provider);
 }
