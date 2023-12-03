@@ -22,4 +22,9 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
     @Transactional
     @Query("DELETE FROM JobApplication ja WHERE ja.id = :jobApplicationId AND ja.applicant = :jobSeeker")
     void deleteJobApplicationByIdAndApplicant(UUID jobApplicationId, JobSeeker jobSeeker);
+
+    @Modifying
+    @Transactional
+    @Query("SELECT ja FROM JobApplication ja INNER JOIN JobPost jp ON ja.jobPost = jp.id WHERE jp.provider = :providerId")
+    Set<JobApplication> findAllByProviderId(UUID providerId);
 }

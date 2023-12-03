@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.entity.ProviderSocialMedia;
+import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.ProviderService;
@@ -28,6 +29,7 @@ import java.util.UUID;
 public class ProviderController {
     private final ProviderService providerService;
     private final ProviderSocialMediaService providerSocialMediaService;
+    private final JobApplicationPersistence jobApplicationPersistence;
 
     @GetMapping("/social-media")
     public ResponseEntity<Object> getAllSocialMediaPlatforms() {
@@ -101,6 +103,17 @@ public class ProviderController {
         } catch (Exception e) {
             Object responseBody = Map.of("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
+    }
+
+    @GetMapping("/job-applications")
+    public ResponseEntity<Object> searchMyApplications(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findAllByProviderId(provider.getId()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }
     }
 }

@@ -26,6 +26,10 @@ public class JobApplicationPersistence {
         return this.jobApplicationRepository.findAllByApplicantId(seekerId);
     }
 
+    public Set<JobApplication> findAllByProviderId(UUID providerId) {
+        return this.jobApplicationRepository.findAllByProviderId(providerId);
+    }
+
     public Optional<JobApplication> findByIdAndSeeker(UUID jobApplicationId, JobSeeker seeker) {
         return this.jobApplicationRepository.findByIdAndApplicantId(jobApplicationId, seeker.getId());
     }
