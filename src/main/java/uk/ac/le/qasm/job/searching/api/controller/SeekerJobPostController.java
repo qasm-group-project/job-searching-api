@@ -11,11 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeekerApplication;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
-import uk.ac.le.qasm.job.searching.api.entity.SeekerSavedJobPost;
+import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.service.ApplicationService;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.service.SavedJobPostService;
 
@@ -33,15 +31,17 @@ public class SeekerJobPostController {
     private final JobSeekerService jobSeekerService;
     private final SavedJobPostService savedJobPostService;
     private final JobSeekerApplicationPersistence jobSeekerApplicationPersistence;
+    private final ApplicationService applicationService;
 
     public SeekerJobPostController(JobSearchService jobSearchService,
                                    JobSeekerService jobSeekerService,
                                    SavedJobPostService savedJobPostService,
-                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence) {
+                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence, ApplicationService applicationService) {
         this.jobSearchService = jobSearchService;
         this.jobSeekerService = jobSeekerService;
         this.savedJobPostService = savedJobPostService;
         this.jobSeekerApplicationPersistence = jobSeekerApplicationPersistence;
+        this.applicationService = applicationService;
     }
 
     @GetMapping
@@ -116,6 +116,11 @@ public class SeekerJobPostController {
             Object responseBody = Map.of("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
         }
+    }
+
+    @PostMapping("/applications/{application_id}/feedback")
+    public ResponseEntity<Object> sendFeedback(@PathVariable("application_id") UUID applicationId, @RequestBody SeekerFeedback seekerFeedback) {
+        return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateSeekerFeedback(applicationId, seekerFeedback));
     }
 
 }

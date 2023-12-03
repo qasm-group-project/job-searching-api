@@ -69,4 +69,8 @@ public class JobPostApplication {
         Optional.ofNullable(providerFeedbacks).orElse(new HashSet<>()).add(providerFeedback);
     }
 
+    public void addFeedback(SeekerFeedback seekerFeedback) {
+        Optional.ofNullable(seekerFeedbacks).orElse(new HashSet<>()).add(seekerFeedback);
+    }
+
 }

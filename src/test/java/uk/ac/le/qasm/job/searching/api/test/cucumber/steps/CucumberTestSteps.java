@@ -773,6 +773,25 @@ public class CucumberTestSteps {
         }
     }
 
+    @When("the job seeker posts the following feedback to the application")
+    public void theJobSeekerPostsTheFollowingFeedbackToTheApplication(String json) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/" + this.applicationId + "/feedback",
+                    HttpMethod.POST,
+                    new HttpEntity<>(json, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
     @Then("the status returned must be {int}")
     public void the_status_returned_must_be(Integer httpStatus) {
         if (response != null) {
