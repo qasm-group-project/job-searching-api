@@ -36,5 +36,5 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
     @Modifying
     @Transactional
     @Query("UPDATE JobApplication set status = :jobApplicationStatus WHERE id = :jobApplicationId")
-    void acceptJobApplication(UUID jobApplicationId, JobApplicationStatus jobApplicationStatus);
+    void updateJobApplicationStatus(UUID jobApplicationId, JobApplicationStatus jobApplicationStatus);
 }

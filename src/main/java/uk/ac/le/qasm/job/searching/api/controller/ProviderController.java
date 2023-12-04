@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.*;
+import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequest;
@@ -118,13 +119,26 @@ public class ProviderController {
     }
 
     @PutMapping("/job-applications/{job_application_id}/accept")
-    public ResponseEntity<Object> updateJobApplicationAccept(@PathVariable("job_application_id") UUID jobApplicationId) {
+    public ResponseEntity<Object> acceptJobApplication(@PathVariable("job_application_id") UUID jobApplicationId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Provider provider = (Provider) authentication.getPrincipal();
 
         try {
-            jobApplicationPersistence.acceptJobApplication(jobApplicationId, provider);
+            jobApplicationPersistence.updateJobApplicationStatus(jobApplicationId, provider, JobApplicationStatus.ACCEPTED);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application accept successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
+    @PutMapping("/job-applications/{job_application_id}/deny")
+    public ResponseEntity<Object> denyJobApplication(@PathVariable("job_application_id") UUID jobApplicationId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+
+        try {
+            jobApplicationPersistence.updateJobApplicationStatus(jobApplicationId, provider, JobApplicationStatus.DENIED);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application deny successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }

@@ -49,13 +49,13 @@ public class JobApplicationPersistence {
         }
     }
 
-    public void acceptJobApplication(UUID jobApplicationId, Provider provider) {
+    public void updateJobApplicationStatus(UUID jobApplicationId, Provider provider, JobApplicationStatus jobApplicationStatus) {
         Optional<JobApplication> existingJobApplicationOptional = jobApplicationRepository.findByIdAndProvider(jobApplicationId, provider);
 
         if (existingJobApplicationOptional.isPresent()) {
             JobApplication existingJobApplication = existingJobApplicationOptional.get();
 
-            jobApplicationRepository.acceptJobApplication(existingJobApplication.getId(), JobApplicationStatus.ACCEPTED);
+            jobApplicationRepository.updateJobApplicationStatus(existingJobApplication.getId(), jobApplicationStatus);
         } else {
             throw new RuntimeException("Job Application not found for the given ID and provider");
         }
