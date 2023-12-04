@@ -563,7 +563,63 @@ public class CucumberTestSteps {
                     HttpMethod.GET,
                     new HttpEntity<>(docString, headers),
                     JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 
+    @And("Provider call get all job applications")
+    public void providerCallGetAllJobApplications(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("Provider call update job application status to accepted with the following body")
+    public void providerCallUpdateJobApplicationStatusToAcceptedWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + job_application_id + "/accept",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("Provider call update job application status to denied with the following body")
+    public void providerCallUpdateJobApplicationStatusToDeniedWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + job_application_id + "/deny",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }

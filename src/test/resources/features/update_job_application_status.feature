@@ -1,7 +1,7 @@
 #language: en
 #utf-8
 
-Feature: The list of job applications
+Feature: Update Job Application Status for a Provider
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -40,17 +40,18 @@ Feature: The list of job applications
     """
     Then I call the apply for jobs path for the job "job post title"
 
-  Scenario: Job seeker see the list of job applications successfully!
-    When I call get all job applications
+  Scenario: Provider update job application status to accepted successfully!
+    And the job provider is logged in with username "username" and password "password"
+    When Provider call update job application status to accepted with the following body
     """
       {
       }
     """
     Then the status returned must be 200
 
-  Scenario: Provider see the list of job applications successfully!
-    When the job provider is logged in with username "username" and password "password"
-    And I call get all job applications
+  Scenario: Provider update job application status to denied successfully!
+    And the job provider is logged in with username "username" and password "password"
+    When Provider call update job application status to denied with the following body
     """
       {
       }
