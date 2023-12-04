@@ -28,8 +28,8 @@ Feature: The list of job applications
     And the job seeker is created with
     """
       {
-        "username":"username",
-        "password":"password",
+        "username":"testusername",
+        "password":"testpassword",
         "nickname":"test_nickname",
         "email":"test",
         "phone":"444412345",
@@ -50,7 +50,7 @@ Feature: The list of job applications
 
   Scenario: Provider see the list of job applications successfully!
     When the job provider is logged in with username "username" and password "password"
-    And I call get all job applications
+    And Provider call get all job applications
     """
       {
       }
