@@ -3,6 +3,7 @@ package uk.ac.le.qasm.job.searching.api.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 
 import java.util.UUID;
 
@@ -27,4 +28,10 @@ public class JobApplication {
     @ManyToOne
     @JsonProperty("job_post")
     private JobPost jobPost;
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    @JsonProperty(value = "status")
+    private JobApplicationStatus status = JobApplicationStatus.PENDING;
 }

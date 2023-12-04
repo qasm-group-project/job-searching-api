@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
+import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 
 import java.util.Optional;
 import java.util.Set;
@@ -19,6 +20,9 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
 
     Optional<JobApplication> findByIdAndApplicantId(UUID jobApplicationId, UUID seekerId);
 
+    @Query("SELECT ja FROM JobApplication ja WHERE ja.id = :jobApplicationId and ja.jobPost in (SELECT jp.id FROM JobPost jp where jp.provider = :provider)")
+    Optional<JobApplication> findByIdAndProvider(UUID jobApplicationId, Provider provider);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM JobApplication ja WHERE ja.id = :jobApplicationId AND ja.applicant = :jobSeeker")
@@ -28,4 +32,9 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
     @Transactional
     @Query("SELECT ja FROM JobApplication ja WHERE ja.jobPost in (SELECT jp.id FROM JobPost jp where jp.provider = :provider)")
     Set<JobApplication> findAllByProvider(Provider provider);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE JobApplication set status = :jobApplicationStatus WHERE id = :jobApplicationId")
+    void acceptJobApplication(UUID jobApplicationId, JobApplicationStatus jobApplicationStatus);
 }
