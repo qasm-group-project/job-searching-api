@@ -588,18 +588,17 @@ public class CucumberTestSteps {
     }
 
     @When("Provider call update job application status to accepted with the following body")
-    public void providerCallUpdateJobApplicationStatusToAcceptedWithTheFollowingBody(String docString) {
+    public void providerCallUpdateJobApplicationStatusToAcceptedWithTheFollowingBody() {
         this.response = null;
         this.ex = null;
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Authorization", "Bearer " + token);
-
         try {
             this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + job_application_id + "/accept",
                     HttpMethod.PUT,
-                    new HttpEntity<>(docString, headers),
+                    new HttpEntity<>(headers),
                     JsonNode.class);
         } catch (RestClientResponseException ex) {
             this.ex = ex;

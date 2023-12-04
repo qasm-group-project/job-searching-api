@@ -28,8 +28,8 @@ Feature: Update Job Application Status for a Provider
     And the job seeker is created with
     """
       {
-        "username":"username",
-        "password":"password",
+        "username":"testusername",
+        "password":"testpassword",
         "nickname":"test_nickname",
         "email":"test",
         "phone":"444412345",
@@ -41,12 +41,8 @@ Feature: Update Job Application Status for a Provider
     Then I call the apply for jobs path for the job "job post title"
 
   Scenario: Provider update job application status to accepted successfully!
-    And the job provider is logged in with username "username" and password "password"
+    Given the job provider is logged in with username "username" and password "password"
     When Provider call update job application status to accepted with the following body
-    """
-      {
-      }
-    """
     Then the status returned must be 200
 
   Scenario: Provider update job application status to denied successfully!
