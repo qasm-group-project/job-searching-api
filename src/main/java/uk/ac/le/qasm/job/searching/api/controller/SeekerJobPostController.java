@@ -16,6 +16,7 @@ import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.SeekerSavedJobPost;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.service.ApplicationService;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.service.SavedJobPostService;
 
@@ -33,15 +34,17 @@ public class SeekerJobPostController {
     private final JobSeekerService jobSeekerService;
     private final SavedJobPostService savedJobPostService;
     private final JobSeekerApplicationPersistence jobSeekerApplicationPersistence;
+    private final ApplicationService applicationService;
 
     public SeekerJobPostController(JobSearchService jobSearchService,
                                    JobSeekerService jobSeekerService,
                                    SavedJobPostService savedJobPostService,
-                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence) {
+                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence, ApplicationService applicationService) {
         this.jobSearchService = jobSearchService;
         this.jobSeekerService = jobSeekerService;
         this.savedJobPostService = savedJobPostService;
         this.jobSeekerApplicationPersistence = jobSeekerApplicationPersistence;
+        this.applicationService = applicationService;
     }
 
     @GetMapping
@@ -118,4 +121,8 @@ public class SeekerJobPostController {
         }
     }
 
+    @GetMapping("/applications/{application_id}/receiveFeedback")
+    public ResponseEntity<Object> receiveFeedback(@PathVariable("application_id") UUID applicationId) {
+        return ResponseEntity.status(HttpStatus.OK).body(applicationService.receiveFeedbackFromProvider(applicationId));
+    }
 }
