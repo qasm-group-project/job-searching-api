@@ -130,4 +130,9 @@ public class ProviderJobPostController {
     public ResponseEntity<Object> sendFeedback(@PathVariable("application_id") UUID applicationId, @RequestBody ProviderFeedback providerFeedback) {
         return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateProviderFeedback(applicationId, providerFeedback));
     }
+
+    @GetMapping("/applications/{application_id}/receiveFeedback")
+    public ResponseEntity<Object> receiveFeedback(@PathVariable("application_id") UUID applicationId) {
+        return ResponseEntity.status(HttpStatus.OK).body(applicationService.receiveFeedbackFromSeeker(applicationId));
+    }
 }

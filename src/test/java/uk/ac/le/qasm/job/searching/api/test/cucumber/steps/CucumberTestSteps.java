@@ -890,7 +890,7 @@ public class CucumberTestSteps {
         headers.add("Authorization", "Bearer " + token);
 
         try {
-            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/applications/" + this.applicationId + "/receiveFeedback",
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-post/applications/" + this.applicationId + "/receiveFeedback",
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
                     String.class);
