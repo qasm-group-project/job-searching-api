@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -34,4 +35,8 @@ public class JobApplication {
     @Column(name = "status")
     @JsonProperty(value = "status")
     private JobApplicationStatus status = JobApplicationStatus.PENDING;
+
+    @Column(name = "interview")
+    @JsonProperty(value = "interview")
+    private LocalDateTime interview;
 }

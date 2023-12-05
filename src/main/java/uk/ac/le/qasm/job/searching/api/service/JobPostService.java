@@ -67,4 +67,8 @@ public class JobPostService {
     public Page<JobPost> getExpiredJobPosts(Provider provider, LocalDateTime currentDateTime, Pageable pageable) {
         return jobPostRepository.findByProviderAndDeadlineBefore(provider, currentDateTime, pageable);
     }
+
+    public Page<JobPost> getDeadlinesJobPosts(LocalDateTime currentDateTime, Pageable pageable) {
+        return jobPostRepository.findByDeadlineAfter(currentDateTime, pageable);
+    }
 }
