@@ -661,4 +661,43 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
+    @When("I call the update job application interview with the following body")
+    public void iCallTheUpdateJobApplicationInterviewWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + job_application_id + "/interview",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+
+            this.token = Objects.requireNonNull(response.getBody()).get("token").asText();
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @And("I call the job application interview with the following body")
+    public void iCallTheJobApplicationInterviewWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications/interviews",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }
