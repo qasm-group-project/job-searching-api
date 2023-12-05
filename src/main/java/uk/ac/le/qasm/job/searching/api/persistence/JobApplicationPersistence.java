@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
+import uk.ac.le.qasm.job.searching.api.entity.ProviderSocialMedia;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 
@@ -56,6 +57,18 @@ public class JobApplicationPersistence {
             JobApplication existingJobApplication = existingJobApplicationOptional.get();
 
             jobApplicationRepository.updateJobApplicationStatus(existingJobApplication.getId(), jobApplicationStatus);
+        } else {
+            throw new RuntimeException("Job Application not found for the given ID and provider");
+        }
+    }
+
+    public JobApplication updateJobApplication(UUID jobApplicationId, Provider provider, JobApplication updateJobApplication) {
+        Optional<JobApplication> existingJobApplicationOptional = jobApplicationRepository.findByIdAndProvider(jobApplicationId, provider);
+
+        if (existingJobApplicationOptional.isPresent()) {
+            JobApplication existingJobApplication = existingJobApplicationOptional.get();
+            existingJobApplication.setInterview(updateJobApplication.getInterview());
+            return jobApplicationRepository.save(existingJobApplication);
         } else {
             throw new RuntimeException("Job Application not found for the given ID and provider");
         }

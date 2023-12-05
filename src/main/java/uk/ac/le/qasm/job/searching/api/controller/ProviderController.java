@@ -14,6 +14,7 @@ import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
 import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.request.JobApplicationInterviewRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.ProviderService;
@@ -139,6 +140,25 @@ public class ProviderController {
         try {
             jobApplicationPersistence.updateJobApplicationStatus(jobApplicationId, provider, JobApplicationStatus.DENIED);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application deny successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
+    @PutMapping("/job-applications/{job_application_id}/interview")
+    public ResponseEntity<Object> updateJobApplicationInterview(@PathVariable("job_application_id") UUID jobApplicationId, @Valid @RequestBody JobApplicationInterviewRequestUpdate request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Provider provider = (Provider) authentication.getPrincipal();
+            var updateJobApplication = JobApplication.builder()
+                    .interview(request.getInterview())
+                    .build();
+        try {
+            JobApplication result = jobApplicationPersistence.updateJobApplication(jobApplicationId, provider, updateJobApplication);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application updated interview successfully", "id", result.getId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }
