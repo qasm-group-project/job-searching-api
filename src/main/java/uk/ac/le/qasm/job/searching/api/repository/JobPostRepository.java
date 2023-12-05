@@ -22,6 +22,4 @@ public interface JobPostRepository extends JpaRepository<JobPost, UUID> {
     Optional<JobPost> findByIdAndIsVisibleAndStatus(UUID jobId, boolean b, JobStatus jobStatus);
 
     Page<JobPost> findByProviderAndDeadlineBefore(Provider provider, LocalDateTime currentDateTime, Pageable pageable);
-
-    Page<JobPost> findByDeadlineAfter(LocalDateTime currentDateTime, Pageable pageable);
 }

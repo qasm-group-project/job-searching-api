@@ -55,16 +55,4 @@ public class SeekerJobPostController {
                                                       .build();
         return ResponseEntity.ok(jobApplicationPersistence.save(jobApplication));
     }
-
-    @GetMapping("/deadlines")
-    public ResponseEntity<Page<JobPost>> getDeadlinesJobPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        try {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            Page<JobPost> deadlinesJobPosts = jobPostService.getDeadlinesJobPosts(currentDateTime, PageRequest.of(page, size));
-
-            return new ResponseEntity<>(deadlinesJobPosts, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
