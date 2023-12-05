@@ -1,14 +1,18 @@
 package uk.ac.le.qasm.job.searching.api.repository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
+import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -19,6 +23,8 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
     Set<JobApplication> findAllByApplicantId(UUID jobSeekerId);
 
     Optional<JobApplication> findByIdAndApplicantId(UUID jobApplicationId, UUID seekerId);
+
+    Page<JobApplication> findByApplicantAndInterviewAfter(JobSeeker jobSeeker, LocalDateTime currentDateTime, Pageable pageable);
 
     @Query("SELECT ja FROM JobApplication ja WHERE ja.id = :jobApplicationId and ja.jobPost in (SELECT jp.id FROM JobPost jp where jp.provider = :provider)")
     Optional<JobApplication> findByIdAndProvider(UUID jobApplicationId, Provider provider);

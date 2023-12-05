@@ -1,13 +1,13 @@
 package uk.ac.le.qasm.job.searching.api.persistence;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.entity.ProviderSocialMedia;
+import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -72,5 +72,9 @@ public class JobApplicationPersistence {
         } else {
             throw new RuntimeException("Job Application not found for the given ID and provider");
         }
+    }
+
+    public Page<JobApplication> getInterviewsJobApplications(JobSeeker jobSeeker, LocalDateTime currentDateTime, Pageable pageable) {
+        return jobApplicationRepository.findByApplicantAndInterviewAfter(jobSeeker, currentDateTime, pageable);
     }
 }

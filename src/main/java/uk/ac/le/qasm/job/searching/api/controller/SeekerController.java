@@ -2,6 +2,8 @@ package uk.ac.le.qasm.job.searching.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,9 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
-import uk.ac.le.qasm.job.searching.api.entity.Provider;
-import uk.ac.le.qasm.job.searching.api.entity.SeekerSocialMedia;
+import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService;
@@ -20,6 +20,7 @@ import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.SeekerSocialMediaService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -179,6 +180,20 @@ public class SeekerController {
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Seeker is invisible"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
+    @GetMapping("/job-applications/interviews")
+    public ResponseEntity<Page<JobApplication>> getInterviewsJobApplications(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
+        try {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            Page<JobApplication> interviewsJobApplications = jobApplicationPersistence.getInterviewsJobApplications(jobSeeker, currentDateTime, PageRequest.of(page, size));
+
+            return new ResponseEntity<>(interviewsJobApplications, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
