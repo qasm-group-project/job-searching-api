@@ -623,4 +623,42 @@ public class CucumberTestSteps {
             this.ex = ex;
         }
     }
+
+    @When("I call the visible seeker with the following body")
+    public void iCallTheVisibleSeekerWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/is-visible/visible",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the invisible seeker with the following body")
+    public void iCallTheInvisibleSeekerWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/is-visible/invisible",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    JsonNode.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
 }
