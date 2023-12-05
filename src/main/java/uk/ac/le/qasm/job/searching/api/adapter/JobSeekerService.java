@@ -12,4 +12,6 @@ public interface JobSeekerService {
     JobSeeker update(JobSeeker jobSeeker);
 
     JobSeeker findById(UUID id);
+
+    void updateJobSeekerIsVisible(JobSeeker jobSeeker, Boolean isVisible);
 }

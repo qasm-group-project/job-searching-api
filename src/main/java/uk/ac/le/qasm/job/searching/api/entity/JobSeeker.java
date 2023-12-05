@@ -71,6 +71,11 @@ public class JobSeeker implements UserDetails {
     @Column(name = "role")
     private Role role;
 
+    @Setter
+    @Column(name = "is_visible")
+    @JsonProperty(value = "is_visible")
+    private Boolean isVisible;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "seeker_id")
     private List<SeekerSocialMedia> socialMediaPlatforms;

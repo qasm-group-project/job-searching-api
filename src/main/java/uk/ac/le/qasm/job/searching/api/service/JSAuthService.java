@@ -60,6 +60,7 @@ public class JSAuthService implements uk.ac.le.qasm.job.searching.api.adapter.JS
                              .lastname(jobSeekerAccount.getLastname())
                              .nickname(jobSeekerAccount.getNickname())
                              .role(Role.PROVIDER)
+                             .isVisible(jobSeekerAccount.getIsVisible())
                              .build();
             var jwtToken = jwtService.generateToken(jobSeeker);
             var user = repository.save(jobSeeker);

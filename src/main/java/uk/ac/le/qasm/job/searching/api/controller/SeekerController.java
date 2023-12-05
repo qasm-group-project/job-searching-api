@@ -10,7 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
+import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.entity.SeekerSocialMedia;
+import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
@@ -154,4 +156,29 @@ public class SeekerController {
         }
     }
 
+    @PutMapping("/is-visible/visible")
+    public ResponseEntity<Object> visibleSeeker() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
+
+        try {
+            jobSeekerService.updateJobSeekerIsVisible(jobSeeker, true);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Seeker is visible"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
+
+    @PutMapping("/is-visible/invisible")
+    public ResponseEntity<Object> invisibleSeeker() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
+
+        try {
+            jobSeekerService.updateJobSeekerIsVisible(jobSeeker, false);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Seeker is invisible"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
+        }
+    }
 }

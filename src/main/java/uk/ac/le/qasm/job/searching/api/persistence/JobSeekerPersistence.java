@@ -34,4 +34,8 @@ public class JobSeekerPersistence {
     public Optional<JobSeeker> findById(UUID id) {
         return jobSeekerRepository.findById(id);
     }
+
+    public void updateJobSeekerIsVisible(JobSeeker jobSeeker, Boolean isVisible) {
+        this.jobSeekerRepository.updateJobSeekerIsVisible(jobSeeker, isVisible);
+    }
 }

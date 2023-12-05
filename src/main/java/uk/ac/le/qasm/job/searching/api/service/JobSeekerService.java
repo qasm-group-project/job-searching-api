@@ -35,4 +35,10 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
     public JobSeeker update(JobSeeker jobSeeker) {
         return jobSeekerPersistence.update(jobSeeker);
     }
+
+    @Override
+    public void updateJobSeekerIsVisible(JobSeeker jobSeeker, Boolean isVisible) {
+        jobSeekerPersistence.updateJobSeekerIsVisible(jobSeeker, isVisible);
+    }
+
 }
