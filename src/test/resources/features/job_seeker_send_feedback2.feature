@@ -45,7 +45,6 @@ Feature: Job seeker send feedback feature
     And I call the apply for jobs path for the job "job post title"
 
   Scenario: Feedback is send by the seeker
-    Given the job seeker is logged in with username "dfsd1f111566666" and password "testacpasswor"
     When the job seeker posts the feedback with following body
     """
        {

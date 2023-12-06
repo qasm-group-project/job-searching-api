@@ -42,7 +42,7 @@ public class JobPostApplication {
     @JsonProperty("provider_feedbacks")
     private Set<ProviderFeedback> providerFeedbacks;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "application_id")
     @JsonProperty("seeker_feedbacks")
     private Set<SeekerFeedback> seekerFeedbacks;

@@ -96,11 +96,10 @@ public class CucumberTestSteps {
         providerNewsRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
         seekerSocialMediaRepository.deleteAll();
-        jobSeekerApplicationRepository.deleteAll();
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
-
+        jobSeekerApplicationRepository.deleteAll();
     }
 
     @Given("the job provider is created with")
