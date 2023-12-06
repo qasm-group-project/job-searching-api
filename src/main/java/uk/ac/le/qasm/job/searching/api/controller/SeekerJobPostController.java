@@ -118,6 +118,20 @@ public class SeekerJobPostController {
         }
     }
 
+    @PostMapping("/searchBy")
+    public ResponseEntity<?> searchBy(@RequestBody SearchJobRequest searchJobRequest){
+        try {
+            if (searchJobRequest.getTitle().isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchByNoTitle(searchJobRequest));
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchBy(searchJobRequest));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+
+        }
+    }
+
     @PostMapping("/applications/{application_id}/feedback")
     public ResponseEntity<Object> sendFeedback(@PathVariable("application_id") UUID applicationId, @RequestBody SeekerFeedback seekerFeedback) {
         return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateSeekerFeedback(applicationId, seekerFeedback));

@@ -96,11 +96,10 @@ public class CucumberTestSteps {
         providerNewsRepository.deleteAll();
         providerSocialMediaRepository.deleteAll();
         seekerSocialMediaRepository.deleteAll();
-        jobSeekerApplicationRepository.deleteAll();
         jobPostRepository.deleteAll();
         providerRepository.deleteAll();
         jobSeekerRepository.deleteAll();
-
+        jobSeekerApplicationRepository.deleteAll();
     }
 
     @Given("the job provider is created with")
@@ -230,6 +229,26 @@ public class CucumberTestSteps {
                                                   HttpMethod.GET,
                                                   new HttpEntity<>(headers),
                                                   String.class);
+
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the search jobs path with condition with body")
+    public void iCallTheSearchWithCondition(String docString) throws JsonProcessingException {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-posts/searchBy",
+                    HttpMethod.POST,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
 
         } catch (RestClientResponseException ex) {
             this.ex = ex;
