@@ -8,9 +8,7 @@ import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.repository.JobApplicationRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class JobApplicationPersistence {
@@ -31,6 +29,10 @@ public class JobApplicationPersistence {
 
     public Set<JobApplication> findAllByProvider(Provider provider) {
         return this.jobApplicationRepository.findAllByProvider(provider);
+    }
+
+    public List<LocalDateTime> findInterviewsBySeeker(JobSeeker jobSeeker) {
+        return this.jobApplicationRepository.findInterviewsBySeeker(jobSeeker);
     }
 
     public Optional<JobApplication> findByIdAndSeeker(UUID jobApplicationId, JobSeeker seeker) {

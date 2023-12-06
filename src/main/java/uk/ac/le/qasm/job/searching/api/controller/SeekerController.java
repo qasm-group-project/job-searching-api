@@ -13,10 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.*;
-import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 import uk.ac.le.qasm.job.searching.api.exception.BaseException;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.persistence.JobApplicationPersistence;
+import uk.ac.le.qasm.job.searching.api.request.JobApplicationInterviewRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.SeekerSocialMediaRequestUpdate;
 import uk.ac.le.qasm.job.searching.api.service.SeekerSocialMediaService;
@@ -136,11 +136,11 @@ public class SeekerController {
         }
     }
     @GetMapping("/job-applications")
-    public ResponseEntity<Object> searchMyApplications(){
+    public ResponseEntity<Object> searchMyApplications(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         JobSeeker jobSeeker = (JobSeeker) authentication.getPrincipal();
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findAllByApplicantId(jobSeeker.getId()));
+            return ResponseEntity.status(HttpStatus.OK).body(jobApplicationPersistence.findInterviewsBySeeker(jobSeeker));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }
@@ -195,6 +195,25 @@ public class SeekerController {
             return new ResponseEntity<>(interviewsJobApplications, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/job-applications/{job_application_id}/interview")
+    public ResponseEntity<Object> updateJobApplicationInterview(@PathVariable("job_application_id") UUID jobApplicationId, @Valid @RequestBody JobApplicationInterviewRequestUpdate request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        var updateJobApplication = JobApplication.builder()
+                .interview(request.getInterview())
+                .build();
+        try {
+            JobApplication result = jobApplicationPersistence.updateJobApplication(jobApplicationId, provider, updateJobApplication);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Job Application updated interview successfully", "id", result.getId()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message",e.getMessage()));
         }
     }
 }

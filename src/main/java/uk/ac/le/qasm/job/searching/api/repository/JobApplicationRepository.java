@@ -7,15 +7,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import uk.ac.le.qasm.job.searching.api.entity.JobApplication;
-import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.JobSeeker;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobApplicationStatus;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface JobApplicationRepository extends CrudRepository<JobApplication, UUID> {
     Set<JobApplication> findAllByJobPostId(UUID jobPostId);
@@ -43,4 +40,7 @@ public interface JobApplicationRepository extends CrudRepository<JobApplication,
     @Transactional
     @Query("UPDATE JobApplication set status = :jobApplicationStatus WHERE id = :jobApplicationId")
     void updateJobApplicationStatus(UUID jobApplicationId, JobApplicationStatus jobApplicationStatus);
+
+    @Query("SELECT ja.interview FROM JobApplication ja WHERE ja.applicant = :jobSeeker and ja.interview IS NOT NULL ORDER BY ja.interview")
+    List<LocalDateTime> findInterviewsBySeeker(JobSeeker jobSeeker);
 }
