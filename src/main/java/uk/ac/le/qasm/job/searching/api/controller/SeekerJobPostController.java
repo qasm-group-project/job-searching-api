@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.adapter.JobSearchService;
 import uk.ac.le.qasm.job.searching.api.entity.*;
 import uk.ac.le.qasm.job.searching.api.persistence.JobSeekerApplicationPersistence;
-import uk.ac.le.qasm.job.searching.api.service.ApplicationService;
 import uk.ac.le.qasm.job.searching.api.service.JobSeekerService;
 import uk.ac.le.qasm.job.searching.api.service.SavedJobPostService;
 
@@ -31,17 +30,15 @@ public class SeekerJobPostController {
     private final JobSeekerService jobSeekerService;
     private final SavedJobPostService savedJobPostService;
     private final JobSeekerApplicationPersistence jobSeekerApplicationPersistence;
-    private final ApplicationService applicationService;
 
     public SeekerJobPostController(JobSearchService jobSearchService,
                                    JobSeekerService jobSeekerService,
                                    SavedJobPostService savedJobPostService,
-                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence, ApplicationService applicationService) {
+                                   JobSeekerApplicationPersistence jobSeekerApplicationPersistence) {
         this.jobSearchService = jobSearchService;
         this.jobSeekerService = jobSeekerService;
         this.savedJobPostService = savedJobPostService;
         this.jobSeekerApplicationPersistence = jobSeekerApplicationPersistence;
-        this.applicationService = applicationService;
     }
 
     @GetMapping
@@ -118,11 +115,18 @@ public class SeekerJobPostController {
         }
     }
 
-    @PostMapping("/applications/{application_id}/feedback")
-    public ResponseEntity<Object> sendFeedback(@PathVariable("application_id") UUID applicationId, @RequestBody SeekerFeedback seekerFeedback) {
-        return ResponseEntity.status(HttpStatus.OK).body(applicationService.updateSeekerFeedback(applicationId, seekerFeedback));
+    @PostMapping("/searchBy")
+    public ResponseEntity<?> searchBy(@RequestBody SearchJobRequest searchJobRequest){
+        try {
+            if (searchJobRequest.getTitle().isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchByNoTitle(searchJobRequest));
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(jobSearchService.searchBy(searchJobRequest));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+
+        }
     }
-
-
 
 }
