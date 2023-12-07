@@ -18,9 +18,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.le.qasm.job.searching.api.Application;
-import uk.ac.le.qasm.job.searching.api.cucumber.utils.MessageFieldExtractor;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.repository.*;
+import uk.ac.le.qasm.job.searching.api.test.cucumber.utils.MessageFieldExtractor;
 
 import java.util.*;
 
