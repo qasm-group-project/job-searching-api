@@ -13,4 +13,5 @@ public interface JobSeekerService {
 
     JobSeeker findById(UUID id);
 
+    void updateJobSeekerIsVisible(JobSeeker jobSeeker, Boolean isVisible);
 }

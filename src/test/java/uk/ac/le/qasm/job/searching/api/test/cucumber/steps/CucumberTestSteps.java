@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -25,10 +26,7 @@ import uk.ac.le.qasm.job.searching.api.repository.*;
 import uk.ac.le.qasm.job.searching.api.test.cucumber.utils.MessageFieldExtractor;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -914,6 +912,175 @@ public class CucumberTestSteps {
                     new HttpEntity<>(headers),
                     String.class);
 
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @And("I call the delete job application with the following body")
+    public void iCallTheDeleteJobApplicationWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications/" + applicationId,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call get all job applications")
+    public void iCallGetAllJobApplications(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @And("Provider call get all job applications")
+    public void providerCallGetAllJobApplications(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("Provider call update job application status to accepted with the following body")
+    public void providerCallUpdateJobApplicationStatusToAcceptedWithTheFollowingBody() {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + applicationId + "/accept",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("Provider call update job application status to denied with the following body")
+    public void providerCallUpdateJobApplicationStatusToDeniedWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            this.response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + applicationId + "/deny",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the visible seeker with the following body")
+    public void iCallTheVisibleSeekerWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/is-visible/visible",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the invisible seeker with the following body")
+    public void iCallTheInvisibleSeekerWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/is-visible/invisible",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @When("I call the update job application interview with the following body")
+    public void iCallTheUpdateJobApplicationInterviewWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/provider/job-applications/" + applicationId + "/interview",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
+        } catch (RestClientResponseException ex) {
+            this.ex = ex;
+        }
+    }
+
+    @And("I call the job application interview with the following body")
+    public void iCallTheJobApplicationInterviewWithTheFollowingBody(String docString) {
+        this.response = null;
+        this.ex = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
+        headers.add("Authorization", "Bearer " + token);
+
+        try {
+            response = restTemplate.exchange("http://localhost:" + port + "/api/v1/seeker/job-applications/interviews",
+                    HttpMethod.GET,
+                    new HttpEntity<>(docString, headers),
+                    String.class);
         } catch (RestClientResponseException ex) {
             this.ex = ex;
         }

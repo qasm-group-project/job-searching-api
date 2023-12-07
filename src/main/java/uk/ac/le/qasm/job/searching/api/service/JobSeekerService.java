@@ -44,6 +44,11 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
         return jobSeekerPersistence.update(jobSeeker);
     }
 
+    @Override
+    public void updateJobSeekerIsVisible(JobSeeker jobSeeker, Boolean isVisible) {
+        jobSeekerPersistence.updateJobSeekerIsVisible(jobSeeker, isVisible);
+    }
+
     public byte[] getAllJobApplicationsBySeekerInFile(JobSeeker jobSeeker) {
         Set<JobSeekerApplication> applications = jobSeekerApplicationPersistence.findAllByApplicant(jobSeeker);
 
@@ -53,6 +58,4 @@ public class JobSeekerService implements uk.ac.le.qasm.job.searching.api.adapter
                                                          .sorted(Comparator.comparing(JobPost::getTitle))
                                                          .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
-
-
 }
