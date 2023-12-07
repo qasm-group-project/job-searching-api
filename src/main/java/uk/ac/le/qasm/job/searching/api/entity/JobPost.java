@@ -19,6 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "job_posts", schema = "job_searching")
 public class JobPost {
+
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -57,8 +58,12 @@ public class JobPost {
     @JsonProperty(value = "status")
     private JobStatus status;
 
+    @Setter
+    @Column(name = "category")
+    @JsonProperty(value = "category")
+    private String category;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "provider_uuid")
     @JsonIgnore
     private Provider provider;
 
@@ -68,27 +73,15 @@ public class JobPost {
 
 
     @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<JobApplication> jobApplications;
+    @JsonProperty("applications")
+    private List<JobPostApplication> jobPostApplications;
 
     @Transient
+    @JsonProperty(value = "number_of_applicants")
     private int numberOfApplicants;
 
     @PostLoad
     private void calculateNumberOfApplicants() {
-        this.numberOfApplicants = (jobApplications != null) ? jobApplications.size() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "JobPost{" +
-               "id=" + id +
-               ", title='" + title + '\'' +
-               ", description='" + description + '\'' +
-               ", salary='" + salary + '\'' +
-               ", jobType=" + jobType +
-               ", isVisible=" + isVisible +
-               ", status=" + status +
-               '}';
+        this.numberOfApplicants = (jobPostApplications != null) ? jobPostApplications.size() : 0;
     }
 }

@@ -41,34 +41,6 @@ public class SeekerController {
         this.jobApplicationPersistence = jobApplicationPersistence;
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<?> updateSeeker(@RequestBody JobSeeker jobSeeker) {
-        return ResponseEntity.ok(jobSeekerService.update(jobSeeker));
-    }
-
-    @PostMapping("/getbyuserame")
-    public JobSeeker getByUsername(@RequestBody JobSeeker jobSeekerAccount) {
-        return jobSeekerService.findByUsername(jobSeekerAccount.getUsername());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") UUID id) {
-        try {
-            return ResponseEntity.ok(jobSeekerService.findById(id));
-        } catch (BaseException ex) {
-            return ResponseEntity.status(ex.getHttpStatus()).body(Map.of("message", ex.getDescription()));
-        }
-    }
-
-    @GetMapping("/social-media")
-    public ResponseEntity<Object> getAllSocialMediaPlatforms() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JobSeeker seeker = (JobSeeker) authentication.getPrincipal();
-        List<SeekerSocialMedia> socialMediaPlatforms = seekerSocialMediaService.getAllSocialMediaPlatforms(seeker);
-        Object responseBody = Map.of("data", socialMediaPlatforms);
-        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-    }
-
     @PostMapping("/social-media")
     public ResponseEntity<Object> addSocialMediaPlatform(
             @Valid @RequestBody SeekerSocialMediaRequest request, BindingResult bindingResult) {
