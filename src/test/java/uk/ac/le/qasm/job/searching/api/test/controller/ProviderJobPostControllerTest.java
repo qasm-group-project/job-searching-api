@@ -1,4 +1,4 @@
-package uk.ac.le.qasm.job.searching.api.controller;
+package uk.ac.le.qasm.job.searching.api.test.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.ac.le.qasm.job.searching.api.controller.ProviderJobPostController;
 import uk.ac.le.qasm.job.searching.api.entity.JobPost;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
 import uk.ac.le.qasm.job.searching.api.enums.JobType;
@@ -397,6 +398,133 @@ public class ProviderJobPostControllerTest {
     }
 
     @Test
+    void updateJobPostSuccessUnsuccessfullyBecauseOfLackOfDataTitle() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
+        // Arrange
+        UUID jobPostId = UUID.randomUUID();
+        Provider provider = new Provider(); // Create a provider instance
+
+        // Create a JobPostRequest with sample data
+        JobPostRequest jobPostRequest = new JobPostRequest();
+        jobPostRequest.setDescription("Updated Description");
+        jobPostRequest.setSalary("50000");
+        jobPostRequest.setIsVisible(true);
+        jobPostRequest.setJobType("FULL_TIME"); // Assuming "FULL_TIME" is a valid JobType
+        // Perform the request using MockMvc
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(jobPostRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.errors[0]")
+                        .value("The full title is required."));
+        // Verify that the service method was called with the correct arguments
+        verify(jobPostService, times(0)).updateJobPost(provider, jobPostId, jobPostRequest);
+    }
+
+    @Test
+    void updateJobPostSuccessUnsuccessfullyBecauseOfLackOfDataDescription() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
+        // Arrange
+        UUID jobPostId = UUID.randomUUID();
+        Provider provider = new Provider(); // Create a provider instance
+
+        // Create a JobPostRequest with sample data
+        JobPostRequest jobPostRequest = new JobPostRequest();
+        jobPostRequest.setTitle("Test title");
+        jobPostRequest.setSalary("50000");
+        jobPostRequest.setIsVisible(true);
+        jobPostRequest.setJobType("FULL_TIME"); // Assuming "FULL_TIME" is a valid JobType
+        // Perform the request using MockMvc
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(jobPostRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.errors[0]")
+                        .value("The full description is required."));
+        // Verify that the service method was called with the correct arguments
+        verify(jobPostService, times(0)).updateJobPost(provider, jobPostId, jobPostRequest);
+    }
+
+    @Test
+    void updateJobPostSuccessUnsuccessfullyBecauseOfLackOfDataVisibility() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
+        // Arrange
+        UUID jobPostId = UUID.randomUUID();
+        Provider provider = new Provider(); // Create a provider instance
+
+        // Create a JobPostRequest with sample data
+        JobPostRequest jobPostRequest = new JobPostRequest();
+        jobPostRequest.setTitle("Test title");
+        jobPostRequest.setDescription("Updated Description");
+        jobPostRequest.setSalary("50000");
+        jobPostRequest.setJobType("FULL_TIME"); // Assuming "FULL_TIME" is a valid JobType
+        // Perform the request using MockMvc
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(jobPostRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.errors[0]")
+                        .value("The status of visibility is required."));
+        // Verify that the service method was called with the correct arguments
+        verify(jobPostService, times(0)).updateJobPost(provider, jobPostId, jobPostRequest);
+    }
+
+    @Test
+    void updateJobPostSuccessUnsuccessfullyBecauseOfLackOfDataSalary() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
+        // Arrange
+        UUID jobPostId = UUID.randomUUID();
+        Provider provider = new Provider(); // Create a provider instance
+
+        // Create a JobPostRequest with sample data
+        JobPostRequest jobPostRequest = new JobPostRequest();
+        jobPostRequest.setTitle("Test title");
+        jobPostRequest.setDescription("Updated Description");
+        jobPostRequest.setIsVisible(true);
+        jobPostRequest.setJobType("FULL_TIME"); // Assuming "FULL_TIME" is a valid JobType
+        // Perform the request using MockMvc
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(jobPostRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.errors[0]")
+                        .value("The full salary is required."));
+        // Verify that the service method was called with the correct arguments
+        verify(jobPostService, times(0)).updateJobPost(provider, jobPostId, jobPostRequest);
+    }
+
+    @Test
+    void updateJobPostSuccessUnsuccessfullyBecauseOfLackOfJobType() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
+        // Arrange
+        UUID jobPostId = UUID.randomUUID();
+        Provider provider = new Provider(); // Create a provider instance
+
+        // Create a JobPostRequest with sample data
+        JobPostRequest jobPostRequest = new JobPostRequest();
+        jobPostRequest.setTitle("Test title");
+        jobPostRequest.setDescription("Updated Description");
+        jobPostRequest.setIsVisible(true);
+        jobPostRequest.setSalary("50000");
+        // Perform the request using MockMvc
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/provider/job-post/{jobPostId}", jobPostId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(jobPostRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.errors[0]")
+                        .value("The full jobType is required."));
+        // Verify that the service method was called with the correct arguments
+        verify(jobPostService, times(0)).updateJobPost(provider, jobPostId, jobPostRequest);
+    }
+
+
+
+    @Test
     void updateJobPostUnauthorized() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(providerJobPostController).build();
         // Arrange
@@ -466,6 +594,8 @@ public class ProviderJobPostControllerTest {
         // Verify that the service method was called with the correct arguments
         verify(jobPostService, times(1)).updateJobPost(provider, jobPostId, jobPostRequest);
     }
+
+
 
     @Test
     void deleteJobPostSuccess() throws Exception {

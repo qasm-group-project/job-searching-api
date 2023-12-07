@@ -12,8 +12,6 @@ import uk.ac.le.qasm.job.searching.api.enums.JobStatus;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class JobPostRequest {
 
@@ -35,5 +33,6 @@ public class JobPostRequest {
     @JsonProperty("status")
     private JobStatus jobStatus = JobStatus.PENDING;
     private LocalDateTime deadline;
+    private String category;
 }
 

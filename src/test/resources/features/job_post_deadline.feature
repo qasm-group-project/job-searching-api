@@ -1,5 +1,9 @@
+#language: en
+#utf-8
+
 Feature: Update or Create a job post with setting deadline for it
   Job provider should be able to set deadline for job posts
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -12,6 +16,7 @@ Feature: Update or Create a job post with setting deadline for it
         "company_location": "company_location"
       }
     """
+
   Scenario: create job post with setting specific deadline time for it
     And the job provider is logged in with username "username" and password "password"
     And a post is created with
@@ -27,6 +32,7 @@ Feature: Update or Create a job post with setting deadline for it
     """
     Then the status returned must be 201
     And the field "id" returned must be "not null"
+
   Scenario: create job post without setting specific deadline time for it
     And the job provider is logged in with username "username" and password "password"
     And a post is created with
@@ -41,6 +47,7 @@ Feature: Update or Create a job post with setting deadline for it
     """
     Then the status returned must be 201
     And the field "id" returned must be "not null"
+
   Scenario: create job post without setting specific deadline time for it
     And the job provider is logged in with username "username" and password "password"
     And a post is created with
@@ -55,6 +62,7 @@ Feature: Update or Create a job post with setting deadline for it
     """
     Then the status returned must be 201
     And the field "id" returned must be "not null"
+
   Scenario: update job post with setting specific deadline time for it
     And the job provider is logged in with username "username" and password "password"
     When a post is created with

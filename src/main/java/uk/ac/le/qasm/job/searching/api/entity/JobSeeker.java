@@ -1,5 +1,6 @@
 package uk.ac.le.qasm.job.searching.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -69,40 +70,39 @@ public class JobSeeker implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
+    @JsonIgnore
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "seeker_id")
     private List<SeekerSocialMedia> socialMediaPlatforms;
-    public void setId(String id_String) {
-        if (id_String != null){
-            this.id = UUID.fromString(id_String);
-        }else {
-            this.id=null;
-        }
-    }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }
