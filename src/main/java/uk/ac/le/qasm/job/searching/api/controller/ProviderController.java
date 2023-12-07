@@ -11,13 +11,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.le.qasm.job.searching.api.entity.Provider;
+import uk.ac.le.qasm.job.searching.api.entity.ProviderNews;
 import uk.ac.le.qasm.job.searching.api.entity.ProviderSocialMedia;
+import uk.ac.le.qasm.job.searching.api.request.ProviderNewsRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequest;
 import uk.ac.le.qasm.job.searching.api.request.ProviderSocialMediaRequestUpdate;
-import uk.ac.le.qasm.job.searching.api.service.ProviderService;
+import uk.ac.le.qasm.job.searching.api.service.ProviderNewsService;
 import uk.ac.le.qasm.job.searching.api.service.ProviderSocialMediaService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,15 +27,16 @@ import java.util.UUID;
 @RequestMapping("/api/v1/provider")
 @RequiredArgsConstructor
 public class ProviderController {
-    private final ProviderService providerService;
     private final ProviderSocialMediaService providerSocialMediaService;
+    private final ProviderNewsService providerNewsService;
 
     @GetMapping("/social-media")
     public ResponseEntity<Object> getAllSocialMediaPlatforms() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Provider provider = (Provider) authentication.getPrincipal();
         List<ProviderSocialMedia> socialMediaPlatforms = providerSocialMediaService.getAllSocialMediaPlatforms(provider);
-        Object responseBody = Map.of("data", socialMediaPlatforms);
+        Object responseBody = Map.of("data", socialMediaPlatforms,
+                "number_of_social_media_platforms", socialMediaPlatforms.size());
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
@@ -97,6 +99,71 @@ public class ProviderController {
         try {
             providerSocialMediaService.deleteProviderSocialMedia(socialMediaId, provider);
             Object responseBody = Map.of("message", "Social Media Platform deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Object responseBody = Map.of("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
+    }
+
+    // provider news
+
+    @PostMapping("/news")
+    public ResponseEntity<Object> addProviderNews(
+            @Valid @RequestBody ProviderNewsRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        var newProviderNews = ProviderNews.builder()
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .provider(provider)
+                .build();
+        ProviderNews providerNews = providerNewsService.saveProviderNews(newProviderNews);
+        Object responseBody = Map.of("message", "Provider News Created successfully!", "id",
+                providerNews.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+    }
+
+    @PutMapping("/news/{newsId}")
+    public ResponseEntity<Object> updateProviderNews(
+            @PathVariable UUID newsId,
+            @Valid @RequestBody ProviderNewsRequest request,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errors", errors));
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+
+        var updatedProviderNews = ProviderNews.builder()
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .provider(provider)
+                .build();
+        try {
+            ProviderNews result = providerNewsService.updateProviderNews(newsId, updatedProviderNews);
+            Object responseBody = Map.of("message", "Provider News updated successfully", "id", result.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        } catch (Exception e) {
+            Object responseBody = Map.of("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+        }
+    }
+
+    @DeleteMapping("/news/{newsId}")
+    public ResponseEntity<Object> deleteProviderNews(@PathVariable UUID newsId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Provider provider = (Provider) authentication.getPrincipal();
+        try {
+            providerNewsService.deleteProviderNews(newsId, provider);
+            Object responseBody = Map.of("message", "Provider News deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             Object responseBody = Map.of("message", e.getMessage());

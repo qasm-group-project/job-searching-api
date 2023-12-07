@@ -55,6 +55,10 @@ public class Provider implements UserDetails{
     @JoinColumn(name = "provider_uuid")
     private List<JobPost> jobPosts;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "provider_id")
+    private List<ProviderNews> providerNews;
+
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
     private List<ProviderSocialMedia> socialMediaPlatforms;
 
@@ -81,18 +85,5 @@ public class Provider implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Provider{" +
-               "id=" + id +
-               ", username='" + username + '\'' +
-               ", password='" + password + '\'' +
-               ", company_name='" + company_name + '\'' +
-               ", company_contact_number='" + company_contact_number + '\'' +
-               ", company_location='" + company_location + '\'' +
-               ", role=" + role +
-               '}';
     }
 }

@@ -1,6 +1,8 @@
 #language: en
 #utf-8
+
 Feature: Updating Social Media for a Provider
+
   Background:
     Given the tables are empty
     And the job provider is created with
@@ -13,7 +15,7 @@ Feature: Updating Social Media for a Provider
         "company_location": "company_location"
       }
     """
-    When the job provider is logged in with username "username" and password "password"
+    And the job provider is logged in with username "username" and password "password"
     And a social media is created with
     """
       {
@@ -21,6 +23,7 @@ Feature: Updating Social Media for a Provider
         "link": "https://link.com"
       }
     """
+
   Scenario: the job provider can update the provider social media successfully!
     And the job provider is logged in with username "username" and password "password"
     When I call the update provider social media path with the following body
@@ -54,6 +57,7 @@ Feature: Updating Social Media for a Provider
     """
     Then the status returned must be 400
     And the field "errors.0" returned must be "The full link is required."
+
   Scenario: Job Provider can not update social media because of invalid id!
     And the job provider is logged in with username "username" and password "password"
     When I call the update provider social media path with the following body with fake socialMediaId

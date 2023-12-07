@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class SeekerSocialMediaRequest {
     @NotEmpty(message = "The full platform is required.")
