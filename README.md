@@ -142,18 +142,33 @@ to their functions.
 
 - Run the following command to run the tests:
     - Windows
-      ```bash
-      mvnw test
-      ```
-      or
-  
-      ```bash
-      ./mvnw test
-      ```
+      - Black-box tests
+        ```bash
+        ./black-box-tests.bat
+        ```
+      - White-box tests
+        - Code Coverage
+          ```bash
+          ./white-box-code-coverage-tests.bat
+          ```
+        - Mutation Coverage
+          ```bash
+          ./white-box-mutation-coverage-tests.bat
+          ```
     - MacOS/Linux
-      ```bash
-      ./mvnw test
-      ```
+      - Black-box tests
+        ```bash
+        zsh ./black-box-tests.sh
+        ```
+      - White-box tests
+        - Code Coverage
+          ```bash
+          zsh ./white-box-code-coverage-tests.sh
+          ```
+        - Mutation Coverage
+          ```bash
+          zsh ./white-box-mutation-coverage-tests.sh
+          ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
