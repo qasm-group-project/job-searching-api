@@ -126,6 +126,11 @@ to their functions.
       ```bash
       mvnw clean install
       ```
+      or
+  
+      ```bash
+      ./mvnw clean install
+      ```
     - MacOS/Linux
       ```bash
       ./mvnw clean install
@@ -141,6 +146,7 @@ to their functions.
       mvnw test
       ```
       or
+  
       ```bash
       ./mvnw test
       ```
@@ -180,6 +186,7 @@ to their functions.
       mvnw spring-boot:run
       ```
       or
+  
       ```bash
       ./mvnw spring-boot:run
       ```
