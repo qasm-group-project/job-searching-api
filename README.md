@@ -140,6 +140,10 @@ to their functions.
       ```bash
       mvnw test
       ```
+      or
+      ```bash
+      ./mvnw test
+      ```
     - MacOS/Linux
       ```bash
       ./mvnw test
@@ -174,6 +178,10 @@ to their functions.
     - Windows
       ```bash
       mvnw spring-boot:run
+      ```
+      or
+      ```bash
+      ./mvnw spring-boot:run
       ```
     - MacOS/Linux
       ```bash
